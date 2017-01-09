@@ -24,4 +24,8 @@
 * http://www.benrlodge.com/blog/post/image-uploading-with-reactjs-nodejs-and-aws-s3
 
 ## other
-http://stackoverflow.com/questions/28553904/client-routing-using-react-router-and-server-side-routing#28558545
+* http://stackoverflow.com/questions/28553904/client-routing-using-react-router-and-server-side-routing#28558545
+
+
+## security
+* https://blog.risingstack.com/node-js-security-checklist/
