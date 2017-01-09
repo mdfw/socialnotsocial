@@ -20,3 +20,5 @@
 * https://css-tricks.com/image-upload-manipulation-react/
 * http://www.benrlodge.com/blog/post/image-uploading-with-reactjs-nodejs-and-aws-s3
 * https://github.com/Automattic/knox
+
+http://stackoverflow.com/questions/28553904/client-routing-using-react-router-and-server-side-routing#28558545
