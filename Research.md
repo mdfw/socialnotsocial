@@ -16,6 +16,7 @@
 * https://developers.facebook.com/docs/graph-api/reference/v2.8/user/feed#publish
 * http://passportjs.org/docs/authorize
 * https://github.com/criso/fbgraph
+* https://developers.facebook.com/docs/graph-api/reference/user/albums
 
 ## Image upload
 * http://www.hartzis.me/react-image-upload/
@@ -25,9 +26,15 @@
 
 ## Other
 * http://stackoverflow.com/questions/28553904/client-routing-using-react-router-and-server-side-routing#28558545
+* https://github.com/OptimalBits/bull
 
 ## Security
 * https://blog.risingstack.com/node-js-security-checklist/
+
+## User id
+* https://blog.twitter.com/2010/announcing-snowflake
+    * timestamp, worker number and sequence number.
+* https://www.npmjs.com/package/base32
 
 ---
 # App: Social not social
