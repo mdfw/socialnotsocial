@@ -3,8 +3,11 @@ import React                     from 'react';
 import { renderToString }        from 'react-dom/server'
 import { RoutingContext, match } from 'react-router';
 import routes                    from '../shared/routes.jsx';
+import http                      from 'http';
 
 const app = express();
+
+app.use(express.static('public'));
 
 app.use((req, res) => {
   match({ routes, location:req.url }, (err, redirectLocation, renderProps) => {
@@ -34,4 +37,8 @@ app.use((req, res) => {
     res.end(HTML);
   });
 });
-export default app;
+const server = http.createServer(app);
+server.listen(3003);
+server.on('listening', () => {
+  console.log('Listening on 3003');
+});
