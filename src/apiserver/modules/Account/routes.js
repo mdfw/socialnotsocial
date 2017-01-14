@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import * as AccountController from './controller';
+import { signup } from './controller';
 
 const routes = new Router();
 
 routes.route('/signup')
-  .post(AccountController.signup)
-  .get(function (req, res) {
-    res.send('Get a random book')
-  })
+  .post(signup)
+  .get(function signupGetFail(req, res) {
+    res.status(405).end('Get is not supported for this endpoint');
+  });
 
 export default routes;
