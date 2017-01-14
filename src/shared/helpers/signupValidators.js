@@ -1,6 +1,6 @@
 import { isEmail } from 'validator';
 
-/* Validates various fields that are required on new accounts. 
+/* Validates various fields that are required on new accounts.
  * Provides flexible tests depending on needs.
  */
 class SignupValidator {
@@ -17,10 +17,10 @@ class SignupValidator {
     const validator = {
       success: true,
       errors: {
-        'email': [],
-        'password': [],
-        'displayName': [],  
-      }
+        email: [],
+        password: [],
+        displayName: [],
+      },
     };
     const mailMessages = this.emailValid();
     if (mailMessages && mailMessages.length > 0) {
@@ -37,7 +37,7 @@ class SignupValidator {
       validator.success = false;
       validator.errors.password = passwordMessages;
     }
-    
+
     return validator;
   }
   displayNameValid() {
@@ -58,10 +58,10 @@ class SignupValidator {
      */
     const messages = [];
     if (!this.email.trim()) {
-      messages.push('Email address is required.')
+      messages.push('Email address is required.');
     }
     if (this.email && !isEmail(this.email)) {
-      messages.push('Email address does not appear to be valid.')
+      messages.push('Email address does not appear to be valid.');
     }
     if (messages.length > 0) {
       return messages;
@@ -83,4 +83,4 @@ class SignupValidator {
   }
 }
 
-export default SignupValidator;;
+export default SignupValidator;

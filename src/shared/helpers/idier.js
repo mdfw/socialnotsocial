@@ -2,25 +2,24 @@ import Base58 from 'base58';
 import generator from 'generate-password';
 
 /* idier: identifier generator. Inspired by twitter's snowflake system
- * https://blog.twitter.com/2010/announcing-snowflake 
- * We use the timestamp converted to seconds + a worker id from the environment + 
+ * https://blog.twitter.com/2010/announcing-snowflake
+ * We use the timestamp converted to seconds + a worker id from the environment +
  *   a sequence number (see below) + a single random number just in case...
  */
 const idier = function idier() {
-
   /* The sequence is stored on the global object. The sequence should be between 1-999 to keep
    *   our total id number in the right space to be converted.
-   *   Note: There's probably an opportunity to use Redis or similar for the sequence. 
-   */ 
+   *   Note: There's probably an opportunity to use Redis or similar for the sequence.
+   */
   let mySequence = 1;
   const globalSeq = GLOBAL.idierSequence;
   if (globalSeq && globalSeq < 1000 && globalSeq > 0) {
     mySequence = globalSeq;
-    GLOBAL.idierSequence = GLOBAL.idierSequence + 1;
+    GLOBAL.idierSequence += 1;
   } else {
     GLOBAL.idierSequence = mySequence + 1;
   }
-  
+
   const workerId = process.env.IDIER_WORKER_ID;
   const timeStamp = Math.floor(Date.now() / 1000);
   const randomnumber = Math.floor(Math.random() * 10);
