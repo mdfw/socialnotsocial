@@ -13,6 +13,7 @@ const envVars = [
   'API_SERVER_PORT',
   'MAIN_SERVER_PORT',
   'ACCOUNT_ENCRYPTION_PEPPER',
+  'IDIER_WORKER_ID',
 ];
 
 // Check that Envvars are set.
