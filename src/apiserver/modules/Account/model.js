@@ -8,7 +8,6 @@ import { idier, passGen } from '../../../shared/helpers/idier';
  * An account can be created by signing up or by having your email added.
  * If you are added to someone's account, loginToken is added so you can see items through email.
  * Note: We are not using the pepperId yet, there's only one pepper
- * TODO: loginToken could(should?) possibly be shorter than 96 bits.
  */
 const accountSchema = new Schema({
   local: {
@@ -61,7 +60,10 @@ accountSchema.pre('save', function presave(next, done) {
   /* check if it's new password or update one so we don't touch it */
   if (!this.isModified('local.password')) next();
 
-  /* TODO: Deal with errors in the encrypt and decrypt steps */
+  /* A password is not technically required for an account to be valid. */
+  if (!this.local.password) next();
+
+  /* TODO: Deal better with errors in the encrypt and decrypt steps */
   const self = this;
   Promise.resolve(self.local.password).then(function hashThePassword(passwordToHash) {
     return self.hashPassword(passwordToHash);
@@ -83,7 +85,8 @@ accountSchema.pre('save', function presave(next, done) {
   });
 });
 
-accountSchema.pre('save', function presave(next, done) {
+/* If it's a new account, create an accountID and loginToken for it. */
+accountSchema.pre('save', function presave(next) {
   console.log('pre2');
   if (!this.local.accountId) {
     this.local.accountId = idier();
@@ -92,8 +95,9 @@ accountSchema.pre('save', function presave(next, done) {
     this.local.loginToken = passGen();
   }
   next();
-
 });
+
+
 /* Compare passwords.
  * Because we are using hashing and encrypting, we have to do that before we compare.
  */
