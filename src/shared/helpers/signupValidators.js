@@ -5,7 +5,6 @@ import { isEmail } from 'validator';
  */
 class SignupValidator {
   constructor(email, password, displayName) {
-    console.log(`validator: email: ${email} password: ${password} displayName: ${displayName}`);
     this.email = email;
     this.password = password;
     this.displayName = displayName;
@@ -48,10 +47,7 @@ class SignupValidator {
     if (!this.displayName.trim()) {
       messages.push('Display name is required.');
     }
-    if (messages.length > 0) {
-      return messages;
-    }
-    return null;
+    return messages;
   }
   emailValid() {
     /* Is the email valid? Uses the validator library to test.
@@ -63,10 +59,7 @@ class SignupValidator {
     if (this.email && !isEmail(this.email)) {
       messages.push('Email address does not appear to be valid.');
     }
-    if (messages.length > 0) {
-      return messages;
-    }
-    return null;
+    return messages;
   }
   passwordValid() {
     /* Currently only checks on empty.
@@ -76,10 +69,7 @@ class SignupValidator {
     if (!this.password.trim()) {
       messages.push('Password is required.');
     }
-    if (messages.length > 0) {
-      return messages;
-    }
-    return null;
+    return messages;
   }
 }
 
