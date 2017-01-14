@@ -12,7 +12,7 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/apiserver/server.jsx'),
+  entry: path.resolve(__dirname, 'src/apiserver/apiserver.js'),
   target: 'node',
   output: {
     path: path.join(__dirname, 'build/apiserver'),
