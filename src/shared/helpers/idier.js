@@ -12,19 +12,23 @@ const idier = function idier() {
    *   Note: There's probably an opportunity to use Redis or similar for the sequence.
    */
   let mySequence = 1;
-  const globalSeq = GLOBAL.idierSequence;
+  const globalSeq = global.idierSequence;
   if (globalSeq && globalSeq < 1000 && globalSeq > 0) {
     mySequence = globalSeq;
-    GLOBAL.idierSequence += 1;
+    global.idierSequence += 1;
   } else {
-    GLOBAL.idierSequence = mySequence + 1;
+    global.idierSequence = mySequence + 1;
   }
 
-  const workerId = process.env.IDIER_WORKER_ID;
+  let workerId = process.env.IDIER_WORKER_ID;
+  if (!workerId) {
+    workerId = Math.floor(Math.random() * 10);
+  }
   const timeStamp = Math.floor(Date.now() / 1000);
   const randomnumber = Math.floor(Math.random() * 10);
   const snowflake = `${timeStamp}${workerId}${mySequence}${randomnumber}`;
-  return snowflake;
+  const snowflakeInt = parseInt(snowflake, 10);
+  return snowflakeInt;
 };
 
 /* toHumanId - transform a number into a base58 encoded string for use in human visible tokens.
