@@ -2,24 +2,29 @@ import Base58 from 'base58';
 import generator from 'generate-password';
 
 /* idier: identifier generator. Inspired by twitter's snowflake system
- * https://blog.twitter.com/2010/announcing-snowflake : "To generate the roughly-sorted
- *   64 bit ids in an uncoordinated manner, we settled on a composition of:
- *   timestamp, worker number and sequence number."
- * This substitutes a random number for the sequence number. If we really need the ordering
- * that a sequence gives, we can add later and we have a good problem.
+ * https://blog.twitter.com/2010/announcing-snowflake 
+ * We use the timestamp converted to seconds + a worker id from the environment + 
+ *   a sequence number (see below) + a single random number just in case...
  */
-
 const idier = function idier() {
-  let sequence = 1;
-  if (global.idierSequence && global.idierSequence < 1000 && global.iderSequence > 0) {
-    sequence = global.idierSequence;
+
+  /* The sequence is stored on the global object. The sequence should be between 1-999 to keep
+   *   our total id number in the right space to be converted.
+   *   Note: There's probably an opportunity to use Redis or similar for the sequence. 
+   */ 
+  let mySequence = 1;
+  const globalSeq = GLOBAL.idierSequence;
+  if (globalSeq && globalSeq < 1000 && globalSeq > 0) {
+    mySequence = globalSeq;
+    GLOBAL.idierSequence = GLOBAL.idierSequence + 1;
   } else {
-    global.iderSequence = sequence;
+    GLOBAL.idierSequence = mySequence + 1;
   }
-  const myId = process.env.IDIER_WORKER_ID;
+  
+  const workerId = process.env.IDIER_WORKER_ID;
   const timeStamp = Math.floor(Date.now() / 1000);
   const randomnumber = Math.floor(Math.random() * 10);
-  const snowflake = `${timeStamp}${myId}${sequence}${randomnumber}`;
+  const snowflake = `${timeStamp}${workerId}${mySequence}${randomnumber}`;
   return snowflake;
 };
 
