@@ -5,49 +5,39 @@ import crypto from 'crypto';
 import { idier, passGen } from '../../../shared/helpers/idier';
 
 /* Account schema represents all accounts, even those created by adding an email address.
- * An account can be created by signing up or by having your email added.
- * If you are added to someone's account, loginToken is added so you can see items through email.
+ * An account can be created by signing up.
  * Note: We are not using the pepperId yet, there's only one pepper
  */
 const accountSchema = new Schema({
-  local: {
-    accountId: {
-      type: Schema.Types.Number,
-      unique: true,
-    },
-    loginToken: {
-      type: Schema.Types.String,
-    },
-    email: {
-      type: String,
-      trim: true,
-      unique: true,
-      lowercase: true,
-      validate: [isEmail, 'You must provide a valid email.'],
-    },
-    displayName: {
-      type: String,
-      trim: true,
-    },
-    password: {
-      type: String,
-      trim: true,
-    },
-    passwordPepperId: {
-      type: String,
-      default: '1',
-    },
-    dateCreated: {
-      type: Date,
-      default: Date.now,
-    },
-    dateAccountValidated: {
-      type: Date,
-    },
-    facebookToken: {
-      type: String,
-      trim: true,
-    },
+  accountId: {
+    type: Schema.Types.Number,
+    unique: true,
+  },
+  email: {
+    type: String,
+    trim: true,
+    unique: true,
+    lowercase: true,
+    validate: [isEmail, 'You must provide a valid email.'],
+  },
+  displayName: {
+    type: String,
+    trim: true,
+  },
+  password: {
+    type: String,
+    trim: true,
+  },
+  passwordPepperId: {
+    type: String,
+    default: '1',
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
+  },
+  dateAccountValidated: {
+    type: Date,
   },
 });
 
@@ -56,16 +46,15 @@ const accountSchema = new Schema({
    Seems safer: https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
    */
 accountSchema.pre('save', function presave(next, done) {
-  console.log('pre1');
   /* check if it's new password or update one so we don't touch it */
-  if (!this.isModified('local.password')) next();
+  if (!this.isModified('password')) next();
 
   /* A password is not technically required for an account to be valid. */
-  if (!this.local.password) next();
+  if (!this.password) next();
 
   /* TODO: Deal better with errors in the encrypt and decrypt steps */
   const self = this;
-  Promise.resolve(self.local.password).then(function hashThePassword(passwordToHash) {
+  Promise.resolve(self.password).then(function hashThePassword(passwordToHash) {
     return self.hashPassword(passwordToHash);
   })
   .then(function bcryptTheHash(hashedPassword) {
@@ -75,8 +64,7 @@ accountSchema.pre('save', function presave(next, done) {
     return self.aesHash(bcryptedPassword);
   })
   .then(function setEncrypted(encrytpedPassword) {
-    self.local.password = encrytpedPassword;
-    console.log(`final encrypt: ${encrytpedPassword} into self: ${self.local.password}`);
+    self.password = encrytpedPassword;
     next();
   })
   .catch(function encryptionFailure(err) {
@@ -87,12 +75,11 @@ accountSchema.pre('save', function presave(next, done) {
 
 /* If it's a new account, create an accountID and loginToken for it. */
 accountSchema.pre('save', function presave(next) {
-  console.log('pre2');
-  if (!this.local.accountId) {
-    this.local.accountId = idier();
+  if (!this.accountId) {
+    this.accountId = idier();
   }
-  if (!this.local.loginToken) {
-    this.local.loginToken = passGen();
+  if (!this.loginToken) {
+    this.loginToken = passGen();
   }
   next();
 });
@@ -104,7 +91,7 @@ accountSchema.pre('save', function presave(next) {
 accountSchema.methods.comparePassword = function comparePassword(candidatePassword, callback) {
   // compare the submitted password to encrypted password in database.
   const candidateHashed = this.hashPassword(candidatePassword);
-  const decryptedPass = this.deAesHash(this.local.password);
+  const decryptedPass = this.deAesHash(this.password);
   compare(candidateHashed, decryptedPass, (err, isMatch) => {
     if (err) callback(err);
     callback(null, isMatch);

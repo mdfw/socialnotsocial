@@ -15,12 +15,12 @@ export const signup = (req, res) => {
   }
 
   // Search the database for a user object with the submitted email.
-  Account.findOne({ 'local.email': email })
+  Account.findOne({ email: email })
     .then((account) => {
       if (account) res.status(422).json({ success: false, message: 'Email is already in use.' });
 
       // Create a new instance of the account model.
-      const newAccount = new Account({ local: { email, password, displayName } });
+      const newAccount = new Account({ email, password, displayName });
       // Save the new account object to the database.
       newAccount.save()
         .then(() => res.status(201).json({
@@ -46,14 +46,14 @@ export const addAccount = (email, displayName) => {
   if (displayNameValidationMessages.length > 0) {
     return new Error(displayNameValidationMessages.join());
   }
-  Account.findOne({ 'local.email': email })
+  Account.findOne({ email: email })
   .then((dupaccount) => {
     if (dupaccount) {
       return dupaccount;
     }
 
     // Create a new instance of the account model.
-    const newAccount = new Account({ local: { email, displayName } });
+    const newAccount = new Account({ email, displayName });
     // Save the new account object to the database.
     newAccount.save()
       .then((account) => { return account; })  // eslint-disable-line arrow-body-style
