@@ -42,10 +42,11 @@ app.get('/boo', function booReturn(req, res) {
   res.send('boo!');
 });
 
-app.get('/idier', function basReturn(req, res){
-  res.send(idier());
+app.get('/idier', function basReturn(req, res) {
+  const newId = idier();
+  res.send(`${newId}`);
+});
 
-})
 app.get('/', function baseReturn(req, res) {
   res.send('Hello World!');
 });
