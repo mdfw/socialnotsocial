@@ -32,6 +32,7 @@ const recipientSchema = new Schema({
   ownerAccountId: {
     type: Schema.Types.Number,
     required: true,
+    index: true,
   },
   loginToken: {
     type: Schema.Types.String,
@@ -70,8 +71,15 @@ const recipientSchema = new Schema({
   },
 });
 
+/* Create an compound index on ownerAccountId + email. This search happens on recipient creation. */
+recipientSchema.index({
+  ownerAccountId: 1,
+  email: 1,
+});
+
 /* If it's a new recipient, create an recipientId and loginToken for it. */
-recipientSchema.pre('save', function presave(next) {
+recipientSchema.pre('validate', function preValidateRecipient(next) {
+  console.log('Called pre save recipient');
   if (!this.recipientId) {
     this.recipientId = idier();
   }
@@ -86,4 +94,4 @@ recipientSchema.pre('save', function presave(next) {
  */
 const Recipient = mongoose.model('Recipient', recipientSchema);
 
-export default { Recipient, RecipientStatus };
+export { Recipient, RecipientStatus };

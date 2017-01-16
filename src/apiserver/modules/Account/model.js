@@ -73,7 +73,7 @@ accountSchema.pre('save', function presave(next, done) {
 });
 
 /* If it's a new account, create an accountID and loginToken for it. */
-accountSchema.pre('save', function presave(next) {
+accountSchema.pre('validate', function preAccountValidate(next) {
   if (!this.accountId) {
     this.accountId = idier();
   }

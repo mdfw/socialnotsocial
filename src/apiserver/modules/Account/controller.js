@@ -2,9 +2,10 @@ import Account from './model';
 import { appraiseThese } from '../../../shared/helpers/appraise';
 
 const addAccount = (email, password, displayName) => {
-  /* Does the actual account adding and returns the status item
+  /* addAccount: Adds an account
    * A new account requires an email, password and displayName.
    * Checks for validity of these fields uing the appraiser.
+   * @returns: {object} - see status object
    */
   const status = {
     errors: {},
@@ -55,26 +56,51 @@ const addAccount = (email, password, displayName) => {
   });
 };
 
-const addAccountRequest = (req, res) => {
-  /* addAccountRequest: Respond to a signup event through the API by calling addAccount */
-  const { email, password, displayName } = req.body;
 
-  addAccount(email, password, displayName)
-    .then(() => {
-      res.status(201).json({
-        success: true,
-        message: 'Successfully Registerd',
-      });
-    })
-    .catch((error) => {
-      res.status(422).json({ success: false, message: error.errors });
-    });
-};
-
-const update = (req, res) => {
-  res.status(418).json({
-    message: 'Brewing',
+const updateAccount = () => { // eslint-disable-line arrow-body-style
+  return new Promise(function updateAccountPromise(resolve) {
+    resolve('Not implemented');
   });
 };
 
-export { addAccountRequest, addAccount, update };
+const accountExists = (accountId) => {
+  /* accountExists: Does the account exist?
+   */
+  const exists = {
+    found: true,
+    error: null,
+    account: null,
+  };
+
+  return new Promise(function addAccountPromise(resolve, reject) {
+    /* Validate the fields */
+    const fieldsValid = appraiseThese({
+      accountId: accountId,
+    });
+    if (!fieldsValid.success) {
+      exists.found = false;
+      exists.error = new Error('Invalid AccountId provided');
+      reject(exists);
+    }
+
+    // Search the database for a user object with the objectId.
+    Account.findOne({ accountId: accountId })
+      .then((foundAccount) => {
+        if (foundAccount) {
+          exists.found = true;
+          resolve(exists);
+        } else {
+          exists.found = false;
+          reject(exists);
+        }
+      })
+      .catch((error) => {
+        console.log('Error occurred during find on account creation.');
+        console.dir(error);
+        exists.error = new Error('Internal error occurred');
+        reject(exists);
+      });
+  });
+};
+
+export { addAccount, updateAccount, accountExists };

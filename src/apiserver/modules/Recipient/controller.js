@@ -1,6 +1,31 @@
 import { Recipient } from './model';
 import { appraiseThese } from '../../../shared/helpers/appraise';
 
+const getRecipients = (ownerAccountId) => {
+ const recipients = {
+    error: null,
+    recipients: null,
+  };
+
+  return new Promise(function getRecipientsPromise(resolve, reject) {
+    const fieldsValid = appraiseThese({
+      ownerAccountId: ownerAccountId,
+    });
+    if (!fieldsValid.success) {
+      recipients.error = fieldsValid.errors.join();
+      reject(recipients);
+    }
+    
+    Recipient.find({ ownerAccountId: ownerAccountId})
+      .then((results) => {
+        resolve(results);
+      })
+      .catch((error) => {
+        reject(error);
+      })
+  })
+};
+
 const addRecipient = (email, displayName, ownerAccountId) => {
   /* Adds a recipient.
    * A recipient requires an ownerAccountId, a displayName and an email address.
@@ -12,6 +37,7 @@ const addRecipient = (email, displayName, ownerAccountId) => {
   };
 
   return new Promise(function addRecipientPromise(resolve, reject) {
+    console.log('Adding recipient');
     /* Validate the fields */
     const fieldsValid = appraiseThese({
       email: email,
@@ -22,7 +48,7 @@ const addRecipient = (email, displayName, ownerAccountId) => {
       status.errors = fieldsValid.errors;
       reject(status);
     }
-
+    console.log('Starting search for a recipient');
     // Search the database for a recipient object with the submitted email and owner.
     Recipient.findOne({ email: email, ownerAccountId: ownerAccountId })
       .then((foundAccount) => {
@@ -30,9 +56,11 @@ const addRecipient = (email, displayName, ownerAccountId) => {
           status.errors.email = 'Recipient exists.';
           reject(status);
         }
-
+        console.log('Recipient not found, adding');
         // Create a new instance of the model.
         const newRecipient = new Recipient({ email, ownerAccountId, displayName });
+        console.log('Created recipient:');
+        console.dir(newRecipient)
         // Save the new object to the database.
         newRecipient.save()
           .then((savedAccountDoc) => {
@@ -40,35 +68,28 @@ const addRecipient = (email, displayName, ownerAccountId) => {
             resolve(status);
           })
           .catch((err) => {
-            let error;
+            console.log('Failed saving recipient: ');
+            console.dir(err);
+            let error = 'Failed to save recipient, likely an internal error.';
             if (err.code === 11000) error = 'Recipient exists.';
             status.errors.email = error;
-            return status;
+            reject(status);
           });
-      });
+      })
+      .catch((err) => {
+        console.log('Failed searching for recipient: ');
+        console.dir(err);
+        status.errors.account = err;
+        reject(status);
+      })
   });
 };
 
-const addRecipientRequest = (req, res) => {
-  /* addRecipientRequest: Respond to a add event through the API by calling addRecipient */
-  const { email, ownerAccountId, displayName } = req.body;
 
-  addRecipient(email, displayName, ownerAccountId)
-    .then(() => {
-      res.status(201).json({
-        success: true,
-        message: 'Successfully Added',
-      });
-    })
-    .catch((error) => {
-      res.status(422).json({ success: false, message: error.errors });
-    });
-};
-
-const update = (req, res) => {
+const updateRecipient = (req, res) => {
   res.status(418).json({
     message: 'Brewing',
   });
 };
 
-export { addRecipientRequest, addRecipient, update };
+export { getRecipients, addRecipient, updateRecipient };
