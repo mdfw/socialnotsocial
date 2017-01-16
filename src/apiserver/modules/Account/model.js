@@ -68,7 +68,6 @@ accountSchema.pre('save', function presave(next, done) {
     next();
   })
   .catch(function encryptionFailure(err) {
-    console.log(`Hashing error: ${err}`);
     done(new Error(err));
   });
 });
@@ -103,7 +102,6 @@ accountSchema.methods.hashPassword = function hashPassword(password) {
   const hasher = crypto.createHash('sha512');
   hasher.update(password);
   const hashed = hasher.digest('hex');
-  console.log(`512hash input: ${password} output: ${hashed} `);
   return hashed;
 };
 
@@ -125,7 +123,6 @@ accountSchema.methods.aesHash = function aesHash(passwordhash) {
   const cipher = crypto.createCipher(algorithm, pepper);
   let crypted = cipher.update(passwordhash, 'utf8', 'hex');
   crypted += cipher.final('hex');
-  console.log(`aesHash input: ${passwordhash} crypted: ${crypted} `);
   return crypted;
 };
 

@@ -43,8 +43,14 @@ const addAccount = (email, password, displayName) => {
             let error;
             if (err.code === 11000) error = 'Email is already in use.';
             status.errors.email = error;
-            return status;
+            reject(status);
           });
+      })
+      .catch((error) => {
+        console.log('Error occurred during find on account creation.');
+        console.dir(error);
+        status.errors.internal = 'Internal error occurred';
+        reject(status);
       });
   });
 };
