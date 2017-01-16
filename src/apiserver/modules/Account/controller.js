@@ -103,4 +103,42 @@ const accountExists = (accountId) => {
   });
 };
 
+const canActOnBehalfOf = (requestorId, behalfOfId) => {
+  /* canActOnBehalfOf - can requestor act on behalf of the other id
+   */
+  const approved = {
+    approved: true,
+    error: null,
+  };
+
+  return new Promise(function addAccountPromise(resolve, reject) {
+    /* Validate the fields */
+    const fieldsValid = appraiseThese({
+      accountId: accountId,
+    });
+    if (!fieldsValid.success) {
+      exists.found = false;
+      exists.error = new Error('Invalid AccountId provided');
+      reject(exists);
+    }
+
+    // Search the database for a user object with the objectId.
+    Account.findOne({ accountId: accountId })
+      .then((foundAccount) => {
+        if (foundAccount) {
+          exists.found = true;
+          resolve(exists);
+        } else {
+          exists.found = false;
+          reject(exists);
+        }
+      })
+      .catch((error) => {
+        console.log('Error occurred during find on account creation.');
+        console.dir(error);
+        exists.error = new Error('Internal error occurred');
+        reject(exists);
+      });
+  });
+};
 export { addAccount, updateAccount, accountExists };
