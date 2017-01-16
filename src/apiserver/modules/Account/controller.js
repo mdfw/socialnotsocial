@@ -27,8 +27,6 @@ const addAccount = (email, password, displayName) => {
     Account.findOne({ email: email })
       .then((foundAccount) => {
         if (foundAccount) {
-          console.log("Found an account. Adding to status: ");
-          console.dir(status);
           status.errors.email = 'Email is already in use.';
           reject(status);
         }
