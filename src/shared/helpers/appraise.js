@@ -7,7 +7,7 @@ const appraiseEmail = function appraiseEmail(emailAddress) {
   if (isEmpty(emailAddress)) {
     messages.push('Email address is required.');
   }
-  if (!isEmpty(emailAddress) && !isEmail(this.email)) {
+  if (!isEmpty(emailAddress) && !isEmail(emailAddress)) {
     messages.push('Email address does not appear to be valid.');
   }
   return messages;
@@ -58,12 +58,7 @@ const appraiseThese = function appraiseThese(what) {
   const appraised = {
     success: true,  // Did all tests pass
     tested: [],  // Which tests where done? Check this to make sure things were passed in correctly.
-    errors: {    // Error output from the sub-testers
-      email: [],
-      password: [],
-      displayName: [],
-      accountId: [],
-    },
+    errors: {},  // Error output from the sub-testers as objects.
   };
   if ('email' in what) {
     appraised.tested.push('email');
@@ -97,6 +92,7 @@ const appraiseThese = function appraiseThese(what) {
       appraised.errors.accountId = messages;
     }
   }
+  return appraised;
 };
 
 export { appraiseThese, appraiseEmail, appraiseDisplayName, appraisePassword, appraiseAccountId };
