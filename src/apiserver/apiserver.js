@@ -7,7 +7,7 @@ import { Server } from 'http';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 //import { Strategy } from 'passport-local';
-import { accountRoutes } from './modules';
+import { accountRoutes, recipientRoutes } from './modules';
 import morgan from 'morgan';
 import { idier } from '../shared/helpers/idier';
 
@@ -36,7 +36,7 @@ app.use(morgan('combined'));
 console.dir(accountRoutes);
 
 /* Routes */
-app.use('/api/v1', [accountRoutes]);
+app.use('/api/v1', [accountRoutes, recipientRoutes]);
 
 app.get('/boo', function booReturn(req, res) {
   res.send('boo!');

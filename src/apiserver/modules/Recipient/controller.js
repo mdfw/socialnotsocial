@@ -1,69 +1,74 @@
-import Account from './model';
-import SignupValidator from '../../../shared/helpers/signupValidators';
+import { Recipient } from './model';
+import { appraiseThese } from '../../../shared/helpers/appraise';
 
-export const signup = (req, res) => {
-  /* Signing up requires an email, password and displayName.
-   * Checks for validity of these fields uing the signupValidators.
+const addRecipient = (email, displayName, ownerAccountId) => {
+  /* Adds a recipient.
+   * A recipient requires an ownerAccountId, a displayName and an email address.
+   * Checks for validity of these fields uing the appraiser.
    */
-  const { email, password, displayName } = req.body;
+  const status = {
+    errors: {},
+    account: null,
+  };
 
-  /* Validate the fields */
-  const validator = new SignupValidator(email, password, displayName);
-  const fieldsValid = validator.allFields();
-  if (!fieldsValid.success) {
-    res.status(422).json(fieldsValid);
-  }
+  return new Promise(function addRecipientPromise(resolve, reject) {
+    /* Validate the fields */
+    const fieldsValid = appraiseThese({
+      email: email,
+      ownerAccountId: ownerAccountId,
+      displayName: displayName,
+    });
+    if (!fieldsValid.success) {
+      status.errors = fieldsValid.errors;
+      reject(status);
+    }
 
-  // Search the database for a user object with the submitted email.
-  Account.findOne({ 'local.email': email })
-    .then((account) => {
-      if (account) res.status(422).json({ success: false, message: 'Email is already in use.' });
+    // Search the database for a recipient object with the submitted email and owner.
+    Recipient.findOne({ email: email, ownerAccountId: ownerAccountId })
+      .then((foundAccount) => {
+        if (foundAccount) {
+          status.errors.email = 'Recipient exists.';
+          reject(status);
+        }
 
-      // Create a new instance of the account model.
-      const newAccount = new Account({ local: { email, password, displayName } });
-      // Save the new account object to the database.
-      newAccount.save()
-        .then(() => res.status(201).json({
-          success: true,
-          message: 'Successfully Registerd',
-        }))
-        .catch((err) => {
-          let error;
-          if (err.code === 11000) error = 'Email is already in use.';
-          res.status(422).json({ success: false, message: error || err });
-        });
+        // Create a new instance of the model.
+        const newRecipient = new Recipient({ email, ownerAccountId, displayName });
+        // Save the new object to the database.
+        newRecipient.save()
+          .then((savedAccountDoc) => {
+            status.account = savedAccountDoc;
+            resolve(status);
+          })
+          .catch((err) => {
+            let error;
+            if (err.code === 11000) error = 'Recipient exists.';
+            status.errors.email = error;
+            return status;
+          });
+      });
+  });
+};
+
+const addRecipientRequest = (req, res) => {
+  /* addRecipientRequest: Respond to a add event through the API by calling addRecipient */
+  const { email, ownerAccountId, displayName } = req.body;
+
+  addRecipient(email, displayName, ownerAccountId)
+    .then(() => {
+      res.status(201).json({
+        success: true,
+        message: 'Successfully Added',
+      });
+    })
+    .catch((error) => {
+      res.status(422).json({ success: false, message: error.errors });
     });
 };
 
-export const addAccount = (email, displayName) => {
-  const validator = new SignupValidator(email, null, displayName);
-
-  const emailValidationMessages = validator.displayNameValid();
-  if (emailValidationMessages.length > 0) {
-    return new Error(emailValidationMessages.join());
-  }
-  const displayNameValidationMessages = validator.emailValid();
-  if (displayNameValidationMessages.length > 0) {
-    return new Error(displayNameValidationMessages.join());
-  }
-  Account.findOne({ 'local.email': email })
-  .then((dupaccount) => {
-    if (dupaccount) {
-      return dupaccount;
-    }
-
-    // Create a new instance of the account model.
-    const newAccount = new Account({ local: { email, displayName } });
-    // Save the new account object to the database.
-    newAccount.save()
-      .then((account) => { return account; })  // eslint-disable-line arrow-body-style
-      .catch((err) => {
-        let error;
-        if (err.code === 11000) error = 'Email is already in use.';
-        const errormsg = error || err;
-        return new Error(errormsg);
-      });
-    return null;
+const update = (req, res) => {
+  res.status(418).json({
+    message: 'Brewing',
   });
-  return null;
 };
+
+export { addRecipientRequest, addRecipient, update };

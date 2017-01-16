@@ -14,8 +14,15 @@ const RecipientStatus = {
  */
 const recipientSchema = new Schema({
   status: {
-    type: Schema.Types.Number,
-    default: RecipientStatusEnum.ACTIVE,
+    type: Schema.Types.String,
+    default: RecipientStatus.ACTIVE,
+    enum: [
+      RecipientStatus.VALIDATING,
+      RecipientStatus.ACTIVE,
+      RecipientStatus.REMOVED,
+      RecipientStatus.BOUNCING,
+      RecipientStatus.UNSUBSCRIBED,
+    ],
   },
   recipientId: {
     type: Schema.Types.Number,
@@ -60,7 +67,7 @@ const recipientSchema = new Schema({
   },
   dateRemoved: {
     type: Date,
-  }
+  },
 });
 
 /* If it's a new recipient, create an recipientId and loginToken for it. */
@@ -79,4 +86,4 @@ recipientSchema.pre('save', function presave(next) {
  */
 const Recipient = mongoose.model('Recipient', recipientSchema);
 
-export default Recipient;
+export default { Recipient, RecipientStatus };

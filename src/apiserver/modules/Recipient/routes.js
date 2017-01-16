@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { signup } from './controller';
+import { addRecipientRequest } from './controller';
 
 const routes = new Router();
 
-routes.route('/signup')
-  .post(signup)
+routes.route('/recipients')
+  .post(addRecipientRequest)
   .get(function signupGetFail(req, res) {
-    res.status(405).end('Get is not supported for this endpoint');
+    res.status(405).end('Get is not supported for recipients endpoint');
   });
 
 export default routes;
