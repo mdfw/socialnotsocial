@@ -4,6 +4,13 @@ import { isEmail } from 'validator';
 import crypto from 'crypto';
 import { idier, passGen } from '../../../shared/helpers/idier';
 
+const AccountType = {
+  NORMAL: 'normal',
+  ADMIN: 'admin',
+  CUSTSERVICE: 'custservice',
+  BANNED: 'banned',
+};
+
 /* Account schema represents all accounts, even those created by adding an email address.
  * An account can be created by signing up.
  * Note: We are not using the pepperId yet, there's only one pepper
@@ -12,6 +19,11 @@ const accountSchema = new Schema({
   accountId: {
     type: Schema.Types.Number,
     unique: true,
+  },
+  accountType: {
+    type: String,
+    enum: [AccountType.NORMAL, AccountType.ADMIN, AccountType.CUSTSERVICE, AccountType.BANNED],
+    default: AccountType.NORMAL,
   },
   email: {
     type: String,
