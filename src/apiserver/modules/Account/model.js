@@ -155,4 +155,4 @@ accountSchema.methods.deAesHash = function deAesHash(passwordhash) {
  */
 const Account = mongoose.model('Account', accountSchema);
 
-export default Account;
+export { AccountType, Account};
