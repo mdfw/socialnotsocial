@@ -150,9 +150,22 @@ accountSchema.methods.deAesHash = function deAesHash(passwordhash) {
   return decrypted;
 };
 
+/* Can this account act on behalf of another account?
+ * @param {number} *ignored* the Account id to check against.
+ * @returns {bool} true if account can act on behalf of accountId
+ * @note Currently, only checks if this account has an account type of admin or customer service
+*/
+accountSchema.methods.canActOnBehalfOf = function canActOnBehalfOf(accountId) {  // eslint-disable-line
+  if (this.accountType === AccountType.ADMIN
+    || this.accountType === AccountType.CUSTSERVICE) {
+    return true;
+  }
+  return false;
+};
+
 /* Compile the schema into a model
  * http://mongoosejs.com/docs/models.html
  */
 const Account = mongoose.model('Account', accountSchema);
 
-export { AccountType, Account};
+export { AccountType, Account };
