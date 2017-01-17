@@ -1,7 +1,10 @@
 import { addAccount, updateAccount } from './controller';
 
+/* add account from a web endpoint.
+ * Respond to a signup web api event through the API by calling addAccount on the main controller
+ */
+
 const addAccountEndpoint = (req, res) => {
-  /* addAccountEndpoint: Respond to a signup web api event through the API by calling addAccount */
   const { email, password, displayName } = req.body;
 
   addAccount(email, password, displayName)
@@ -16,7 +19,7 @@ const addAccountEndpoint = (req, res) => {
     });
 };
 
-const updateAccountEnpoint = (req, res) => {
+const updateAccountEndpoint = (req, res) => {
   updateAccount()
     .then(
       res.status(418).json({
@@ -25,4 +28,4 @@ const updateAccountEnpoint = (req, res) => {
     );
 };
 
-export { addAccountEndpoint, updateAccountEnpoint };
+export { addAccountEndpoint, updateAccountEndpoint };
