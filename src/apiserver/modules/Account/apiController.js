@@ -1,31 +1,37 @@
-import { addAccount, updateAccount } from './controller';
-
-/* add account from a web endpoint.
- * Respond to a signup web api event through the API by calling addAccount on the main controller
- */
+import Account from './model';
 
 const addAccountEndpoint = (req, res) => {
   const { email, password, displayName } = req.body;
-
-  addAccount(email, password, displayName)
-    .then(() => {
+  const newAccount = new Account({ email, password, displayName });
+  newAccount.setPassword(password)
+    .then(() => { // eslint-disable-line arrow-body-style
+      return newAccount.save();
+    })
+    .then((createdAccount) => {
+      console.log('Created new account: ');
+      console.dir(createdAccount.toObject());
       res.status(201).json({
         success: true,
-        message: 'Successfully Registerd',
+        message: 'Successfully Registered',
       });
     })
-    .catch((error) => {
-      res.status(422).json({ success: false, message: error.errors });
+    .catch((err) => {
+      console.log('Account creation error: ');
+      console.dir(err);
+      let errorMessage = 'Account could not be created.';
+      if (err.code === 11000) {
+        errorMessage = 'Account with that email already exists';
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      res.status(422).json({ success: false, messages: errorMessage });
     });
 };
 
 const updateAccountEndpoint = (req, res) => {
-  updateAccount()
-    .then(
-      res.status(418).json({
-        message: 'Brewing',
-      }),
-    );
+  res.status(418).json({
+    message: 'Brewing',
+  });
 };
 
 export { addAccountEndpoint, updateAccountEndpoint };
