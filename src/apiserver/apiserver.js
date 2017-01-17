@@ -1,17 +1,20 @@
 /* Configurations */
+import { Server } from 'http';
+import { accountRoutes, recipientRoutes } from './modules';
+import { Strategy } from 'passport-local';
 import '../config/environment';
 import '../config/mongoConnect';
-import redisClient from '../config/redisConnect';
-import express from 'express';
-import { Server } from 'http';
 import bodyParser from 'body-parser';
-import passport from 'passport';
-//import { Strategy } from 'passport-local';
-import { accountRoutes, recipientRoutes } from './modules';
+import express from 'express';
+import session from 'express-session';
 import morgan from 'morgan';
-import { idier } from '../shared/helpers/idier';
+import passport from 'passport';
+import redisClient from '../config/redisConnect';
 
-const port = process.env.API_SERVER_PORT;
+let port = process.env.API_SERVER_PORT;
+if (!port) {
+  port = 3006;
+}
 
 const app = express();
 
@@ -22,7 +25,7 @@ app.use((err, req, res, next) => {
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require('express-session')({
+app.use(session({
   name: 'sessionId',
   secret: 'MmyWTLNNsTi15LYHz8FP',
   resave: true,
@@ -33,27 +36,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan('combined'));
 
-console.dir(accountRoutes);
-
 /* Routes */
 app.use('/api/v1', [accountRoutes, recipientRoutes]);
 
-app.get('/boo', function booReturn(req, res) {
-  res.send('boo!');
-});
-
-app.get('/idier', function basReturn(req, res) {
-  const newId = idier();
-  res.send(`${newId}`);
-});
-
 app.get('/', function baseReturn(req, res) {
-  res.send('Hello World!');
+  res.send('Hello - this is the api server. You probably want a more interesting endpoint.');
 });
 
 /* Start the API Server */
 const server = Server(app);
-server.listen(port, err => {
-  if (err) console.log(`API Server error on startup: ${err}`);
-  console.log(`API Server listening on http://localhost:${port}.`);
+server.listen(port, function reportOnListen(error) {
+  if (error) {
+    console.log(`API Server ERROR on startup: ${error}`);
+  } else {
+    console.log(`API Server listening on http://localhost:${port}.`);
+  }
 });
+
