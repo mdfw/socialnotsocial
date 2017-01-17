@@ -36,6 +36,13 @@
     * timestamp, worker number and sequence number.
 * https://www.npmjs.com/package/base32
 
+
+## Redis
+* redis-server /usr/local/etc/redis.conf
+
+## Mongo
+* mongod --dbpath ~/mongodb/data/db/
+
 ---
 # App: Social not social
 ## Description
