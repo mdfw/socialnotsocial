@@ -1,12 +1,15 @@
 import Account from './model';
 import { appraiseThese } from '../../../shared/helpers/appraise';
 
+/* addAccount: Adds an account
+ * A new account requires an email, password and displayName.
+ * Checks for validity of these fields uing the appraiser.
+ * @param {string} email - email address for new account.
+ * @param {string} password - password for the account.
+ * @param {string} displayName - The display name for pages shown for the account.
+ * @returns: {object} - see status object
+ */
 const addAccount = (email, password, displayName) => {
-  /* addAccount: Adds an account
-   * A new account requires an email, password and displayName.
-   * Checks for validity of these fields uing the appraiser.
-   * @returns: {object} - see status object
-   */
   const status = {
     errors: {},
     account: null,
@@ -56,18 +59,23 @@ const addAccount = (email, password, displayName) => {
   });
 };
 
-
+/* Updates an account
+ * Not currently implemented
+ */
 const updateAccount = () => { // eslint-disable-line arrow-body-style
   return new Promise(function updateAccountPromise(resolve) {
     resolve('Not implemented');
   });
 };
 
-const accountExists = (accountId) => {
-  /* accountExists: Does the account exist?
-   */
+/* Find an account
+ * @param {string} accountId - the identifier for the account.
+ * @returns {object} - the exists object below with the account object if found.
+ */
+const findAccount = (accountId) => {
+  /* exists is the return object */
   const exists = {
-    found: true,
+    found: false,
     error: null,
     account: null,
   };
@@ -83,7 +91,7 @@ const accountExists = (accountId) => {
       reject(exists);
     }
 
-    // Search the database for a user object with the objectId.
+    // Search the database for a account object with the objectId.
     Account.findOne({ accountId: accountId })
       .then((foundAccount) => {
         if (foundAccount) {
@@ -103,36 +111,4 @@ const accountExists = (accountId) => {
   });
 };
 
-const canActOnBehalfOf = (requestorId, behalfOfId) => {
-  /* canActOnBehalfOf - can requestor act on behalf of the other id
-   */
-  const approved = {
-    approved: false,
-    error: null,
-  };
-
-  return new Promise(function canActOnBehalfOfPromise(resolve, reject) {
-    /* Validate the fields */
-    accountExists(requestorId)
-      .then((exists) => {
-        const account = exists.account;
-        if (!account) {
-          approved.approved = false;
-          approved.error = new Error('Proxy account not found.');
-          reject(approved);
-        }
-        if (account.accountType === accountType.ADMIN || account.accountType === accountType.CUSTSERVICE) {
-          approved.approved = true;
-          resolve(approved);
-        }
-      })
-      .catch((err) {
-        approved.approved = false;
-        approved.error = new Error('Proxy account not found.');
-        reject(approved);
-       })
-       
-  });
-};
-
-export { addAccount, updateAccount, accountExists, canActOnBehalfOf };
+export { addAccount, updateAccount, findAccount };
