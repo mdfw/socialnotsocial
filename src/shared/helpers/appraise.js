@@ -1,8 +1,9 @@
 import { isEmail, isEmpty } from 'validator';
+import owasp from 'owasp-password-strength-test';
 
+/* Is the email valid? Uses the validator library to test.
+ */
 const appraiseEmail = function appraiseEmail(emailAddress) {
-  /* Is the email valid? Uses the validator library to test.
-   */
   const messages = [];
   if (isEmpty(emailAddress)) {
     messages.push('Email address is required.');
@@ -13,10 +14,11 @@ const appraiseEmail = function appraiseEmail(emailAddress) {
   return messages;
 };
 
+/* Test for the validity of the displayName.
+ *  Currently only checks if it's empty.
+ */
 const appraiseDisplayName = function appraiseDisplayName(displayName) {
-  /* appraiseDisplayName tests for the validity of the displayName.
-   *  Only checks if it's empty.
-   */
+
   const messages = [];
   if (isEmpty(displayName)) {
     messages.push('Display name is required.');
@@ -24,22 +26,27 @@ const appraiseDisplayName = function appraiseDisplayName(displayName) {
   return messages;
 };
 
+/* Tests a password.
+ * Must be valid and pass the owasp validation tests.
+ */
 const appraisePassword = function appraisePassword(password) {
-  /* Currently only checks on empty.
-   *  TODO: add other checks for a valid password.
-   */
-  const messages = [];
+  let messages = [];
   if (isEmpty(password)) {
     messages.push('Password is required.');
+  } else {
+    const owaspResults = owasp.test(password);
+    if (!owaspResults.strong) {
+      messages = messages.concat(owaspResults.errors);
+    }
   }
   return messages;
 };
 
+/* Tests for the presense of an accountID.
+ *  Only checks if it's empty.
+ *  TODO: Check if the account actually exists.
+ */
 const appraiseAccountId = function appraiseAccountId(accountId) {
-  /* appraiseAccountId tests for the presense of an accountID.
-   *  Only checks if it's empty.
-   *  TODO: Check if the account actually exists.
-   */
   const messages = [];
   if (isEmpty(accountId)) {
     messages.push('AccountId is required.');
