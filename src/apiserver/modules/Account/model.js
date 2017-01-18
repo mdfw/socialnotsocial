@@ -161,6 +161,22 @@ AccountSchema.methods.canActOnBehalfOf = function canActOnBehalfOf(accountId) { 
   return false;
 };
 
+/* Find an account by an accountId
+ * @param {number} accountId - the account id
+ * @param {function} callback - The callback in form of (error, accountObj)
+ */
+AccountSchema.statics.findAccount = function findAccountById(accountId, callback) {
+  this.find({ accountId: accountId }, callback);
+};
+
+/* Find an account by an email address
+ * @param {string} email - the associated email address
+ * @param {function} callback - The callback in form of (error, accountObj)
+ */
+AccountSchema.statics.findByEmail = function findAccountByEmail(email, callback) {
+  this.find({ email: email }, callback);
+};
+
 /* Compile the schema into a model
  * http://mongoosejs.com/docs/models.html
  */
