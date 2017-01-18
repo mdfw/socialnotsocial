@@ -18,7 +18,6 @@ const appraiseEmail = function appraiseEmail(emailAddress) {
  *  Currently only checks if it's empty.
  */
 const appraiseDisplayName = function appraiseDisplayName(displayName) {
-
   const messages = [];
   if (isEmpty(displayName)) {
     messages.push('Display name is required.');
