@@ -1,10 +1,14 @@
 import { Router } from 'express';
-import { getRecipientsEndpoint, addRecipientEndpoint, updateRecipient } from './apiController';
+import { getRecipientsEndpoint, addRecipientEndpoint, updateRecipientEndpoint, removeRecipientEndpoint } from './apiController';
 
 const routes = new Router();
 
-routes.route('/recipients/:ownerAccountId')
+routes.route('/recipients/')
   .post(addRecipientEndpoint)
   .get(getRecipientsEndpoint);
+
+routes.route('/recipients/:recipientId')
+  .put(updateRecipientEndpoint)
+  .delete(removeRecipientEndpoint);
 
 export default routes;

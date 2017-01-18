@@ -2,7 +2,7 @@ import { Recipient } from './model';
 import { appraiseThese } from '../../../shared/helpers/appraise';
 
 const getRecipients = (ownerAccountId) => {
- const recipients = {
+  const recipients = {
     error: null,
     recipients: null,
   };
@@ -15,15 +15,15 @@ const getRecipients = (ownerAccountId) => {
       recipients.error = fieldsValid.errors.join();
       reject(recipients);
     }
-    
-    Recipient.find({ ownerAccountId: ownerAccountId})
+
+    Recipient.find({ ownerAccountId: ownerAccountId })
       .then((results) => {
         resolve(results);
       })
       .catch((error) => {
         reject(error);
-      })
-  })
+      });
+  });
 };
 
 const addRecipient = (email, displayName, ownerAccountId) => {
@@ -60,7 +60,7 @@ const addRecipient = (email, displayName, ownerAccountId) => {
         // Create a new instance of the model.
         const newRecipient = new Recipient({ email, ownerAccountId, displayName });
         console.log('Created recipient:');
-        console.dir(newRecipient)
+        console.dir(newRecipient);
         // Save the new object to the database.
         newRecipient.save()
           .then((savedAccountDoc) => {
@@ -81,7 +81,7 @@ const addRecipient = (email, displayName, ownerAccountId) => {
         console.dir(err);
         status.errors.account = err;
         reject(status);
-      })
+      });
   });
 };
 

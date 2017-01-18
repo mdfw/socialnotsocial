@@ -1,13 +1,13 @@
 import { getRecipients, addRecipient } from './controller';
 
 const getRecipientsEndpoint = (req, res) => {
-  //const { ownerAccountId } = req.body;
+  // const { ownerAccountId } = req.body;
   const ownerAccountId = req.params.ownerAccountId;
   console.log('Getting recipients from api');
   getRecipients(ownerAccountId)
     .then((recipients) => {
       console.log('Recieved recipients');
-      console.dir(recipients)
+      console.dir(recipients);
       res.status(201).json({
         success: true,
         message: 'Successfully Found',
@@ -39,10 +39,21 @@ const addRecipientEndpoint = (req, res) => {
     });
 };
 
-const updateRecipient = (req, res) => {
+const updateRecipientEndpoint = (req, res) => {
   res.status(418).json({
     message: 'Brewing',
   });
 };
 
-export { getRecipientsEndpoint, addRecipientEndpoint, updateRecipient };
+const removeRecipientEndpoint = (req, res) => {
+  res.status(418).json({
+    message: 'Brewing',
+  });
+};
+
+export {
+  getRecipientsEndpoint,
+  addRecipientEndpoint,
+  updateRecipientEndpoint,
+  removeRecipientEndpoint,
+};
