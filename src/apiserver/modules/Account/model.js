@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { compare, hash } from 'bcrypt';
-import crypto from 'crypto';
+import { encryptPassword, passwordsMatch } from './passwordEncryption';
 import { idier } from '../../../shared/helpers/idier';
 import { appraiseEmail, appraiseDisplayName, appraisePassword } from '../../../shared/helpers/appraise';
 
@@ -42,9 +41,8 @@ const AccountSchema = new Schema({
     trim: true,
     required: true,
   },
-  passwordEncryptionPepperId: {
+  encryptedPasswordPepperId: {
     type: String,
-    default: '1',
   },
   dateCreated: {
     type: Date,
@@ -92,21 +90,18 @@ AccountSchema.methods.setPassword = function setPassword(password) {
       return password;
     })
     .then(function runHashing(passwordValue) {
-      return self.encryptPassword(passwordValue);
+      return encryptPassword(passwordValue);
     })
     .then((encryptedValue) => {
-      self.encryptedPasswordHash = encryptedValue;
+      console.log('Got encrypted value: ');
+      console.dir(encryptedValue);
+      self.encryptedPasswordHash = encryptedValue.encrypted;
+      self.encryptedPasswordPepperId = encryptedValue.pepperId;
     })
     .catch((err) => {
       throw err;
     });
 };
-
-/* Returns the unencrypted version of the passwordHash */
-AccountSchema.virtual('passwordHash')
-.get(function getPasswordHash() {
-  this.deAesHash(this.encryptedPasswordHash);
-});
 
 /* If we don't have an accountID (say, on a new account), set one. */
 AccountSchema.pre('validate', function preValidateAddAccountId(next) {
@@ -146,89 +141,12 @@ AccountSchema.pre('save', true, function preSaveValidations(next, done) {
   done();
 });
 
-/* Encrypting a password.
-   Follows dropbox's pattern of hashing, bcrypting, then encrypting.
-   Seems safer: https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
-   */
-AccountSchema.methods.encryptPassword = function encryptPassword(rawPassword) {
-  /* TODO: Deal better with errors in the encrypt and decrypt steps */
-  const self = this;
-  console.log(`Account:: encryptPassword with ${rawPassword}`);
-  return new Promise(function sendPasswordToHash(resolve) {
-    resolve(rawPassword);
-  })
-  .then(function hashThePassword(passwordToHash) {
-    return self.hashPassword(passwordToHash);
-  })
-  .then(function bcryptTheHash(hashedPassword) {
-    return self.bcryptHash(hashedPassword);
-  })
-  .then(function aesTheHash(bcryptedPassword) {
-    return self.aesHash(bcryptedPassword);
-  })
-  .then(function setEncrypted(encrytpedPassword) {
-    return encrytpedPassword;
-  })
-  .catch(function encryptionFailure(err) {
-    return new Error(err);
-  });
-};
-
-
-/* Hashes the password into a SHA512 hex hash */
-AccountSchema.methods.hashPassword = function hashPassword(password) {
-  const hasher = crypto.createHash('sha512');
-  hasher.update(password);
-  const hashed = hasher.digest('hex');
-  return hashed;
-};
-
-/* Bcrypts a string (expects a hash) with 10 rounds and a per user salt
- * Salt is returned as part of the hash and thus saved.
- * Note that this version of bcrypt only takes the first 72 characters.
-  */
-AccountSchema.methods.bcryptHash = function bcryptHash(passwordhash) {
-  const saltRounds = 10;
-  return hash(passwordhash, saltRounds);
-};
-
-/* Encrypts the bcrypted string using aes256 using a pepper stored
- *   in the environment. This is what should be finally saved.
- */
-AccountSchema.methods.aesHash = function aesHash(passwordhash) {
-  const pepper = process.env.ACCOUNT_ENCRYPTION_PEPPER;
-  const algorithm = 'aes-256-ctr';
-  const cipher = crypto.createCipher(algorithm, pepper);
-  let crypted = cipher.update(passwordhash, 'utf8', 'hex');
-  crypted += cipher.final('hex');
-  return crypted;
-};
-
-/* Decrypts the encrypted bcrypt hash using aes256 using a pepper stored
- *   in the environment. Should use this only with the bcrypted, hashed password.
- */
-AccountSchema.methods.deAesHash = function deAesHash(passwordhash) {
-  const pepper = process.env.ACCOUNT_ENCRYPTION_PEPPER;
-  const algorithm = 'aes-256-ctr';
-  const decipher = crypto.createDecipher(algorithm, pepper);
-  let decrypted = decipher.update(passwordhash, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
-};
-
-/* Compare passwords.
- * Because we are using hashing and encrypting, we have to do that before we compare.
- */
-AccountSchema.methods.comparePassword = function comparePassword(candidatePassword, callback) {
-  // compare the submitted password to encrypted password in database.
-  const candidateHashed = this.hashPassword(candidatePassword);
-  const decryptedPass = this.deAesHash(this.password);
-  compare(candidateHashed, decryptedPass, (err, isMatch) => {
+AccountSchema.methods.comparePassword = function comparePasswords(candidate, callback) {
+  passwordsMatch(candidate, this.encryptedPasswordHash, this.encryptedPasswordPepperId, (err, isMatch) => { // eslint-disable-line max-len
     if (err) callback(err);
     callback(null, isMatch);
   });
 };
-
 
 /* Can this account act on behalf of another account?
  * @param {number} *ignored* the Account id to check against.
