@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default class AppView extends React.Component {
+/* eslint-disable react/prop-types */
+
+export default class AppView extends React.Component { // eslint-disable-line 
   render() {
     return (
       <div id="app-view">
@@ -11,3 +13,4 @@ export default class AppView extends React.Component {
     );
   }
 }
+/* eslint-enable react/prop-types */

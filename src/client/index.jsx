@@ -1,6 +1,8 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { Router, Route, Link, browserHistory } from 'react-router'
+/* eslint-disable  */
+
+import React from 'react';
+import { render } from 'react-dom';
+import { Router, Route, Link, browserHistory } from 'react-router';
 
 const App = React.createClass({/*...*/})
 const About = React.createClass({/*...*/})
@@ -59,3 +61,5 @@ render((
     </Route>
   </Router>
 ), document.getElementById('root'))
+
+/* eslint-enable  */
