@@ -160,7 +160,7 @@ AccountSchema.methods.canActOnBehalfOf = function canActOnBehalfOf(accountId) { 
 
 /* Find an account by an accountId
  * @param {number} accountId - the account id
- * @param {function} callback - The callback in form of (error, accountObj)
+ * @returns {promise} - a promise to find something
  */
 AccountSchema.statics.findOneAccount = function findAccountById(accountId) {
   return this.findOne({ accountId: accountId }).exec();
@@ -168,7 +168,7 @@ AccountSchema.statics.findOneAccount = function findAccountById(accountId) {
 
 /* Find an account by an email address
  * @param {string} email - the associated email address
- * @param {function} callback - The callback in form of (error, accountObj)
+ * @returns {promise} - a promise to find something
  */
 AccountSchema.statics.findOneByEmail = function findAccountByEmail(email) {
   return this.findOne({ email: email }).exec();
