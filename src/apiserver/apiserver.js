@@ -1,15 +1,15 @@
 /* Configurations */
 import { Server } from 'http';
-import { accountRoutes, recipientRoutes } from './modules';
-import { Strategy } from 'passport-local';
+import { accountRoutes, recipientRoutes, authenticationRoutes } from './modules';
+import { ensureLoggedIn } from './modules/Authentication';
 import '../config/environment';
 import '../config/mongoConnect';
-import bodyParser from 'body-parser';
-import express from 'express';
-import session from 'express-session';
-import morgan from 'morgan';
-import passport from 'passport';
-import redisClient from '../config/redisConnect';
+import bodyParser from 'body-parser'; // eslint-disable-line import/first
+import express from 'express'; // eslint-disable-line import/first
+import session from 'express-session'; // eslint-disable-line import/first
+import morgan from 'morgan'; // eslint-disable-line import/first
+import passport from 'passport'; // eslint-disable-line import/first
+import redisClient from '../config/redisConnect'; // eslint-disable-line import/first
 
 let port = process.env.API_SERVER_PORT;
 if (!port) {
@@ -37,7 +37,7 @@ app.use(passport.session());
 app.use(morgan('combined'));
 
 /* Routes */
-app.use('/api/v1', [accountRoutes, recipientRoutes]);
+app.use('/api/v1', [accountRoutes, recipientRoutes, authenticationRoutes]);
 
 app.get('/', function baseReturn(req, res) {
   res.send('Hello - this is the api server. You probably want a more interesting endpoint.');

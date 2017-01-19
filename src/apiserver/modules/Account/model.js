@@ -141,11 +141,8 @@ AccountSchema.pre('save', true, function preSaveValidations(next, done) {
   done();
 });
 
-AccountSchema.methods.comparePassword = function comparePasswords(candidate, callback) {
-  passwordsMatch(candidate, this.encryptedPasswordHash, this.encryptedPasswordPepperId, (err, isMatch) => { // eslint-disable-line max-len
-    if (err) callback(err);
-    callback(null, isMatch);
-  });
+AccountSchema.methods.comparePassword = function comparePassword(candidate) {
+  return passwordsMatch(candidate, this.encryptedPasswordHash, this.encryptedPasswordPepperId);
 };
 
 /* Can this account act on behalf of another account?
@@ -165,16 +162,16 @@ AccountSchema.methods.canActOnBehalfOf = function canActOnBehalfOf(accountId) { 
  * @param {number} accountId - the account id
  * @param {function} callback - The callback in form of (error, accountObj)
  */
-AccountSchema.statics.findAccount = function findAccountById(accountId, callback) {
-  this.find({ accountId: accountId }, callback);
+AccountSchema.statics.findOneAccount = function findAccountById(accountId) {
+  return this.findOne({ accountId: accountId }).exec();
 };
 
 /* Find an account by an email address
  * @param {string} email - the associated email address
  * @param {function} callback - The callback in form of (error, accountObj)
  */
-AccountSchema.statics.findByEmail = function findAccountByEmail(email, callback) {
-  this.find({ email: email }, callback);
+AccountSchema.statics.findOneByEmail = function findAccountByEmail(email) {
+  return this.findOne({ email: email }).exec();
 };
 
 /* Compile the schema into a model

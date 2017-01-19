@@ -79,15 +79,11 @@ const passwordsMatch = function passwordsMatch(
   candidatePassword,
   encryptedPasswordHash,
   pepperId,
-  callback,
   ) {
   // compare the submitted password to encrypted password in database.
   const candidateHashed = hashPassword(candidatePassword);
   const decryptedPass = deAesHash(encryptedPasswordHash, pepperId);
-  compare(candidateHashed, decryptedPass, (err, isMatch) => {
-    if (err) callback(err);
-    callback(null, isMatch);
-  });
+  return compare(candidateHashed, decryptedPass);
 };
 
 export { encryptPassword, deAesHash, hashPassword, bcryptHash, aesHash, passwordsMatch };
