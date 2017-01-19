@@ -1,5 +1,11 @@
 import Account from './model';
 
+/* Adds an account to the Accounts database based on the fields passed in.
+ * Params needed in body:
+ *   @param {string} email - the email address
+ *   @param {string} password - the user's password. Must pass owasp tests.
+ *   @param {string} displayName - the name to display on the users page.
+ */
 const addAccountEndpoint = (req, res) => {
   const { email, password, displayName } = req.body;
   const newAccount = new Account({ email, password, displayName });
@@ -31,6 +37,8 @@ const addAccountEndpoint = (req, res) => {
     });
 };
 
+/* Updating a user's data.
+  */
 const updateAccountEndpoint = (req, res) => {
   res.status(418).json({
     message: 'Brewing',
