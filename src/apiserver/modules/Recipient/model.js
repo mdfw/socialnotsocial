@@ -144,26 +144,19 @@ RecipientSchema.statics.findOneRecipient = function findAccountById(recipientId)
  * @param {number} recipientId - the recipient id
  * @param {object} fieldsToUpdate - the fields and their values to update to.
  * @returns {promise} - a promise to find something
+ * @note: We do it this way instead of findOneAndUpdate because update and valdiation hooks are
+ *   not called on findOneAndUpdate.
  */
 RecipientSchema.statics.update = function findAccountById(recipientId, ownerId, fieldsToUpdate) {
   return this.findOne({ recipientId: recipientId, ownerAccountId: ownerId }).exec()
     .then((foundItem) => {
+      const foundRecipient = foundItem;
       const fieldsToUpdateKeys = Object.keys(fieldsToUpdate);
       fieldsToUpdateKeys.forEach(function modifyItem(key) {
-        foundItem[key] = fieldsToUpdate[key];
+        foundRecipient[key] = fieldsToUpdate[key];
       });
-      return foundItem.save();
+      return foundRecipient.save();
     });
-  /*
-  return this.findOneAndUpdate(
-    {
-      recipientId: recipientId,
-      ownerAccountId: ownerId,
-    },
-    fieldsToUpdate,
-    { new: true, runValidators: true },
-  ).exec();
-  */
 };
 
 /* Find a recipient by an email address

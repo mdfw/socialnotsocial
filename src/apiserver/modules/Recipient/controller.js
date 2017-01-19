@@ -1,4 +1,4 @@
-import { Recipient } from './model';
+import { Recipient, RecipientStatus } from './model';
 
 /* Returns either the current account's accountId or, if onBehalfOfId is passed in
  *  to the body, it will verify if the current account can act on behalf of the passed
@@ -89,7 +89,7 @@ const addRecipientEndpoint = (req, res) => {
     });
 };
 
-/* Updates a recipient 
+/* Updates a recipient
  * Params needed in req.body:
  *   @param {string=} email (optional) - the email address to update.
  *   @param {string=} displayName (optional) - the displayName to update.
@@ -133,13 +133,57 @@ const updateRecipientEndpoint = (req, res) => {
       console.log('Recipient update error: ');
       console.dir(err);
       let errorMessage = 'Recipient could not be updated.';
-      if (err.code === 11000) {
-        errorMessage = 'Recipient already exists';
-      } else if (err.message) {
+      if (err.message) {
         errorMessage = err.message;
       }
       res.status(422).json({ success: false, messages: errorMessage });
     });
 };
 
-export { getRecipientsEndpoint, addRecipientEndpoint, updateRecipientEndpoint };
+
+/* Removes a recipient (marks the status to 'removed')
+ * Params needed in req.body:
+ *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
+ *      can act on behalf of it.
+ *  @param (number) recipientId - Will be pulled from req.params or req.body (body takes priority)
+ *  @param {number} accountId - Will be pulled from req.user.
+ *  Uses activeAccountId() to get the accountId to search for.
+ */
+const removeRecipientEndpoint = (req, res) => {
+  let recipientId = req.params.recipientId;
+  if (req.body.recipientId) {
+    recipientId = req.body.recipientId;
+  }
+  if (!recipientId) {
+    res.status(422).json({ success: false, messages: 'No recipientId provided.' });
+  }
+
+  const accountId = activeAccountId(req);
+  Recipient.update(recipientId, accountId, { status: RecipientStatus.REMOVED })
+    .then((updatedRecipient) => {
+      console.log('Updated recipient: ');
+      console.dir(updatedRecipient);
+      console.dir(updatedRecipient.toObject());
+      res.status(201).json({
+        success: true,
+        message: 'Successfully removed recipient',
+      });
+    })
+    .catch((err) => {
+      console.log('Recipient removal error: ');
+      console.dir(err);
+      let errorMessage = 'Recipient could not be removed.';
+      if (err.message) {
+        errorMessage = err.message;
+      }
+      res.status(422).json({ success: false, messages: errorMessage });
+    });
+};
+
+
+export {
+  getRecipientsEndpoint,
+  addRecipientEndpoint,
+  updateRecipientEndpoint,
+  removeRecipientEndpoint,
+};
