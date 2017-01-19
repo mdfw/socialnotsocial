@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addAccountEndpoint } from './apiController';
+import { addAccountEndpoint } from './controller';
 
 const routes = new Router();
 
