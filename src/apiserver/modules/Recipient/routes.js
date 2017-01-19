@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getRecipientsEndpoint, addRecipientEndpoint, updateRecipientEndpoint, removeRecipientEndpoint } from './apiController';
+import { getRecipientsEndpoint, addRecipientEndpoint, updateRecipientEndpoint } from './controller';
 
 const routes = new Router();
 
@@ -8,7 +8,7 @@ routes.route('/recipients/')
   .get(getRecipientsEndpoint);
 
 routes.route('/recipients/:recipientId')
-  .put(updateRecipientEndpoint)
-  .delete(removeRecipientEndpoint);
+  .put(updateRecipientEndpoint);
+  // .delete(removeRecipientEndpoint);
 
 export default routes;
