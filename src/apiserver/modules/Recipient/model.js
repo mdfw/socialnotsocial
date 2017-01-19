@@ -178,6 +178,13 @@ RecipientSchema.statics.findAllForId = function findRecipients(accountId, lean =
   return this.find({ ownerAccountId: accountId }).exec();
 };
 
+/* Determine total number of recipients for account
+ * @param {number} - accountId
+ */
+RecipientSchema.statics.totalForAccountId = function countPosts(accountId) {
+  return this.count({ ownerAccountId: accountId }).exec();
+};
+
 /* Compile the schema into a model
  * http://mongoosejs.com/docs/models.html
  */
