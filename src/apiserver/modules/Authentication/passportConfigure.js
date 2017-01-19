@@ -2,12 +2,13 @@ import { Strategy } from 'passport-local';
 import passport from 'passport';
 import Account from '../Account/model';
 
-// Configure the local strategy for use by Passport.
-//
-// The local strategy require a `verify` function which receives the credentials
-// (`username` and `password`) submitted by the user.  The function must verify
-// that the password is correct and then invoke `cb` with a user object, which
-// will be set at `req.user` in route handlers after authentication.
+/* Configure the local strategy for use by Passport.
+ *
+ * The local strategy require a `verify` function which receives the credentials
+ * (`username` and `password`) submitted by the user.  The function must verify
+ * that the password is correct and then invoke `callback` with a user object, which
+ * will be set at `req.user` in route handlers after authentication.
+ */
 passport.use(new Strategy(
   {
     usernameField: 'email',
@@ -27,7 +28,7 @@ passport.use(new Strategy(
         return foundAccount;
       })
       .then(function returnAccount(accountToReturn) {
-        callback(null, foundAccount);
+        callback(null, accountToReturn);
       })
       .catch(function catchAuthFailure(err) {
         console.log(`Passport authentication failed: Unknown error: ${err}`);
@@ -36,27 +37,28 @@ passport.use(new Strategy(
   }));
 
 
-// Configure Passport authenticated session persistence.
-//
-// In order to restore authentication state across HTTP requests, Passport needs
-// to serialize users into and deserialize users out of the session.  The
-// typical implementation of this is as simple as supplying the user ID when
-// serializing, and querying the user record by ID from the database when
-// deserializing.
+/* Configure Passport authenticated session persistence.
+ *
+ * In order to restore authentication state across HTTP requests, Passport needs
+ * to serialize users into and deserialize users out of the session.  The
+ * typical implementation of this is as simple as supplying the user ID when
+ * serializing, and querying the user record by ID from the database when
+ * deserializing.
+ */
 passport.serializeUser(function serializeAccount(account, callback) {
   console.log('Serializing user. This id: ', account.accountId);
   callback(null, account.accountId);
 });
 
 passport.deserializeUser(function deserializeAccount(accountId, callback) {
-  console.log('Deserializing user');
-  Account.findAccount(accountId, function foundAccount(err, account) {
-    if (err) {
-      return callback(err);
-    }
-    return callback(null, account);
+  console.log(`Deserializing user based on ${accountId}`);
+  Account.findOneAccount(accountId)
+  .then(function determineAction(theAccount) {
+    return callback(null, theAccount);
+  })
+  .catch(function noFind(err) {
+    return callback(err);
   });
-  callback('Error occurred', null);
 });
 
 
@@ -100,17 +102,17 @@ const ensureLoggedIn = function ensureLoggedIn(options) {
   let unauthenticatedRedirectURL = '/login';
   if (typeof options === 'string') {
     unauthenticatedRedirectURL = options;
-  } else if (options.redirectTo && options.redirectTo.length > 0) {
+  } else if (options && options.redirectTo && options.redirectTo.length > 0) {
     unauthenticatedRedirectURL = options.redirectTo;
   }
   const allOptions = options || {};
 
   const setReturnTo = (allOptions.setReturnTo === undefined) ? true : options.setReturnTo;
 
-  return function areWeAuthenticated(req, res, next) {
+  return function areWeAuthenticated(req, res, next) { // eslint-disable-line consistent-return
     if (!req.isAuthenticated || !req.isAuthenticated()) {
       if (setReturnTo && req.session) {
-        req.session.returnTo = req.originalUrl || req.url;
+        req.session.returnTo = req.originalUrl || req.url; // eslint-disable-line no-param-reassign
       }
       return res.redirect(unauthenticatedRedirectURL);
     }
@@ -118,4 +120,4 @@ const ensureLoggedIn = function ensureLoggedIn(options) {
   };
 };
 
-export { ensureLoggedIn };
+export { ensureLoggedIn }; // eslint-disable-line import/prefer-default-export

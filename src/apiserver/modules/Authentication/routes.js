@@ -8,7 +8,6 @@ routes.route('/login')
     passport.authenticate('local', {
       successRedirect: '/',
       failureRedirect: '/login',
-      failureFlash: true,
     },
     ),
   );
