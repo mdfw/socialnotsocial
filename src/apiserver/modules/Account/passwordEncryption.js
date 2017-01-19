@@ -34,27 +34,13 @@ const aesHash = function aesHash(passwordhash) {
 /* Encrypting a password.
    Follows dropbox's pattern of hashing, bcrypting, then encrypting.
    Seems safer: https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
-   */
+*/
 const encryptPassword = function encryptPassword(rawPassword) {
-  /* TODO: Deal better with errors in the encrypt and decrypt steps */
-  console.log(`Account:: encryptPassword with ${rawPassword}`);
-  return new Promise(function sendPasswordToHash(resolve) {
-    resolve(rawPassword);
-  })
-  .then(function hashThePassword(passwordToHash) {
-    return hashPassword(passwordToHash);
-  })
-  .then(function bcryptTheHash(hashedPassword) {
-    return bcryptHash(hashedPassword);
-  })
-  .then(function aesTheHash(bcryptedPassword) {
-    return aesHash(bcryptedPassword);
-  })
-  .catch(function encryptionFailure(err) {
-    return new Error(err);
-  });
+  return Promise.resolve(rawPassword)
+  .then(hashPassword)
+  .then(bcryptHash)
+  .then(aesHash);
 };
-
 
 /* Decrypts the encrypted bcrypt hash using aes256 using a pepper stored
  *   in the environment. Should use this only with the bcrypted, hashed password.
