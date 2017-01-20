@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { appraiseEmail, appraiseDisplayName } from '../../../shared/helpers/appraise';
-import { idier, passGen } from '../../../shared/helpers/idier';
+import { idier } from '../../../shared/helpers/idier';
 
 const RecipientStatus = {
   VALIDATING: 'validating',
@@ -33,10 +33,6 @@ const RecipientSchema = new Schema({
     type: Schema.Types.Number,
     required: true,
     index: true,
-  },
-  loginToken: {
-    type: Schema.Types.String,
-    required: true,
   },
   email: {
     type: String,
@@ -74,14 +70,11 @@ const RecipientSchema = new Schema({
   },
 });
 
-/* If it's a new recipient, create an recipientId and loginToken for it. */
+/* If it's a new recipient, create an recipientId for it. */
 RecipientSchema.pre('validate', function preValidateRecipient(next) {
   console.log('Called pre save recipient');
   if (!this.recipientId) {
     this.recipientId = idier();
-  }
-  if (!this.loginToken) {
-    this.loginToken = passGen();
   }
   next();
 });
@@ -136,7 +129,7 @@ RecipientSchema.set('toJSON', {
  * @param {number} recipientId - the recipient id
  * @returns {promise} - a promise to find something
  */
-RecipientSchema.statics.findOneRecipient = function findAccountById(recipientId) {
+RecipientSchema.statics.findOneRecipient = function findRecipientById(recipientId) {
   return this.findOne({ recipientId: recipientId }).exec();
 };
 
@@ -147,7 +140,7 @@ RecipientSchema.statics.findOneRecipient = function findAccountById(recipientId)
  * @note: We do it this way instead of findOneAndUpdate because update and valdiation hooks are
  *   not called on findOneAndUpdate.
  */
-RecipientSchema.statics.update = function findAccountById(recipientId, ownerId, fieldsToUpdate) {
+RecipientSchema.statics.update = function findARecipientById(recipientId, ownerId, fieldsToUpdate) {
   return this.findOne({ recipientId: recipientId, ownerAccountId: ownerId }).exec()
     .then((foundItem) => {
       const foundRecipient = foundItem;
@@ -163,7 +156,7 @@ RecipientSchema.statics.update = function findAccountById(recipientId, ownerId, 
  * @param {string} email - the associated email address
  * @returns {promise} - a promise to find something
  */
-RecipientSchema.statics.findOneByEmail = function findAccountByEmail(email) {
+RecipientSchema.statics.findOneByEmail = function findRecipientByEmail(email) {
   return this.findOne({ email: email }).exec();
 };
 
@@ -181,7 +174,7 @@ RecipientSchema.statics.findAllForId = function findRecipients(accountId, lean =
 /* Determine total number of recipients for account
  * @param {number} - accountId
  */
-RecipientSchema.statics.totalForAccountId = function countPosts(accountId) {
+RecipientSchema.statics.totalForAccountId = function countRecipients(accountId) {
   return this.count({ ownerAccountId: accountId }).exec();
 };
 
