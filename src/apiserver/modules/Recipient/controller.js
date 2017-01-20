@@ -72,7 +72,7 @@ const addRecipientEndpoint = (req, res) => {
       console.dir(createdRecipient.toObject());
       res.status(201).json({
         success: true,
-        message: 'Successfully Created recipient',
+        message: 'Successfully created recipient',
         recipient: createdRecipient.toJSON(),
       });
     })
@@ -125,7 +125,7 @@ const updateRecipientEndpoint = (req, res) => {
       console.dir(updatedRecipient.toObject());
       res.status(201).json({
         success: true,
-        message: 'Successfully Updated recipient',
+        message: 'Successfully updated recipient',
         recipient: updatedRecipient.toJSON(),
       });
     })
