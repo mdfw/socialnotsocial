@@ -8,13 +8,4 @@ routes.post('/recipients', ensureLoggedIn(), addRecipientEndpoint);
 routes.put('/recipients/:recipientId', ensureLoggedIn(), updateRecipientEndpoint);
 routes.delete('/recipients/:recipientId', ensureLoggedIn(), removeRecipientEndpoint);
 
-/*
-routes.route('/recipients/')
-  .post(addRecipientEndpoint)
-  .get(getRecipientsEndpoint);
-
-routes.route('/recipients/:recipientId')
-  .put(updateRecipientEndpoint);
-  // .delete(removeRecipientEndpoint);
-*/
 export default routes;
