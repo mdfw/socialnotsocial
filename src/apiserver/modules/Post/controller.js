@@ -15,7 +15,10 @@ const activeAccountId = function getAccount(req) {
       return onBehalfOfId;
     }
   }
-  return req.user.accountId;
+  if (req.user && req.user.accountId) {
+    return req.user.accountId;
+  }
+  return null;
 };
 
 /* Get all of the posts for the accountId.
