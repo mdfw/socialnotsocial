@@ -130,7 +130,7 @@ const updatePostEndpoint = (req, res) => {
       res.status(201).json({
         success: true,
         message: 'Successfully updated post',
-        recipient: updatedItem.toJSON(),
+        post: updatedItem.toJSON(),
       });
     })
     .catch((err) => {
