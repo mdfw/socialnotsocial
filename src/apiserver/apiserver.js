@@ -1,15 +1,16 @@
-/* Configurations */
+/* Base imports */
 import { Server } from 'http';
-import { accountRoutes, recipientRoutes, authenticationRoutes } from './modules';
-import { ensureLoggedIn } from './modules/Authentication';
+import bodyParser from 'body-parser';
+import express from 'express';
+import session from 'express-session';
+import morgan from 'morgan';
+import passport from 'passport';
+/* Routes */
+import { accountRoutes, recipientRoutes, authenticationRoutes, postRoutes } from './modules';
+/* Configurations */
 import '../config/environment';
 import '../config/mongoConnect';
-import bodyParser from 'body-parser'; // eslint-disable-line
-import express from 'express'; // eslint-disable-line
-import session from 'express-session'; // eslint-disable-line
-import morgan from 'morgan'; // eslint-disable-line
-import passport from 'passport'; // eslint-disable-line
-import redisClient from '../config/redisConnect'; // eslint-disable-line
+import redisClient from '../config/redisConnect';
 
 const RedisStore = require('connect-redis')(session);
 
@@ -39,11 +40,7 @@ app.use(passport.session());
 app.use(morgan('combined'));
 
 /* Routes */
-app.use('/api/v1', [accountRoutes, recipientRoutes, authenticationRoutes]);
-
-app.get('/supersecure', ensureLoggedIn(), function secureReturn(req, res) {
-  res.send('Hellow - this is secure.');
-});
+app.use('/api/v1', [accountRoutes, recipientRoutes, authenticationRoutes, postRoutes]);
 
 app.get('/', function baseReturn(req, res) {
   res.send('Hello - this is the api server. You probably want a more interesting endpoint.');
