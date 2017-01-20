@@ -67,6 +67,21 @@ AccountSchema.set('toJSON', {
     return objRepresentation;
   },
 });
+
+AccountSchema.set('toJSON', {
+  transform: function transformJSON(doc, objRepresentation) {
+    return {
+      displayName: objRepresentation.displayName,
+      email: objRepresentation.email,
+      dateCreated: objRepresentation.dateCreated,
+      dateAccountValidated: objRepresentation.dateAccountValidated,
+      dateUpdated: objRepresentation.dateUpdated,
+      accountId: objRepresentation.accountId,
+      accountType: objRepresentation.accountType,
+    };
+  },
+});
+
 AccountSchema.set('toObject', {
   transform: function transformObject(doc, objRepresentation) {
     delete objRepresentation.encryptedPasswordHash;  // eslint-disable-line no-param-reassign

@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { addAccountEndpoint } from './controller';
+import { addAccountEndpoint, getAccountInfoEndpoint } from './controller';
+import { ensureLoggedIn } from '../Authentication';
 
 const routes = new Router();
 
 routes.route('/register')
-  .post(addAccountEndpoint)
-  .get(function signupGetFail(req, res) {
-    res.status(405).end('Get is not supported for this endpoint');
-  });
+  .post(addAccountEndpoint);
+
+routes.get('/account', ensureLoggedIn(), getAccountInfoEndpoint);
 
 export default routes;
