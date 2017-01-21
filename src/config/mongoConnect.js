@@ -9,3 +9,5 @@ mongoose.connect(MONGO_URL);
 mongoose.connection
   .once('open', () => console.log(`Connected to MongoDb: running on ${MONGO_URL}`))
   .on('error', err => console.warn('Warning', err));
+
+export default mongoose;

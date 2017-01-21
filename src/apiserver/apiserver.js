@@ -9,7 +9,7 @@ import passport from 'passport';
 import { accountRoutes, recipientRoutes, authenticationRoutes, postRoutes } from './modules';
 /* Configurations */
 import '../config/environment';
-import '../config/mongoConnect';
+import mongooseConnection from '../config/mongoConnect';
 import redisClient from '../config/redisConnect';
 
 const RedisStore = require('connect-redis')(session);
@@ -44,6 +44,17 @@ app.use('/api/v1', [accountRoutes, recipientRoutes, authenticationRoutes, postRo
 
 app.get('/', function baseReturn(req, res) {
   res.send('Hello - this is the api server. You probably want a more interesting endpoint.');
+});
+
+process.on('SIGTERM', () => {
+  console.log('Closing server.');
+  app.close();
+});
+
+app.on('close', () => {
+  console.log('Closing redis.');
+  redisClient.quit();
+  mongooseConnection.close();
 });
 
 /* Start the API Server */
