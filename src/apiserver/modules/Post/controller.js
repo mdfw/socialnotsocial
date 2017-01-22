@@ -54,7 +54,7 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
  * Params needed in req.body:
  *   @param {string} message - the main message body
  *   @param {string=} subject (optional) - subject of the post.
- *   @param {array[number]} photoIds - the photoIds associated with this post.
+ *   @param {array[number]} mediaIds - the mediaIds associated with this post.
  *   @param {string=} status (optional) - Must be one of PostStatus (see Post model).
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
@@ -62,12 +62,12 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
  *  Uses activeAccountId() to get the accountId to search for.
  */
 const addPostEndpoint = (req, res) => {
-  const { message, subject, photoIds, status } = req.body;
+  const { message, subject, mediaIds, status } = req.body;
   const accountId = activeAccountId(req);
   const newItem = new Post({
     message: message,
     subject: subject,
-    photoIds: photoIds,
+    mediaIds: mediaIds,
     status: status,
     ownerAccountId: accountId,
   });
@@ -98,7 +98,7 @@ const addPostEndpoint = (req, res) => {
 /* Updates a post
  *   @param {string} message - the main message body
  *   @param {string=} subject (optional) - subject of the post.
- *   @param {array[number]} photoIds - the photoIds associated with this post.
+ *   @param {array[number]} mediaIds - the mediaIds associated with this post.
  *   @param {string=} status (optional) - Must be one of PostStatus (see Post model).
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
@@ -115,12 +115,12 @@ const updatePostEndpoint = (req, res) => {
     res.status(422).json({ success: false, messages: 'No PostId provided.' });
   }
 
-  const { message, subject, photoIds, status } = req.body;
+  const { message, subject, mediaIds, status } = req.body;
   const accountId = activeAccountId(req);
   const updates = {};
   if (message && message.length > 0) updates.message = message;
   if (subject && subject.length > 0) updates.subject = subject;
-  if (photoIds && photoIds.length > 0) updates.photoIds = photoIds;
+  if (mediaIds && mediaIds.length > 0) updates.mediaIds = mediaIds;
   if (status && status.length > 0) updates.status = status;
 
   if (Object.keys(updates).length === 0) {

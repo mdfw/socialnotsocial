@@ -36,7 +36,7 @@ const PostSchema = new Schema({
   subject: {
     type: Schema.Types.String,
   },
-  photoIds: {
+  mediaIds: {
     type: Schema.Types.Array,
   },
   ownerAccountId: {
@@ -78,7 +78,7 @@ PostSchema.set('toJSON', {
       postId: objRepresentation.postId,
       message: objRepresentation.message,
       subject: objRepresentation.subject,
-      photoIds: objRepresentation.photoIds,
+      mediaIds: objRepresentation.mediaIds,
       ownerAccountId: objRepresentation.ownerAccountId,
       dateCreated: objRepresentation.dateCreated,
       dateUpdated: objRepresentation.dateUpdated,
