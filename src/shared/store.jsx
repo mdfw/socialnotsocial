@@ -1,19 +1,12 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-const reducers = require('./reducers/');
+import reducers from './reducers/';
 
 const createStoreWithMiddleware = applyMiddleware(
-    thunkMiddleware
+    thunkMiddleware,
 )(createStore);
 
 export default function configureStore(initialState) {
-    const store = createStoreWithMiddleware(reducers, initialState);
-    return store;
+  const store = createStoreWithMiddleware(reducers, initialState);
+  return store;
 }
-
-/*
-  AccountReducer
-  PostsReducer
-  CurrentPostReducer
-  */
-  
