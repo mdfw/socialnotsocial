@@ -21,4 +21,15 @@ routes.route('/logout')
     });
   });
 
+/* Checks if a user is currently authenticated.
+ * Thecnically, checks the cookie.
+ */
+routes.route('/authenticated')
+  .get(function isAuthenticated(req, res) {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      res.status(204).end();
+    }
+    res.status(403).end();
+  });
+
 export default routes;
