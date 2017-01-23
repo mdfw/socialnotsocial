@@ -1,11 +1,27 @@
+import { connect } from 'react-redux';
 import React from 'react';
+import Header from './Header';
 
-const App = function App() {
+function App(props) {
   return (
     <div id="mainapp">
-      Hello World!
+      <Header />
+      {props.children}
     </div>
   );
+}
+
+App.propTypes = {
+  children: React.PropTypes.element.isRequired,
 };
 
-export default App;
+/** redux store map **/
+const mapStateToProps = function mapStateToProps(state, ownprops) {
+  return {
+    children: ownprops.children,
+  };
+};
+
+const Container = connect(mapStateToProps)(App);
+
+export default Container;
