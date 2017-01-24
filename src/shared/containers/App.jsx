@@ -12,7 +12,7 @@ function App(props) {
 }
 
 App.propTypes = {
-  children: React.PropTypes.element.isRequired,
+  children: React.PropTypes.any,
 };
 
 /** redux store map **/

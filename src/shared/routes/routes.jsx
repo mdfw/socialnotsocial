@@ -27,14 +27,9 @@ function hasAuth(store, nextState, replace) {
 
 export default function buildRoutes(store = {}) {
   let history = browserHistory;
-  console.log('The store: ');
-  console.dir(store);
-  
   if (store) {
     history = syncHistoryWithStore(browserHistory, store);
   }
-  console.log("history: ");
-  console.dir(history);
   const checkForAuth = function checkForAuth(nextState, replace) {
     return hasAuth(store, nextState, replace);
   };
@@ -44,13 +39,14 @@ export default function buildRoutes(store = {}) {
   };
 
   return (
-    <Router history={history}>
+    <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute
           component={Register}
         />
-      </Route>;
-    </Router>
+      </Route>
+    </Router> 
+
   );
 }
 

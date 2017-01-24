@@ -7,26 +7,31 @@ import { appraiseEmail,
 
 const validate = (values) => {
   const errors = {};
-  const displayNameErrors = appraiseDisplayName(values.displayName);
-  if (displayNameErrors.length > 0) {
-    errors.displayName = displayNameErrors.join(' ');
+  if (values.displayName) {
+    const displayNameErrors = appraiseDisplayName(values.displayName);
+    if (displayNameErrors.length > 0) {
+      errors.displayName = displayNameErrors.join(' ');
+    }
   }
 
-  const emailErrors = appraiseEmail(values.email);
-  if (emailErrors.length > 0) {
-    errors.email = emailErrors.join(' ');
+  if (values.email) {
+    const emailErrors = appraiseEmail(values.email);
+    if (emailErrors.length > 0) {
+      errors.email = emailErrors.join(' ');
+    }
   }
-
-  const passwordErrors = appraisePassword(values.password);
-  if (passwordErrors.length > 0) {
-    errors.password = passwordErrors.join(' ');
+  if (values.password) {
+    const passwordErrors = appraisePassword(values.password);
+    if (passwordErrors.length > 0) {
+      errors.password = passwordErrors.join(' ');
+    }
   }
   return errors;
 };
 
 const warn = (values) => {
   const warnings = {};
-  if (values.displayName.length < 5) {
+  if (values.displayName && values.displayName.length < 5) {
     warnings.displayName = 'Your name is short. It\'s used when informing others of new posts.';
   }
   return warnings;
@@ -43,10 +48,10 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
 );
 
 renderField.propTypes = {
-  input: React.PropTypes.String,
-  label: React.PropTypes.String,
-  type: React.PropTypes.String,
-  meta: React.PropTypes.Object,
+  input: React.PropTypes.object,
+  label: React.PropTypes.string,
+  type: React.PropTypes.string,
+  meta: React.PropTypes.object,
 };
 
 
@@ -64,14 +69,14 @@ const RegisterForm = (props) => {
     </form>
   );
 };
-
+/*
 RegisterForm.propTypes = {
   handleSubmit: React.PropTypes.func,
   pristine: React.PropTypes.bool,
   reset: React.PropTypes.bool,
   submitting: React.propTypes.bool,
 };
-
+*/
 export default reduxForm({
   form: 'registerForm',  // a unique identifier for this form
   validate,                // <--- validation function given to redux-form

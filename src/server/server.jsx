@@ -40,7 +40,7 @@ app.all('/api/*', function allapiTraffic(req, res) {
 });
 /*
 app.use((req, res) => {
-  match({ routes, location: req.url }, (err, redirectLocation, renderProps) => { // eslint-disable-line consistent-return, max-len
+  match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
       console.error(err);
       return res.status(500).end('Internal server error');
