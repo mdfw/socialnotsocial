@@ -2,9 +2,10 @@ import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import App from '../reactComponents';
-import Login from '../reactComponents';
-import Home from '../reactComponents';
+import App from '../containers/App';
+import Login from '../containers/LoginForm';
+import Home from '../containers/Home';
+import Register from '../containers/RegisterForm';
 
 function requireAuth(store, nextState, replace) {
   if (!store.account.authenticated) {
@@ -15,31 +16,63 @@ function requireAuth(store, nextState, replace) {
   }
 }
 
+function hasAuth(store, nextState, replace) {
+  if (store.account.authenticated) {
+    replace({
+      pathname: '/app/',
+      state: { nextPathname: nextState.location.pathname },
+    });
+  }
+}
+
 export default function buildRoutes(store = {}) {
   let history = browserHistory;
-
+  console.log('The store: ');
+  console.dir(store);
+  
   if (store) {
     history = syncHistoryWithStore(browserHistory, store);
   }
+  console.log("history: ");
+  console.dir(history);
+  const checkForAuth = function checkForAuth(nextState, replace) {
+    return hasAuth(store, nextState, replace);
+  };
+
+  const needsAuth = function needsAuth(nextState, replace) {
+    return requireAuth(store, nextState, replace);
+  };
 
   return (
     <Router history={history}>
-      <Route path="/app/login" component={Login} />
-      <Route path="/app/" component={App}>
+      <Route path="/" component={App}>
         <IndexRoute
-          component={Home}
-          onEnter={function authForHome(nextState, replace) {
-            return requireAuth(store, nextState, replace);
-          }}
-        />
-        <Route
-          path="/app/posts/:id"
-          component={Home}
-          onEnter={function authForPostId(nextState, replace) {
-            return requireAuth(store, nextState, replace);
-          }}
+          component={Register}
         />
       </Route>;
     </Router>
   );
 }
+
+/*
+        <Route
+          path="/app/register"
+          component={Register}
+        />
+          <Route
+          path="/app/login"
+          component={Login}
+          onEnter={checkForAuth}
+        />
+        <IndexRoute
+          component={Home}
+          onEnter={needsAuth}
+        />
+        <Route
+          path="/app/posts/:id"
+          component={Home}
+          onEnter={needsAuth}
+        />
+
+
+*/

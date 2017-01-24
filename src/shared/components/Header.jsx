@@ -14,7 +14,7 @@ const Header = function Header() {
   };
   return (
     <header id="header">
-      <h1 style={headerStyle}><Link to={'/'}>Social, not Social</Link></h1>
+      <h1 style={headerStyle}><Link to={'/app'}>Social, not Social</Link></h1>
     </header>
   );
 };

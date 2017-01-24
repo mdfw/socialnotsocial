@@ -41,6 +41,32 @@ const appraisePassword = function appraisePassword(password) {
   return messages;
 };
 
+const appraisePasswordErrors = {
+  minLength: 0,
+  maxLength: 1,
+  repeating: 2,
+  needLowercase: 3,
+  needUppercase: 4,
+  needNumber: 5,
+  needCharacter: 6,
+};
+
+/* A wrapper for awasp tests that returns this
+ * {
+ *   errors              : [],
+ *   failedTests         : [],
+ *   requiredTestErrors  : [],
+ *   optionalTestErrors  : [],
+ *   passedTests         : [ 0, 1, 2, 3, 4, 5, 6 ],
+ *   isPassphrase        : false,
+ *   strong              : true,
+ *   optionalTestsPassed : 4
+ * }
+ */
+const appraisePasswordExtra = function appraisePasswordExtra(password) {
+  return owasp.test(password);
+};
+
 /* Tests for the presense of an accountID.
  *  Only checks if it's empty.
  *  TODO: Check if the account actually exists.
@@ -101,4 +127,12 @@ const appraiseThese = function appraiseThese(what) {
   return appraised;
 };
 
-export { appraiseThese, appraiseEmail, appraiseDisplayName, appraisePassword, appraiseAccountId };
+export {
+  appraiseThese,
+  appraiseEmail,
+  appraiseDisplayName,
+  appraisePassword,
+  appraisePasswordExtra,
+  appraisePasswordErrors,
+  appraiseAccountId,
+};

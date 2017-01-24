@@ -40,9 +40,11 @@ const addAccountEndpoint = (req, res) => {
       console.log('Created new account: ');
       console.dir(createdAccount);
       console.dir(createdAccount.toObject());
+      const cleanedAccount = createdAccount.toJSON();
       res.status(201).json({
         success: true,
         message: 'Successfully Registered',
+        account: cleanedAccount,
       });
     })
     .catch((err) => {

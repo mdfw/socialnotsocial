@@ -1,17 +1,16 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import Header from './Header';
 
-function App(props) {
+function Home(props) {
   return (
-    <div id="mainapp">
-      <Header />
-      {props.children}
+    <div id="home">
+      Hi, you are home.
+      { props.children }
     </div>
   );
 }
 
-App.propTypes = {
+Home.propTypes = {
   children: React.PropTypes.element.isRequired,
 };
 
@@ -22,6 +21,6 @@ const mapStateToProps = function mapStateToProps(state, ownprops) {
   };
 };
 
-const Container = connect(mapStateToProps)(App);
+const Container = connect(mapStateToProps)(Home);
 
 export default Container;

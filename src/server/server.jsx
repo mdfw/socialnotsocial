@@ -3,11 +3,13 @@ import http from 'http';
 import httpProxy from 'http-proxy';
 import express from 'express';
 import helmet from 'helmet';
-import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { RoutingContext, match } from 'react-router';
+import morgan from 'morgan';
+
+// import React from 'react';
+// import { renderToString } from 'react-dom/server';
+// import { RoutingContext, match } from 'react-router';
 /* Routes */
-import routes from '../shared/routes';
+// import routes from '../shared/routes';
 /* Configurations */
 import '../config/environment';
 
@@ -19,19 +21,24 @@ if (!apiServerPort) {
 const apiProxy = httpProxy.createProxyServer();
 const apiServer = `http://localhost:${apiServerPort}`;
 
+let ourPort = process.env.MAIN_SERVER_PORT;
+if (!ourPort) {
+  ourPort = 3001;
+}
+
 const app = express();
 
 /* Configure middleware */
 /* Helmet - help secure Express/Connect apps with various HTTP headers */
 app.use(helmet());
-
-app.use(express.static('public'));
+app.use(morgan('combined'));
+app.use(express.static('build/public'));
 
 /* Proxy all api calls through to the api server */
 app.all('/api/*', function allapiTraffic(req, res) {
   apiProxy.web(req, res, { target: apiServer });
 });
-
+/*
 app.use((req, res) => {
   match({ routes, location: req.url }, (err, redirectLocation, renderProps) => { // eslint-disable-line consistent-return, max-len
     if (err) {
@@ -60,8 +67,14 @@ app.use((req, res) => {
     res.end(HTML);
   });
 });
+*/
+
 const server = http.createServer(app);
-server.listen(3003);
-server.on('listening', () => {
-  console.log('Main Server listening on 3003');
+server.listen(ourPort);
+server.on('listening', function reportOnListen(error) {
+  if (error) {
+    console.log(`Main Server ERROR on startup: ${error}`);
+  } else {
+    console.log(`Main Server listening on http://localhost:${ourPort}.`);
+  }
 });

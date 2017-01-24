@@ -43,6 +43,10 @@
 ## Mongo
 * mongod --dbpath ~/mongodb/data/db/
 
+
+## Tabled
+* https://github.com/mattt/Chroma-Hash
+
 ---
 # App: Social not social
 ## Description
