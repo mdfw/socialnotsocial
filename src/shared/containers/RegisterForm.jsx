@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { submitNewAccount, submitAccountErrorAck } from '../actions/account';
-import { registerFormUpdate } from '../actions/registerForm';
+import { formUpdate, REG_FORM_NAME } from '../actions/forms';
 import RegisterForm from '../components/RegisterForm';
 import { appraiseEmail,
   appraiseDisplayName,
@@ -41,18 +41,18 @@ class RegisterFormContainer extends React.Component {
     );
   }
   handleChange(fields) {
-    this.props.dispatch(registerFormUpdate(fields));
+    this.props.dispatch(formUpdate(REG_FORM_NAME, fields));
   }
   handleFocus(fieldName) {
     if (this.props.fieldsTouched.indexOf(fieldName) === -1) {
       const newTouched = this.props.fieldsTouched.concat(fieldName);
-      this.props.dispatch(registerFormUpdate({ fieldsTouched: newTouched }));
+      this.props.dispatch(formUpdate(REG_FORM_NAME, { fieldsTouched: newTouched }));
     }
   }
   handleBlur(fieldName) {
     if (this.props.fieldsExited.indexOf(fieldName) === -1) {
       const newExited = this.props.fieldsExited.concat(fieldName);
-      this.props.dispatch(registerFormUpdate({ fieldsExited: newExited }));
+      this.props.dispatch(formUpdate(REG_FORM_NAME, { fieldsExited: newExited }));
     }
   }
   handleErrorAck() {
@@ -105,11 +105,11 @@ const mapStateToProps = function mapStateToProps(state) {
   return {
     submitting: state.account.submitting,
     submitError: state.account.submitError,
-    displayName: state.registerForm.displayName,
-    email: state.registerForm.email,
-    password: state.registerForm.password,
-    fieldsTouched: state.registerForm.fieldsTouched,
-    fieldsExited: state.registerForm.fieldsExited,
+    displayName: state.forms.registerForm.displayName,
+    email: state.forms.registerForm.email,
+    password: state.forms.registerForm.password,
+    fieldsTouched: state.forms.registerForm.fieldsTouched,
+    fieldsExited: state.forms.registerForm.fieldsExited,
   };
 };
 

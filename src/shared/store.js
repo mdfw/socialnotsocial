@@ -2,12 +2,12 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { routerReducer } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
-import { accountReducer, registerFormReducer } from './reducers/';
+import { accountReducer, formReducer } from './reducers/';
 
 const allReducers = combineReducers({
   account: accountReducer,
   routing: routerReducer,
-  registerForm: registerFormReducer,
+  forms: formReducer,
 });
 
 export default function configureStore(initialState) {

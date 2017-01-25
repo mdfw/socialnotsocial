@@ -1,6 +1,6 @@
 import accountReducer from './account';
-import registerFormReducer from './registerForm';
+import formReducer from './forms';
 // import postsReducer from './posts';
 
 
-export { accountReducer, registerFormReducer };
+export { accountReducer, formReducer };

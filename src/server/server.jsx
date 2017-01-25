@@ -11,6 +11,7 @@ import morgan from 'morgan';
 /* Routes */
 // import routes from '../shared/routes';
 /* Configurations */
+
 import '../config/environment';
 
 /* Set up proxy routes to the api server */

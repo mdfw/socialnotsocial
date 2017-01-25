@@ -1,6 +1,49 @@
 import fetch from 'isomorphic-fetch';
-import { submittingAccountInfo, receiveAccountInfo, receiveAccountError, submitAccountError } from './account';
-import { registerFormClear } from './registerForm';
+import { push } from 'react-router-redux';
+import {
+  submittingAccountInfo,
+  receiveAccountInfo,
+  receiveAccountError,
+  submitAccountError,
+  requestLogin,
+  loginError,
+} from './account';
+import { formClear, REG_FORM_NAME, LOGIN_FORM_NAME } from './forms';
+
+
+/* If we have valid new account data, dispatch it to the store.
+ * Throw error on failure.
+ * TODO: This seems fragile - is there a way to have server and
+ *  this have agreement on what to expect?
+ */
+function dispatchAccountData(dispatch, data) {
+  const account = data.account;
+  if (!account.displayName ||
+    account.displayName.length === 0 ||
+    !account.email ||
+    account.email.length === 0 ||
+    !account.accountId ||
+    account.accountId.length === 0
+  ) {
+    throw new Error('Invalid account information returned.');
+  }
+  return dispatch(
+    receiveAccountInfo(account),
+  );
+}
+
+/* Check that we did not receive an error from api server
+ * Returns server error.statusText on non-201 status
+ * Returns the server response object on 201 status
+ */
+function checkAccountReturn(response) {
+  if (response.status === 201 || response.status === 200) {
+    return response;
+  }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
+}
 
 function checkFetchAPIStatus(response) {
   if (response.status === 201) {
@@ -36,51 +79,81 @@ const fetchAccountAPI = function fetchAccountAPI() {
 };
 
 
-/* Check that we did not receive an error from api server
- * Returns server error.statusText on non-201 status
- * Returns the server response object on 201 status
- */
-function checkAddAccountReturn(response) {
-  if (response.status === 201) {
-    return response;
-  }
-  const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
-}
+// ----- //
+// LOGIN //
+// ----- //
 
-/* If we have valid new account data, dispatch it to the store.
- * Throw error on failure.
- * TODO: This seems fragile - is there a way to have server and
- *  this have agreement on what to expect?
- */
-function dispatchNewAccountData(dispatch, data) {
-  const account = data.account;
-  if (!account.displayName ||
-    account.displayName.length === 0 ||
-    !account.email ||
-    account.email.length === 0 ||
-    !account.accountId ||
-    account.accountId.length === 0
-  ) {
-    throw new Error('Invalid account information returned.');
-  }
+/* Clears the login data from the store
+  */
+function dispatchLoginFormClear(dispatch) {
   return dispatch(
-    receiveAccountInfo(account),
+    formClear(LOGIN_FORM_NAME),
   );
 }
+/* The heavy lifting work of logging in an account.
+ * @param {string} email
+ * @param {string} password
+ * Calls to the api endpoint to log in, parses it,
+ *   places the account info in the store and clears the login form.
+ */
+const loginAccountAPI = function loginAccountAPI(email, password) {
+  return function fetchPageDispatch(dispatch) {
+    if (!email || email.length === 0 ||
+      !password || password.length === 0
+      ) {
+      throw new Error('Missing items');
+    }
+    // Set the submitting flag
+    dispatch(requestLogin());
+    fetch('/api/v1/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+    .then(checkAccountReturn)
+    .then(function processJsonResponse(response) {
+      return response.json();
+    })
+    .then(function addToStore(data) {
+      return dispatchAccountData(dispatch, data);
+    })
+    .then(dispatchLoginFormClear(dispatch))
+    .then(function goHome() {
+      return dispatch(
+        push('/'),
+      );
+    })
+    .catch(function submitError(error) {
+      const errMsg = error.message;
+      return dispatch(
+        loginError(errMsg),
+      );
+    });
+  };
+};
+
+// ------ //
+// ADDING //
+// ------ //
+
 
 /* Clears the new account data from the store
   */
 function dispatchNewAccountFormClear(dispatch) {
   return dispatch(
-    registerFormClear(),
+    formClear(REG_FORM_NAME),
   );
 }
 /* The heavy lifting work of adding an account.
  * @param {string} displayName
- * @param {string} displayName
- * @param {string} displayName
+ * @param {string} email
+ * @param {string} password
  * Calls to the api endpoint to create an account, parses it,
  *   places the account info in the store and clears the form.
  */
@@ -106,14 +179,19 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
         password: password,
       }),
     })
-    .then(checkAddAccountReturn)
+    .then(checkAccountReturn)
     .then(function processJsonResponse(response) {
       return response.json();
     })
     .then(function addToStore(data) {
-      return dispatchNewAccountData(dispatch, data);
+      return dispatchAccountData(dispatch, data);
     })
     .then(dispatchNewAccountFormClear(dispatch))
+    .then(function goHome() {
+      return dispatch(
+        push('/'),
+      );
+    })
     .catch(function submitError(error) {
       const errMsg = error.message;
       return dispatch(
@@ -123,4 +201,4 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
   };
 };
 
-export { fetchAccountAPI, addAccountAPI };
+export { fetchAccountAPI, addAccountAPI, loginAccountAPI };

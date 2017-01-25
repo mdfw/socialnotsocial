@@ -6,9 +6,10 @@ import App from '../containers/App';
 import Login from '../containers/LoginForm';
 import Home from '../containers/Home';
 import Register from '../containers/RegisterForm';
+import Welcome from '../components/Welcome';
 
-function requireAuth(store, nextState, replace) {
-  if (!store.account.authenticated) {
+function requireAuth(state, nextState, replace) {
+  if (!state.account.authenticated) {
     replace({
       pathname: '/app/login',
       state: { nextPathname: nextState.location.pathname },
@@ -16,8 +17,8 @@ function requireAuth(store, nextState, replace) {
   }
 }
 
-function hasAuth(store, nextState, replace) {
-  if (store.account.authenticated) {
+function hasAuth(state, nextState, replace) {
+  if (state.account.authenticated) {
     replace({
       pathname: '/app/',
       state: { nextPathname: nextState.location.pathname },
@@ -26,23 +27,26 @@ function hasAuth(store, nextState, replace) {
 }
 
 export default function buildRoutes(store = {}) {
+  console.log('Store: ')
+  console.dir(store);
+  const state = store.getState();
   let history = browserHistory;
   if (store) {
     history = syncHistoryWithStore(browserHistory, store);
   }
   const checkForAuth = function checkForAuth(nextState, replace) {
-    return hasAuth(store, nextState, replace);
+    return hasAuth(state, nextState, replace);
   };
 
   const needsAuth = function needsAuth(nextState, replace) {
-    return requireAuth(store, nextState, replace);
+    return requireAuth(state, nextState, replace);
   };
 
   return (
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute
-          component={Register}
+          component={Home}
         />
       </Route>
     </Router> 

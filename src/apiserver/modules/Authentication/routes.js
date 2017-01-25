@@ -3,14 +3,27 @@ import passport from 'passport';
 
 const routes = new Router();
 
+function signinUser(req, res, next) {
+  passport.authenticate('local', (err, user, info) => { // eslint-disable-line consistent-return
+    if (err || !user) {
+      return res.status(400).send(info);
+    }
+    req.logIn(user, (error) => { // eslint-disable-line consistent-return
+      if (error) {
+        return next(error);
+      }
+      // you can send a json response instead of redirecting the user
+      res.status(200).json({
+        success: true,
+        message: 'Logged in',
+        account: user,
+      });
+    });
+  })(req, res, next);
+}
+
 routes.route('/login')
-  .post(
-    passport.authenticate('local', {
-      successRedirect: '/',
-      failureRedirect: '/login',
-    },
-    ),
-  );
+  .post(signinUser);
 
 routes.route('/logout')
   .get(function logThemOut(req, res) {
@@ -22,7 +35,7 @@ routes.route('/logout')
   });
 
 /* Checks if a user is currently authenticated.
- * Thecnically, checks the cookie.
+ * Technically, checks the cookie.
  */
 routes.route('/authenticated')
   .get(function isAuthenticated(req, res) {

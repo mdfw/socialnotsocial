@@ -1,17 +1,5 @@
-import { fetchAccountAPI, addAccountAPI } from './accountAPI';
+import { fetchAccountAPI, addAccountAPI, loginAccountAPI } from './accountAPI';
 
-const REQUEST_ACCOUNT_INFO = 'REQUEST_ACCOUNT_INFO';
-function requestAccountInfo() {
-  return { type: REQUEST_ACCOUNT_INFO };
-}
-
-const RECEIVE_ACCOUNT_ERROR = 'RECEIVE_ACCOUNT_ERROR';
-function receiveAccountError(errorMessage) {
-  return {
-    type: RECEIVE_ACCOUNT_ERROR,
-    errorMessage: errorMessage,
-  };
-}
 
 const RECEIVE_ACCOUNT_INFO = 'RECEIVE_ACCOUNT_INFO';
 function receiveAccountInfo(account) {
@@ -27,12 +15,60 @@ function receiveAccountInfo(account) {
   };
 }
 
+const REQUEST_ACCOUNT_INFO = 'REQUEST_ACCOUNT_INFO';
+function requestAccountInfo() {
+  return { type: REQUEST_ACCOUNT_INFO };
+}
+
+const RECEIVE_ACCOUNT_ERROR = 'RECEIVE_ACCOUNT_ERROR';
+function receiveAccountError(errorMessage) {
+  return {
+    type: RECEIVE_ACCOUNT_ERROR,
+    errorMessage: errorMessage,
+  };
+}
+
 function fetchAccount() {
   return (dispatch) => {
     dispatch(requestAccountInfo());
     dispatch(fetchAccountAPI());
   };
 }
+
+
+function loginAccount(email, password) {
+  return (dispatch) => {
+    dispatch(loginAccountAPI(email, password));
+  };
+}
+
+
+const REQUEST_LOGIN = 'REQUEST_LOGIN';
+function requestLogin() {
+  return { type: REQUEST_LOGIN };
+}
+
+const LOGIN_ERROR = 'LOGIN_ERROR';
+function loginError(errorMessage) {
+  return {
+    type: LOGIN_ERROR,
+    errorMessage: errorMessage,
+  };
+}
+const LOGIN_ERROR_ACK = 'LOGIN_ERROR_ACK';
+function loginErrorAck() {
+  return {
+    type: LOGIN_ERROR_ACK,
+  };
+}
+
+
+function submitNewAccount(displayName, email, password) {
+  return (dispatch) => {
+    dispatch(addAccountAPI(displayName, email, password));
+  };
+}
+
 
 const SUBMITTING_ACCOUNT_INFO = 'SUBMITTING_ACCOUNT_INFO';
 function submittingAccountInfo() {
@@ -54,21 +90,21 @@ function submitAccountErrorAck() {
   };
 }
 
-function submitNewAccount(displayName, email, password) {
-  return (dispatch) => {
-    dispatch(addAccountAPI(displayName, email, password));
-  };
-}
-
-
 export {
   REQUEST_ACCOUNT_INFO,
   requestAccountInfo,
-  RECEIVE_ACCOUNT_ERROR,
-  receiveAccountError,
   RECEIVE_ACCOUNT_INFO,
   receiveAccountInfo,
+  RECEIVE_ACCOUNT_ERROR,
+  receiveAccountError,
   fetchAccount,
+  REQUEST_LOGIN,
+  requestLogin,
+  LOGIN_ERROR,
+  loginError,
+  LOGIN_ERROR_ACK,
+  loginErrorAck,
+  loginAccount,
   SUBMITTING_ACCOUNT_INFO,
   submittingAccountInfo,
   SUBMIT_ACCOUNT_ERROR,
