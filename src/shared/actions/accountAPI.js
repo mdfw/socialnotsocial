@@ -47,9 +47,13 @@ function checkAddAPIStatus(response) {
   throw error;
 }
 
-const addAccountAPI = function addAccountAPI(displayName, email, passsword) {
+const addAccountAPI = function addAccountAPI(displayName, email, password) {
   return function fetchPageDispatch(dispatch) {
-    fetch('/users', {
+    console.log(`Adding account: dn: ${displayName} em: ${email} ps: ${password}`);
+    if (!displayName || displayName.length === 0 || !email || email.length === 0 || !password || password.length === 0 ) {
+      throw new Error('Missing items');
+    }
+    fetch('/api/v1/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +62,7 @@ const addAccountAPI = function addAccountAPI(displayName, email, passsword) {
       body: JSON.stringify({
         displayName: displayName,
         email: email,
-        passsword: passsword,
+        password: password,
       }),
     })
     .then(checkAddAPIStatus)

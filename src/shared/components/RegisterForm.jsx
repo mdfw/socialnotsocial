@@ -1,84 +1,109 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { appraiseEmail,
-  appraiseDisplayName,
-  appraisePassword,
-} from '../helpers/appraise';
+import TextField from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
 
-const validate = (values) => {
-  const errors = {};
-  if (values.displayName) {
-    const displayNameErrors = appraiseDisplayName(values.displayName);
-    if (displayNameErrors.length > 0) {
-      errors.displayName = displayNameErrors.join(' ');
+class SubmitProgress extends React.Component {
+  render() {
+    if (this.props.submitting) {
+      return <CircularProgress mode="indeterminate" />;
     }
+    return null;
   }
-
-  if (values.email) {
-    const emailErrors = appraiseEmail(values.email);
-    if (emailErrors.length > 0) {
-      errors.email = emailErrors.join(' ');
-    }
-  }
-  if (values.password) {
-    const passwordErrors = appraisePassword(values.password);
-    if (passwordErrors.length > 0) {
-      errors.password = passwordErrors.join(' ');
-    }
-  }
-  return errors;
+}
+SubmitProgress.propTypes = {
+  submitting: React.PropTypes.bool,
 };
 
-const warn = (values) => {
-  const warnings = {};
-  if (values.displayName && values.displayName.length < 5) {
-    warnings.displayName = 'Your name is short. It\'s used when informing others of new posts.';
+class RegisterForm extends React.Component {
+  constructor() {
+    super();
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+ }
+  onChange(e) {
+    const target = e.target;
+    const name = target.name;
+    const value = target.value;
+    this.props.handleChange({
+      [name]: value,
+    });
   }
-  return warnings;
-};
-
-const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-);
-
-renderField.propTypes = {
-  input: React.PropTypes.object,
-  label: React.PropTypes.string,
-  type: React.PropTypes.string,
-  meta: React.PropTypes.object,
-};
-
-
-const RegisterForm = (props) => {
-  const { handleSubmit, pristine, reset, submitting } = props;
-  return (
-    <form onSubmit={handleSubmit}>
-      <Field name="displayName" type="text" component={renderField} label="Your name" />
-      <Field name="email" type="email" component={renderField} label="Your email address" />
-      <Field name="password" type="password" component={renderField} label="A solid password" />
+  onSubmit(e) {
+    e.preventDefault();
+    this.props.handleSubmit();
+  }
+  onBlur(e) {
+    const name = e.target.name;
+    this.props.handleBlur(name);
+  }
+  onFocus(e) {
+    const name = e.target.name;
+    this.props.handleFocus(name);
+  }
+  render() {
+    const { submitting, errors, displayNameValue, emailValue, passswordValue, passwordFieldType } = this.props;
+    return (
       <div>
-        <button type="submit" disabled={pristine || submitting}>Submit</button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>Clear</button>
+        <form onSubmit={this.onSubmit}>
+          <div>
+            Create an account on Social, not social
+          </div>
+          <div>
+            <TextField
+              name="displayName"
+              hintText="Your full name"
+              floatingLabelText="Your Name"
+              errorText={errors.displayName}
+              value={displayNameValue}
+              type="text"
+              disabled={submitting}
+              onChange={this.onChange}
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+            />
+          </div>
+          <div>
+            <TextField
+              name="email"
+              hintText="Email"
+              floatingLabelText="Email"
+              value={emailValue}
+              errorText={errors.email}
+              type="text"
+              disabled={submitting}
+              onChange={this.onChange}
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+            />
+          </div>
+          <div>
+            <TextField
+              name="password"
+              hintText=""
+              value={passswordValue}
+              floatingLabelText="Password"
+              type={passwordFieldType}
+              errorText={errors.password}
+              onChange={this.onChange}
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+            />
+          </div>
+          <div>
+            <button type="submit" disabled={submitting || !errors.formReady}>Submit</button>
+          </div>
+        </form>
+        <SubmitProgress submitting={submitting} />
       </div>
-    </form>
-  );
-};
+    );
+  }
+}
 /*
 RegisterForm.propTypes = {
-  handleSubmit: React.PropTypes.func,
-  pristine: React.PropTypes.bool,
-  reset: React.PropTypes.bool,
-  submitting: React.propTypes.bool,
+  handleSubmit: React.PropTypes.func.required,
+  submitting: React.PropTypes.bool,
 };
 */
-export default reduxForm({
-  form: 'registerForm',  // a unique identifier for this form
-  validate,                // <--- validation function given to redux-form
-  warn,                    // <--- warning function given to redux-form
-})(RegisterForm);
+export default RegisterForm;
