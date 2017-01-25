@@ -4,6 +4,7 @@ import {
   RECEIVE_ACCOUNT_INFO,
   SUBMITTING_ACCOUNT_INFO,
   SUBMIT_ACCOUNT_ERROR,
+  SUBMIT_ACCOUNT_ERROR_ACK,
 } from '../actions/account';
 
 const DEFAULT_ACCOUNT_STATE = {
@@ -37,7 +38,7 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
         type: action.accountType,
         dateCreated: action.dateCreated,
         accountId: action.accountId,
-        authenticated: action.authenticated,
+        authenticated: true,
         fetching: false,
         submitting: false,
       };
@@ -63,6 +64,13 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
         ...state,
         submitting: false,
         submitError: action.errorMessage,
+      };
+      break;
+    }
+    case SUBMIT_ACCOUNT_ERROR_ACK: {
+      newstate = {
+        ...state,
+        submitError: null,
       };
       break;
     }

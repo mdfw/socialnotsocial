@@ -10,7 +10,7 @@ function checkFetchAPIStatus(response) {
     error.response = response;
     throw error;
   }
-  const error = new Error(response.statusText);
+  const error = new Error(response.message);
   error.response = response;
   throw error;
 }
@@ -86,7 +86,6 @@ function dispatchNewAccountFormClear(dispatch) {
  */
 const addAccountAPI = function addAccountAPI(displayName, email, password) {
   return function fetchPageDispatch(dispatch) {
-    console.log(`AccountAPI: Adding account: dn: ${displayName} em: ${email} ps: ${password}`);
     if (!displayName || displayName.length === 0 ||
       !email || email.length === 0 ||
       !password || password.length === 0
@@ -116,8 +115,9 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
     })
     .then(dispatchNewAccountFormClear(dispatch))
     .catch(function submitError(error) {
+      const errMsg = error.message;
       return dispatch(
-        submitAccountError(error),
+        submitAccountError(errMsg),
       );
     });
   };

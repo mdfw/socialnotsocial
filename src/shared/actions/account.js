@@ -47,6 +47,13 @@ function submitAccountError(errorMessage) {
   };
 }
 
+const SUBMIT_ACCOUNT_ERROR_ACK = 'SUBMIT_ACCOUNT_ERROR_ACK';
+function submitAccountErrorAck() {
+  return {
+    type: SUBMIT_ACCOUNT_ERROR_ACK,
+  };
+}
+
 function submitNewAccount(displayName, email, password) {
   return (dispatch) => {
     dispatch(addAccountAPI(displayName, email, password));
@@ -66,5 +73,7 @@ export {
   submittingAccountInfo,
   SUBMIT_ACCOUNT_ERROR,
   submitAccountError,
+  SUBMIT_ACCOUNT_ERROR_ACK,
+  submitAccountErrorAck,
   submitNewAccount,
 };

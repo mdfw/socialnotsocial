@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { submitNewAccount } from '../actions/account';
+import { submitNewAccount, submitAccountErrorAck } from '../actions/account';
 import { registerFormUpdate } from '../actions/registerForm';
 import RegisterForm from '../components/RegisterForm';
 import { appraiseEmail,
@@ -25,11 +25,11 @@ function determineErrors(dname, email, pass, touched, exited) {
     errors.email = emailErrors.join(' ');
   }
   const passwordErrors = appraisePassword(pass);
-  if (passwordErrors.length > 0 && (exited.indexOf('password') > -1) || (touched.indexOf('password') > -1 && pass.length > 5)) {
+  if (passwordErrors.length > 0 && ((exited.indexOf('password') > -1) || (touched.indexOf('password') > -1 && pass.length > 5))) {
     errors.password = passwordErrors.join(' ');
   }
   if (passwordErrors.length > 0 || emailErrors.length > 0 || displayNameErrors.length > 0) {
-     errors.formReady = false;
+    errors.formReady = false;
   }
   return errors;
 }
@@ -55,6 +55,9 @@ class RegisterFormContainer extends React.Component {
       this.props.dispatch(registerFormUpdate({ fieldsExited: newExited }));
     }
   }
+  handleErrorAck() {
+    this.props.dispatch(submitAccountErrorAck());
+  }
   render() {
     const errors = determineErrors(
       this.props.displayName,
@@ -63,6 +66,9 @@ class RegisterFormContainer extends React.Component {
       this.props.fieldsTouched,
       this.props.fieldsExited,
     );
+    if (this.props.submitError && this.props.submitError.length > 0) {
+      errors.submitError = this.props.submitError;
+    }
     return (
       <MuiThemeProvider>
         <RegisterForm
@@ -70,6 +76,7 @@ class RegisterFormContainer extends React.Component {
           handleChange={fields => this.handleChange(fields)}
           handleBlur={fieldName => this.handleBlur(fieldName)}
           handleFocus={fieldName => this.handleFocus(fieldName)}
+          handleErrorAck={() => this.handleErrorAck()}
           submitting={this.props.submitting}
           displayNameValue={this.props.displayName}
           emailValue={this.props.email}

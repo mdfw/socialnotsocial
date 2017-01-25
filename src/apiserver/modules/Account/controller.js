@@ -30,16 +30,11 @@ const activeAccountId = function getAccount(req) {
 const addAccountEndpoint = (req, res) => {
   const { email, password, displayName } = req.body;
   const newAccount = new Account({ email, password, displayName });
-  console.log('Heres the new account before save or even setting password');
-  console.dir(newAccount);
   newAccount.setPassword(password)
     .then(() => { // eslint-disable-line arrow-body-style
       return newAccount.save();
     })
     .then((createdAccount) => {
-      console.log('Created new account: ');
-      console.dir(createdAccount);
-      console.dir(createdAccount.toObject());
       const cleanedAccount = createdAccount.toJSON();
       res.status(201).json({
         success: true,
@@ -48,15 +43,14 @@ const addAccountEndpoint = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log('Account creation error: ');
-      console.dir(err);
       let errorMessage = 'Account could not be created.';
       if (err.code === 11000) {
         errorMessage = 'Account with that email already exists';
       } else if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
@@ -81,7 +75,8 @@ const getAccountInfoEndpoint = (req, res) => { // eslint-disable-line consistent
       });
     })
     .catch((err) => {
-      res.status(422).json({ success: false, message: err.message });
+      res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
