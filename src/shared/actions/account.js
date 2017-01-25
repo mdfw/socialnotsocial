@@ -49,7 +49,6 @@ function submitAccountError(errorMessage) {
 
 function submitNewAccount(displayName, email, password) {
   return (dispatch) => {
-    dispatch(submittingAccountInfo());
     dispatch(addAccountAPI(displayName, email, password));
   };
 }

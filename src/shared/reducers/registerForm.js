@@ -22,7 +22,7 @@ const regFormReducer = function regFormReducer(state = DEFAULT_REGFORM_STATE, ac
       break;
     }
     case REG_FORM_CLEAR: {
-      newstate = {};
+      newstate = DEFAULT_REGFORM_STATE;
       break;
     }
     default:

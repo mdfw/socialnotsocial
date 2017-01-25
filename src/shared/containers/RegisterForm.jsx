@@ -17,19 +17,19 @@ function determineErrors(dname, email, pass, touched, exited) {
     formReady: true,
   };
   const displayNameErrors = appraiseDisplayName(dname);
-  if (displayNameErrors.length > 0 && exited.indexOf('displayName') > 0) {
+  if (displayNameErrors.length > 0 && exited.indexOf('displayName') > -1) {
     errors.displayName = displayNameErrors.join(' ');
-    errors.formReady = false;
   }
   const emailErrors = appraiseEmail(email);
-  if (emailErrors.length > 0 && exited.indexOf('email') > 0) {
+  if (emailErrors.length > 0 && exited.indexOf('email') > -1) {
     errors.email = emailErrors.join(' ');
-    errors.formReady = false;
   }
   const passwordErrors = appraisePassword(pass);
-  if (passwordErrors.length > 0 && exited.indexOf('password') > 0) {
+  if (passwordErrors.length > 0 && (exited.indexOf('password') > -1) || (touched.indexOf('password') > -1 && pass.length > 5)) {
     errors.password = passwordErrors.join(' ');
-    errors.formReady = false;
+  }
+  if (passwordErrors.length > 0 || emailErrors.length > 0 || displayNameErrors.length > 0) {
+     errors.formReady = false;
   }
   return errors;
 }
