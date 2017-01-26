@@ -15,7 +15,7 @@ const DEFAULT_ACCOUNT_STATE = {
   email: '',
   type: '',
   dateCreated: '',
-  accountId: '',
+  accountId: null,
   authenticated: false,
   fetching: false,
   fetchError: null,

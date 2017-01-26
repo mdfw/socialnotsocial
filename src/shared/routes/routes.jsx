@@ -4,7 +4,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 import App from '../containers/App';
 import Login from '../containers/LoginForm';
-import Home from '../containers/Home';
+import HomeDirector from '../containers/HomeDirector';
 import Register from '../containers/RegisterForm';
 import Welcome from '../components/Welcome';
 
@@ -46,7 +46,7 @@ export default function buildRoutes(store = {}) {
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute
-          component={Home}
+          component={HomeDirector}
         />
       </Route>
     </Router> 
