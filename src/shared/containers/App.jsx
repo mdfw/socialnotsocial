@@ -1,13 +1,16 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import Header from '../components/Header';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 function App(props) {
   return (
-    <div id="mainapp">
-      <Header />
-      {props.children}
-    </div>
+    <MuiThemeProvider>
+      <div id="mainapp">
+        <Header />
+        {props.children}
+      </div>
+    </MuiThemeProvider>
   );
 }
 

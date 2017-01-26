@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { loginAccount, loginErrorAck } from '../actions/account';
 import { LOGIN_FORM_NAME, formUpdate } from '../actions/forms';
 import LoginForm from '../components/LoginForm';
@@ -64,20 +63,18 @@ class LoginFormContainer extends React.Component {
       errors.loginError = this.props.loginError;
     }
     return (
-      <MuiThemeProvider>
-        <LoginForm
-          handleSubmit={() => this.handleSubmit()}
-          handleChange={fields => this.handleChange(fields)}
-          handleBlur={fieldName => this.handleBlur(fieldName)}
-          handleFocus={fieldName => this.handleFocus(fieldName)}
-          handleErrorAck={() => this.handleErrorAck()}
-          loggingIn={this.props.loggingIn}
-          emailValue={this.props.email}
-          passswordValue={this.props.password}
-          passwordFieldType="password"
-          errors={errors}
-        />
-      </MuiThemeProvider>
+      <LoginForm
+        handleSubmit={() => this.handleSubmit()}
+        handleChange={fields => this.handleChange(fields)}
+        handleBlur={fieldName => this.handleBlur(fieldName)}
+        handleFocus={fieldName => this.handleFocus(fieldName)}
+        handleErrorAck={() => this.handleErrorAck()}
+        loggingIn={this.props.loggingIn}
+        emailValue={this.props.email}
+        passswordValue={this.props.password}
+        passwordFieldType="password"
+        errors={errors}
+      />
     );
   }
 }

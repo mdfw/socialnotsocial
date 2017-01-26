@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { submitNewAccount, submitAccountErrorAck } from '../actions/account';
 import { formUpdate, REG_FORM_NAME } from '../actions/forms';
 import RegisterForm from '../components/RegisterForm';
@@ -70,21 +69,19 @@ class RegisterFormContainer extends React.Component {
       errors.submitError = this.props.submitError;
     }
     return (
-      <MuiThemeProvider>
-        <RegisterForm
-          handleSubmit={() => this.handleSubmit()}
-          handleChange={fields => this.handleChange(fields)}
-          handleBlur={fieldName => this.handleBlur(fieldName)}
-          handleFocus={fieldName => this.handleFocus(fieldName)}
-          handleErrorAck={() => this.handleErrorAck()}
-          submitting={this.props.submitting}
-          displayNameValue={this.props.displayName}
-          emailValue={this.props.email}
-          passswordValue={this.props.password}
-          passwordFieldType="password"
-          errors={errors}
-        />
-      </MuiThemeProvider>
+      <RegisterForm
+        handleSubmit={() => this.handleSubmit()}
+        handleChange={fields => this.handleChange(fields)}
+        handleBlur={fieldName => this.handleBlur(fieldName)}
+        handleFocus={fieldName => this.handleFocus(fieldName)}
+        handleErrorAck={() => this.handleErrorAck()}
+        submitting={this.props.submitting}
+        displayNameValue={this.props.displayName}
+        emailValue={this.props.email}
+        passswordValue={this.props.password}
+        passwordFieldType="password"
+        errors={errors}
+      />
     );
   }
 }
