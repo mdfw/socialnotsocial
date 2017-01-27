@@ -31,7 +31,8 @@ const activeAccountId = function getAccount(req) {
 const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-return
   const accountId = activeAccountId(req);
   if (!accountId) {
-    return res.status(422).json({ success: false, message: 'No accountId provided' });
+    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
   Post.findAllForId(accountId, false)
     .then((items) => {
@@ -46,7 +47,8 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
       });
     })
     .catch((err) => {
-      res.status(422).json({ success: false, message: err.message });
+      res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
@@ -62,8 +64,12 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
  *  Uses activeAccountId() to get the accountId to search for.
  */
 const addPostEndpoint = (req, res) => {
-  const { message, subject, mediaIds, status } = req.body;
   const accountId = activeAccountId(req);
+  if (!accountId) {
+    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
+  const { message, subject, mediaIds, status } = req.body;
   const newItem = new Post({
     message: message,
     subject: subject,
@@ -76,10 +82,11 @@ const addPostEndpoint = (req, res) => {
       console.log('Created new: ');
       console.dir(createdItem);
       console.dir(createdItem.toObject());
+      const cleanedPost = createdItem.toJSON();
       res.status(201).json({
         success: true,
         message: 'Successfully created post',
-        recipient: createdItem.toJSON(),
+        recipient: cleanedPost,
       });
     })
     .catch((err) => {
@@ -91,7 +98,8 @@ const addPostEndpoint = (req, res) => {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
@@ -107,6 +115,11 @@ const addPostEndpoint = (req, res) => {
  *  Uses activeAccountId() to get the accountId to search for.
  */
 const updatePostEndpoint = (req, res) => {
+  const accountId = activeAccountId(req);
+  if (!accountId) {
+    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
   let itemId = req.params.postId;
   if (req.body.postId) {
     itemId = req.body.postId;
@@ -114,9 +127,7 @@ const updatePostEndpoint = (req, res) => {
   if (!itemId) {
     res.status(422).json({ success: false, messages: 'No PostId provided.' });
   }
-
   const { message, subject, mediaIds, status } = req.body;
-  const accountId = activeAccountId(req);
   const updates = {};
   if (message && message.length > 0) updates.message = message;
   if (subject && subject.length > 0) updates.subject = subject;
@@ -143,7 +154,8 @@ const updatePostEndpoint = (req, res) => {
       if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
@@ -157,15 +169,19 @@ const updatePostEndpoint = (req, res) => {
  *  Uses activeAccountId() to get the accountId to search for.
  */
 const removePostEndpoint = (req, res) => {
+  const accountId = activeAccountId(req);
+  if (!accountId) {
+    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
   let itemId = req.params.postId;
   if (req.body.postId) {
     itemId = req.body.postId;
   }
   if (!itemId) {
-    res.status(422).json({ success: false, messages: 'No postId provided.' });
+    res.statusMessage = 'No postId provided.'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
-
-  const accountId = activeAccountId(req);
   Post.update(itemId, accountId, { status: PostStatus.REMOVED })
     .then((updateItem) => {
       console.log('Updated : ');
@@ -183,7 +199,8 @@ const removePostEndpoint = (req, res) => {
       if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
