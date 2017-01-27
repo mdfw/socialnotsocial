@@ -3,11 +3,11 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import App from '../containers/App';
-import Login from '../containers/LoginForm';
 import HomeDirector from '../containers/HomeDirector';
-import Register from '../containers/RegisterForm';
-import Welcome from '../components/Welcome';
+import LoginPage from '../components/LoginPage';
+import RegisterPage from '../components/RegisterPage';
 
+/*
 function requireAuth(state, nextState, replace) {
   if (!state.account.authenticated) {
     replace({
@@ -25,15 +25,16 @@ function hasAuth(state, nextState, replace) {
     });
   }
 }
+*/
 
 export default function buildRoutes(store = {}) {
-  console.log('Store: ')
-  console.dir(store);
-  const state = store.getState();
+  // const state = store.getState();
   let history = browserHistory;
+
   if (store) {
     history = syncHistoryWithStore(browserHistory, store);
   }
+/*
   const checkForAuth = function checkForAuth(nextState, replace) {
     return hasAuth(state, nextState, replace);
   };
@@ -41,16 +42,17 @@ export default function buildRoutes(store = {}) {
   const needsAuth = function needsAuth(nextState, replace) {
     return requireAuth(state, nextState, replace);
   };
-
+*/
   return (
-    <Router history={browserHistory}>
+    <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute
           component={HomeDirector}
         />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/signup" component={RegisterPage} />
       </Route>
-    </Router> 
-
+    </Router>
   );
 }
 

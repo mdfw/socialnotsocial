@@ -1,0 +1,78 @@
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+
+body
+{
+	background-color: White;
+	/* For testing only*/
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	letter-spacing: 0.03em;
+}
+
+div
+{
+	/*border: 1px solid Chocolate;*/
+	/* For testing only */
+}
+
+.content
+{
+	max-width: 970px;
+	margin: 0 auto;
+}
+
+.top-navigation
+{
+	background-color: #459691;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 9999;
+}
+
+.top-title {
+  float: left;
+  font-family: 'Amatic SC', cursive;
+  font-size: 30px;
+  width: 100%;
+}
+
+.welcome {
+  float: right;
+  line-height: 60px;
+}
+img {
+    vertical-align: middle;
+}
+.topSpacer {
+  height: 70px;
+  position: relative;
+}
+
+.text-header {
+  font-size: 1.6em;
+  font-weight: strong;
+}
+
+.loginHints {
+  font-size: .8em;
+  text-decoration: none;
+}
+
+.marketingTextLarge {
+  font-size: 2em;
+}
+
+.marketingTextMedium  {
+  font-size: 1.5em;
+}
+
+.marketingSpacing {
+  margin-top: 20px;
+}
+.newPost {
+  position: relative;
+}
+

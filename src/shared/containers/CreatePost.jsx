@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { loginAccount, loginErrorAck } from '../actions/account';
 import { LOGIN_FORM_NAME, formUpdate } from '../actions/forms';
 import LoginForm from '../components/LoginForm';
-import { appraiseEmail,
-  appraisePassword,
-} from '../helpers/appraise';
 
 function determineErrors(email, pass, touched, exited) {
   const errors = {
@@ -28,7 +24,7 @@ function determineErrors(email, pass, touched, exited) {
   return errors;
 }
 
-class LoginFormContainer extends React.Component {
+class CreatPostContainer extends React.Component {
   handleSubmit() {
     this.props.dispatch(
       loginAccount(this.props.email, this.props.password),
@@ -74,14 +70,12 @@ class LoginFormContainer extends React.Component {
         passswordValue={this.props.password}
         passwordFieldType="password"
         errors={errors}
-        inlineForm={this.props.inlineForm}
       />
     );
   }
 }
 
 LoginFormContainer.propTypes = {
-  inlineForm: React.PropTypes.bool,
   loggingIn: React.PropTypes.bool,
   loginError: React.PropTypes.string,
   dispatch: React.PropTypes.func,

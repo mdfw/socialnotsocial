@@ -125,6 +125,7 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
     })
     .then(dispatchLoginFormClear(dispatch))
     .then(function goHome() {
+      console.log('Should be pushing to root');
       return dispatch(
         push('/'),
       );
