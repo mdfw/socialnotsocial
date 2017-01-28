@@ -8,6 +8,7 @@ import {
   SUBMITTING_ACCOUNT_INFO,
   SUBMIT_ACCOUNT_ERROR,
   SUBMIT_ACCOUNT_ERROR_ACK,
+  CLEAR_ACCOUNT_INFO,
 } from '../actions/account';
 
 const DEFAULT_ACCOUNT_STATE = {
@@ -100,6 +101,10 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
         ...state,
         submitError: null,
       };
+      break;
+    }
+    case CLEAR_ACCOUNT_INFO: {
+      newstate = DEFAULT_ACCOUNT_STATE;
       break;
     }
     default:

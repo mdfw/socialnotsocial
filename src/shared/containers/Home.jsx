@@ -1,25 +1,16 @@
-import { connect } from 'react-redux';
 import React from 'react';
+import Paper from 'material-ui/Paper';
+import CreatePostForm from './CreatePostForm';
+import Posts from './Posts';
 
-function Home(props) {
-  return (
-    <div id="board">
-      Here should be many many posts for {props.accountId}.
-    </div>
-  );
-}
+/* This is the baseline for all the activity that will take place. Similar to a 'wall' */
+const Home = () => (
+  <div id="board">
+    <Paper zDepth={2}>
+      <CreatePostForm />
+    </Paper>
+    <Posts />
+  </div>
+);
 
-Home.propTypes = {
-  accountId: React.PropTypes.string,
-};
-
-/** redux store map **/
-const mapStateToProps = function mapStateToProps(state) {
-  return {
-    accountId: state.account.number,
-  };
-};
-
-const Container = connect(mapStateToProps)(Home);
-
-export default Container;
+export default Home;

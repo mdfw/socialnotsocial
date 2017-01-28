@@ -1,5 +1,5 @@
-import { fetchAccountAPI, addAccountAPI, loginAccountAPI } from './accountAPI';
-
+import cookie from 'react-cookie';
+import { fetchAccountAPI, addAccountAPI, loginAccountAPI, logoutAccountAPI } from './accountAPI';
 
 const RECEIVE_ACCOUNT_INFO = 'RECEIVE_ACCOUNT_INFO';
 function receiveAccountInfo(account) {
@@ -35,6 +35,18 @@ function fetchAccount() {
   };
 }
 
+const CLEAR_ACCOUNT_INFO = 'CLEAR_ACCOUNT_INFO';
+function clearAccountInfo() {
+  return { type: CLEAR_ACCOUNT_INFO };
+}
+
+function logoutAccount() {
+  return (dispatch) => {
+    cookie.remove('snss');
+    dispatch(logoutAccountAPI());
+    dispatch(clearAccountInfo());
+  };
+}
 
 function loginAccount(email, password) {
   return (dispatch) => {
@@ -105,6 +117,7 @@ export {
   LOGIN_ERROR_ACK,
   loginErrorAck,
   loginAccount,
+  logoutAccount,
   SUBMITTING_ACCOUNT_INFO,
   submittingAccountInfo,
   SUBMIT_ACCOUNT_ERROR,

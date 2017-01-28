@@ -3,11 +3,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import thunkMiddleware from 'redux-thunk';
-import { accountReducer, formReducer } from './reducers/';
+import { accountReducer, formReducer, postsReducer } from './reducers/';
 
 const allReducers = combineReducers({
   account: accountReducer,
   routing: routerReducer,
+  posts: postsReducer,
   forms: formReducer,
 });
 

@@ -127,6 +127,28 @@ const appraiseThese = function appraiseThese(what) {
   return appraised;
 };
 
+/* Tests for the presense of a post message.
+ *  Only checks if it's empty.
+ *  Here for future functionality.
+ */
+const appraisePostMessage = function appraisePostMessage(postMessage) {
+  const messages = [];
+  if (!postMessage || isEmpty(postMessage)) {
+    messages.push('A message is required.');
+  }
+  return messages;
+};
+
+/* Tests for the presense of a post subject.
+ *  Runs no checks.
+ *  Here for future functionality.
+ */
+/* eslint-disable no-unused-vars */
+const appraisePostSubject = function appraisePostSubject(postSubject) {
+  return [];
+};
+/* eslint-enable no-unused-vars */
+
 export {
   appraiseThese,
   appraiseEmail,
@@ -135,4 +157,6 @@ export {
   appraisePasswordExtra,
   appraisePasswordErrors,
   appraiseAccountId,
+  appraisePostSubject,
+  appraisePostMessage,
 };

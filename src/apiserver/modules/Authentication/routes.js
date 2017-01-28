@@ -12,6 +12,8 @@ function signinUser(req, res, next) {
       if (error) {
         return next(error);
       }
+      res.cookie('snssl', 'y', { httpOnly: false });
+
       // you can send a json response instead of redirecting the user
       res.status(200).json({
         success: true,
@@ -28,7 +30,8 @@ routes.route('/login')
 routes.route('/logout')
   .get(function logThemOut(req, res) {
     req.logout();
-    res.status(201).json({
+    res.clearCookie('snssl');
+    res.status(200).json({
       success: true,
       message: 'Successfully logged out.',
     });

@@ -1,8 +1,13 @@
+/* Reducers for form actions.
+ * Requires a form name to be passed in.
+ */
+
 import {
   FORM_UPDATE,
   FORM_CLEAR,
   REG_FORM_NAME,
   LOGIN_FORM_NAME,
+  CREATE_POST_FORM_NAME,
 } from '../actions/forms';
 
 const DEFAULT_REGFORM = {
@@ -20,9 +25,19 @@ const DEFAULT_LOGINFORM = {
   fieldsExited: [],
 };
 
+const DEFAULT_CREATE_POST_FORM = {
+  subject: '',
+  message: '',
+  fieldsTouched: [],
+  fieldsExited: [],
+  submitting: false,
+  submitError: null,
+};
+
 const DEFAULT_FORM_STATE = {
   [REG_FORM_NAME]: DEFAULT_REGFORM,
   [LOGIN_FORM_NAME]: DEFAULT_LOGINFORM,
+  [CREATE_POST_FORM_NAME]: DEFAULT_CREATE_POST_FORM,
 };
 
 function emptyStateForForm(formId) {
@@ -31,10 +46,13 @@ function emptyStateForForm(formId) {
       return DEFAULT_REGFORM;
     case LOGIN_FORM_NAME:
       return DEFAULT_LOGINFORM;
+    case CREATE_POST_FORM_NAME:
+      return DEFAULT_LOGINFORM;
     default:
       return {};
   }
 }
+
 const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE, action) {
   const newstate = Object.assign({}, state);
   switch (action.type) {

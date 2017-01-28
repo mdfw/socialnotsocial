@@ -7,6 +7,7 @@ import {
   submitAccountError,
   requestLogin,
   loginError,
+  logoutAccount,
 } from './account';
 import { formClear, REG_FORM_NAME, LOGIN_FORM_NAME } from './forms';
 
@@ -45,29 +46,23 @@ function checkAccountReturn(response) {
   throw error;
 }
 
-function checkFetchAPIStatus(response) {
-  if (response.status === 201) {
-    return response.body.account;
-  } else if (response.status === 422) {
-    const error = new Error(response.body.messages);
-    error.response = response;
-    throw error;
-  }
-  const error = new Error(response.message);
-  error.response = response;
-  throw error;
-}
-
 const fetchAccountAPI = function fetchAccountAPI() {
   return function fetchPageDispatch(dispatch) {
     const url = '/api/v1/account';
     return fetch(url, {
       credentials: 'same-origin',
     })
-    .then(checkFetchAPIStatus)
-    .then(function returnAccountData(account) {
+    .then(checkAccountReturn)
+    .then(function processJsonResponse(response) {
+      return response.json();
+    })
+    .then(function addToStore(data) {
+      return dispatchAccountData(dispatch, data);
+    })
+    .then(function goHome() {
+      console.log('Should be pushing to root');
       return dispatch(
-        receiveAccountInfo(account),
+        push('/'),
       );
     })
     .catch(function receiveError(error) {
@@ -124,6 +119,38 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
       return dispatchAccountData(dispatch, data);
     })
     .then(dispatchLoginFormClear(dispatch))
+    .then(function goHome() {
+      console.log('Should be pushing to root');
+      return dispatch(
+        push('/'),
+      );
+    })
+    .catch(function submitError(error) {
+      const errMsg = error.message;
+      return dispatch(
+        loginError(errMsg),
+      );
+    });
+  };
+};
+
+// ------ //
+// LOGOUT //
+// ------ //
+
+/* The heavy lifting work of logging in an account.
+ * @param {string} email
+ * @param {string} password
+ * Calls to the api endpoint to log in, parses it,
+ *   places the account info in the store and clears the login form.
+ */
+const logoutAccountAPI = function logoutAccountAPI() {
+  return function fetchLogoutDispatch(dispatch) {
+    const url = '/api/v1/logout';
+    return fetch(url, {
+      credentials: 'same-origin',
+    })
+    .then(logoutAccount)
     .then(function goHome() {
       console.log('Should be pushing to root');
       return dispatch(
@@ -202,4 +229,4 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
   };
 };
 
-export { fetchAccountAPI, addAccountAPI, loginAccountAPI };
+export { fetchAccountAPI, addAccountAPI, loginAccountAPI, logoutAccountAPI };
