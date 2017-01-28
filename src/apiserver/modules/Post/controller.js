@@ -41,9 +41,9 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
       });
       console.log('Found these:');
       console.dir(cleanedItems);
-      res.status(201).json({
+      res.status(200).json({
         success: true,
-        recipients: cleanedItems,
+        posts: cleanedItems,
       });
     })
     .catch((err) => {
@@ -141,7 +141,7 @@ const updatePostEndpoint = (req, res) => {
     .then((updatedItem) => {
       console.log('Updated: ');
       console.dir(updatedItem.toObject());
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: 'Successfully updated post',
         post: updatedItem.toJSON(),
@@ -187,7 +187,7 @@ const removePostEndpoint = (req, res) => {
       console.log('Updated : ');
       console.dir(updateItem);
       console.dir(updateItem.toObject());
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: 'Successfully removed post',
       });
