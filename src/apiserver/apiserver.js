@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-  name: 'sessionId',
+  name: 'snss',
   secret: 'MmyWTLNNsTi15LYHz8FP',
   resave: true,
   saveUninitialized: false,
