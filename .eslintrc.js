@@ -18,6 +18,7 @@ module.exports = {
       // else is used
       "quotes": [2, "single"],
       "react/jsx-filename-extension": 0,
+      "react/jsx-boolean-value": 0,
       "object-shorthand": 0,
       "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
       "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
