@@ -126,9 +126,12 @@ PostSchema.statics.findAllForId = function allPosts(accountId, limit = 20, befor
   if (limiter > MAX_RETURN_LIMIT) limiter = MAX_RETURN_LIMIT;
 
   if (beforeId) {
-    return this.find({ ownerAccountId: accountId, postId: { $lte: beforeId } }).limit(limiter).sort('-postId').exec();
+    return this.find({ ownerAccountId: accountId, postId: { $lte: beforeId } })
+      .limit(limiter)
+      .sort({ postId: -1 })
+      .exec();
   }
-  return this.find({ ownerAccountId: accountId }).limit(limiter).exec();
+  return this.find({ ownerAccountId: accountId }).limit(limiter).sort({ postId: -1 }).exec();
 };
 
 /* Determine total number of posts for account
