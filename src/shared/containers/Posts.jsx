@@ -22,7 +22,6 @@ AllPosts.propTypes = {
   posts: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
 };
 
-
 /* Main container that manages showing of posts */
 class PostsContainer extends React.Component {
   componentDidMount() {

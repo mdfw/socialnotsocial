@@ -25,7 +25,7 @@ class HomeDirectorLogin extends React.Component {
   render() {
     return (
       <div style={outerDivStyle} >
-        <p style={announceTextStyle}>Checking your login...</p>
+        <p style={announceTextStyle}>Getting set up...</p>
       </div>
     );
   }

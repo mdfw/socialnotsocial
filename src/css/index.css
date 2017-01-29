@@ -30,19 +30,20 @@ div
 	right: 0;
 	left: 0;
 	z-index: 9999;
+	height: 50px;
 }
 
 .top-title {
   float: left;
   font-family: 'Amatic SC', cursive;
-  font-size: 30px;
+  font-size: 35px;
   font-weight: 700;
   width: 100%;
 }
 
 .welcome {
   float: right;
-  line-height: 60px;
+  line-height: 50px;
   font-weight: 600;
 }
 img {

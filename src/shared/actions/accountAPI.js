@@ -7,7 +7,7 @@ import {
   submitAccountError,
   requestLogin,
   loginError,
-  logoutAccount,
+  clearAccountInfo,
 } from './account';
 import { formClear, REG_FORM_NAME, LOGIN_FORM_NAME } from './forms';
 
@@ -60,7 +60,6 @@ const fetchAccountAPI = function fetchAccountAPI() {
       return dispatchAccountData(dispatch, data);
     })
     .then(function goHome() {
-      console.log('Should be pushing to root');
       return dispatch(
         push('/'),
       );
@@ -120,7 +119,6 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
     })
     .then(dispatchLoginFormClear(dispatch))
     .then(function goHome() {
-      console.log('Should be pushing to root');
       return dispatch(
         push('/'),
       );
@@ -150,9 +148,12 @@ const logoutAccountAPI = function logoutAccountAPI() {
     return fetch(url, {
       credentials: 'same-origin',
     })
-    .then(logoutAccount)
+    .then(function clearTheAccount() {
+      return dispatch(
+        clearAccountInfo(),
+      );
+    })
     .then(function goHome() {
-      console.log('Should be pushing to root');
       return dispatch(
         push('/'),
       );

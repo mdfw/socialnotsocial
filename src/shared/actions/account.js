@@ -44,7 +44,6 @@ function logoutAccount() {
   return (dispatch) => {
     cookie.remove('snss');
     dispatch(logoutAccountAPI());
-    dispatch(clearAccountInfo());
   };
 }
 
@@ -125,4 +124,6 @@ export {
   SUBMIT_ACCOUNT_ERROR_ACK,
   submitAccountErrorAck,
   submitNewAccount,
+  CLEAR_ACCOUNT_INFO,
+  clearAccountInfo,
 };
