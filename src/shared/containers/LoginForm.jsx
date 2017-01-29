@@ -53,6 +53,7 @@ class LoginFormContainer extends React.Component {
     this.props.dispatch(loginErrorAck());
   }
   render() {
+    console.log('Loading login form');
     const errors = determineErrors(
       this.props.email,
       this.props.password,
@@ -61,6 +62,7 @@ class LoginFormContainer extends React.Component {
     );
     if (this.props.loginError && this.props.loginError.length > 0) {
       errors.loginError = this.props.loginError;
+      console.log('There is a login error');
     }
     return (
       <LoginForm
@@ -94,8 +96,8 @@ LoginFormContainer.propTypes = {
 /** redux store map **/
 const mapStateToProps = function mapStateToProps(state) {
   return {
-    submitting: state.account.submitting,
-    submitError: state.account.submitError,
+    loggingIn: state.account.loggingIn,
+    loginError: state.account.loginError,
     email: state.forms.loginForm.email,
     password: state.forms.loginForm.password,
     fieldsTouched: state.forms.loginForm.fieldsTouched,
