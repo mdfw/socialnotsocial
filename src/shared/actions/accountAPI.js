@@ -18,6 +18,9 @@ import { formClear, REG_FORM_NAME, LOGIN_FORM_NAME } from './forms';
  *  this have agreement on what to expect?
  */
 function dispatchAccountData(dispatch, data) {
+  console.log('dispatchAccountData:');
+  console.dir(data);
+
   const account = data.account;
   if (!account.displayName ||
     account.displayName.length === 0 ||
@@ -46,6 +49,9 @@ function checkAccountReturn(response) {
   throw error;
 }
 
+// -------- //
+// FETCHING //
+// -------- //
 const fetchAccountAPI = function fetchAccountAPI() {
   return function fetchPageDispatch(dispatch) {
     const url = '/api/v1/account';
@@ -99,7 +105,7 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
     }
     // Set the submitting flag
     dispatch(requestLogin());
-    fetch('/api/v1/login', {
+    fetch('/api/v1/sessions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -110,18 +116,26 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
         password: password,
       }),
     })
-    .then(checkAccountReturn)
-    .then(function processJsonResponse(response) {
-      return response.json();
-    })
-    .then(function addToStore(data) {
-      return dispatchAccountData(dispatch, data);
-    })
-    .then(dispatchLoginFormClear(dispatch))
-    .then(function goHome() {
-      return dispatch(
-        push('/'),
-      );
+    .then(function processReturn(response) {
+      if (response.status === 201 || response.status === 200) {
+        console.log('login ok');
+        return Promise.resolve(response.json())
+        .then(function sendAccountData(data) {
+          return dispatchAccountData(dispatch, data);
+        })
+        .then(dispatchLoginFormClear(dispatch))
+        .then(function goHome() {
+          return dispatch(
+            push('/'),
+          );
+        });
+      } else if (response.status === 422) {
+        console.log(`login failed with text: ${response.statusText}`);
+        return dispatch(
+          loginError(response.statusText, 422),
+        );
+      }
+      return null;
     })
     .catch(function submitError(error) {
       const errMsg = error.message;
@@ -144,8 +158,9 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
  */
 const logoutAccountAPI = function logoutAccountAPI() {
   return function fetchLogoutDispatch(dispatch) {
-    const url = '/api/v1/logout';
+    const url = '/api/v1/sessions';
     return fetch(url, {
+      method: 'DELETE',
       credentials: 'same-origin',
     })
     .then(function clearTheAccount() {
