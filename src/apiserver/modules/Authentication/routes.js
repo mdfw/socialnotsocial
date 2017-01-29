@@ -29,6 +29,7 @@ routes.route('/login')
 
 routes.route('/logout')
   .get(function logThemOut(req, res) {
+    req.session.destroy();
     req.logout();
     res.clearCookie('snssl');
     res.status(200).json({
