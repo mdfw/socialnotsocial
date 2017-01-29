@@ -11,6 +11,11 @@ import {
   CLEAR_ACCOUNT_INFO,
 } from '../actions/account';
 
+import {
+  FORM_UPDATE,
+  LOGIN_FORM_NAME,
+} from '../actions/forms';
+
 const DEFAULT_ACCOUNT_STATE = {
   displayName: '',
   email: '',
@@ -22,8 +27,10 @@ const DEFAULT_ACCOUNT_STATE = {
   fetchError: null,
   loggingIn: false,
   loginError: null,
+  loginErrorStatusCode: null,
   submitting: false,
   submitError: null,
+  submitErrorStatusCode: null,
 };
 
 const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, action) {
@@ -71,6 +78,7 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
         ...state,
         loggingIn: false,
         loginError: action.errorMessage,
+        loginErrorStatusCode: action.statusCode,
       };
       break;
     }
@@ -79,6 +87,16 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
         ...state,
         loginError: null,
       };
+      break;
+    }
+    case FORM_UPDATE: {
+      if ((state.loginError || state.loginErrorStatusCode) && action.formId === LOGIN_FORM_NAME) {
+        newstate = {
+          ...state,
+          loginError: null,
+          loginErrorStatusCode: null,
+        };
+      }
       break;
     }
     case SUBMITTING_ACCOUNT_INFO: {
@@ -93,6 +111,7 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
         ...state,
         submitting: false,
         submitError: action.errorMessage,
+        submitErrorStatusCode: action.statusCode,
       };
       break;
     }
@@ -100,6 +119,7 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
       newstate = {
         ...state,
         submitError: null,
+        submitErrorStatusCode: null,
       };
       break;
     }
