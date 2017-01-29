@@ -4,9 +4,10 @@ import passport from 'passport';
 const routes = new Router();
 
 function signinUser(req, res, next) {
-  passport.authenticate('local', (err, user, info) => { // eslint-disable-line consistent-return
+  passport.authenticate('local', (err, user) => { // eslint-disable-line consistent-return
     if (err || !user) {
-      return res.status(400).send(info);
+      res.statusMessage = 'Could not log in with that email and password combination.'; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     }
     req.logIn(user, (error) => { // eslint-disable-line consistent-return
       if (error) {
@@ -15,7 +16,7 @@ function signinUser(req, res, next) {
       res.cookie('snssl', 'y', { httpOnly: false });
 
       // you can send a json response instead of redirecting the user
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: 'Logged in',
         account: user,
@@ -24,24 +25,21 @@ function signinUser(req, res, next) {
   })(req, res, next);
 }
 
-routes.route('/login')
+routes.route('/sessions')
   .post(signinUser);
 
-routes.route('/logout')
-  .get(function logThemOut(req, res) {
+routes.route('/sessions')
+  .delete(function logThemOut(req, res) {
     req.session.destroy();
     req.logout();
     res.clearCookie('snssl');
-    res.status(200).json({
-      success: true,
-      message: 'Successfully logged out.',
-    });
+    res.status(204).end();
   });
 
 /* Checks if a user is currently authenticated.
  * Technically, checks the cookie.
  */
-routes.route('/authenticated')
+routes.route('/sessions')
   .get(function isAuthenticated(req, res) {
     if (!req.isAuthenticated || !req.isAuthenticated()) {
       res.status(204).end();
