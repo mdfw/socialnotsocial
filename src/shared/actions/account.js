@@ -60,10 +60,11 @@ function requestLogin() {
 }
 
 const LOGIN_ERROR = 'LOGIN_ERROR';
-function loginError(errorMessage) {
+function loginError(errorMessage, statusCode) {
   return {
     type: LOGIN_ERROR,
     errorMessage: errorMessage,
+    statusCode: statusCode,
   };
 }
 const LOGIN_ERROR_ACK = 'LOGIN_ERROR_ACK';
@@ -87,10 +88,11 @@ function submittingAccountInfo() {
 }
 
 const SUBMIT_ACCOUNT_ERROR = 'SUBMIT_ACCOUNT_ERROR';
-function submitAccountError(errorMessage) {
+function submitAccountError(errorMessage, statusCode) {
   return {
     type: SUBMIT_ACCOUNT_ERROR,
     errorMessage: errorMessage,
+    statusCode: statusCode,
   };
 }
 
