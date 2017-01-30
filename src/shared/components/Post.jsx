@@ -3,7 +3,8 @@ import Paper from 'material-ui/Paper';
 
 const postContainerStyle = {
   padding: '10px',
-}
+};
+
 function Post(props) {
   return (
     <div className="post">
