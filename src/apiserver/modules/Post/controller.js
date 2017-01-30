@@ -48,7 +48,7 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
     })
     .catch((err) => {
       res.statusMessage = err.message; // eslint-disable-line no-param-reassign
-      res.status(422).end();
+      res.status(404).end();
     });
 };
 
