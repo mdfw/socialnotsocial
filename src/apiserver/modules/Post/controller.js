@@ -39,8 +39,6 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
       const cleanedItems = items.map(function jsonify(mappedItem) {
         return mappedItem.toJSON();
       });
-      console.log('Found these:');
-      console.dir(cleanedItems);
       res.status(200).json({
         success: true,
         posts: cleanedItems,
@@ -79,9 +77,6 @@ const addPostEndpoint = (req, res) => {
   });
   newItem.save()
     .then((createdItem) => {
-      console.log('Created new: ');
-      console.dir(createdItem);
-      console.dir(createdItem.toObject());
       const cleanedPost = createdItem.toJSON();
       res.status(201).json({
         success: true,
@@ -90,8 +85,6 @@ const addPostEndpoint = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log('Post creation error: ');
-      console.dir(err);
       let errorMessage = 'Post could not be created.';
       if (err.code === 11000) {
         errorMessage = 'Post already exists';
@@ -139,8 +132,6 @@ const updatePostEndpoint = (req, res) => {
   }
   Post.update(itemId, accountId, updates)
     .then((updatedItem) => {
-      console.log('Updated: ');
-      console.dir(updatedItem.toObject());
       res.status(200).json({
         success: true,
         message: 'Successfully updated post',
@@ -148,8 +139,6 @@ const updatePostEndpoint = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log('Post update error: ');
-      console.dir(err);
       let errorMessage = 'Post could not be updated.';
       if (err.message) {
         errorMessage = err.message;
@@ -183,18 +172,10 @@ const removePostEndpoint = (req, res) => {
     res.status(422).end();
   }
   Post.update(itemId, accountId, { status: PostStatus.REMOVED })
-    .then((updateItem) => {
-      console.log('Updated : ');
-      console.dir(updateItem);
-      console.dir(updateItem.toObject());
-      res.status(200).json({
-        success: true,
-        message: 'Successfully removed post',
-      });
+    .then(() => {
+      res.status(204).end();
     })
     .catch((err) => {
-      console.log('Post removal error: ');
-      console.dir(err);
       let errorMessage = 'Post could not be removed.';
       if (err.message) {
         errorMessage = err.message;
