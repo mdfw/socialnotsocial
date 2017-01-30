@@ -18,7 +18,7 @@ const NotImplemented = () => (
   <div id="registerPage">
     <div style={innerStyle}>
       <Paper zDepth={2} style={style}>
-        This functionality is not yet implemented  
+        This functionality is not yet implemented.
       </Paper>
     </div>
   </div>
