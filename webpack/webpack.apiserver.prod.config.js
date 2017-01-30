@@ -12,19 +12,24 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/apiserver/apiserver.js'),
+  entry: path.resolve(__dirname, '../src/apiserver/apiserver.js'),
   target: 'node',
   output: {
-    path: path.join(__dirname, 'build/apiserver'),
+    path: path.join(__dirname, '../build/apiserver'),
     filename: 'server.js'
   },
   externals: nodeModules,
   plugins: [
     new webpack.IgnorePlugin(/\.(css|less)$/),
-    new webpack.BannerPlugin('require("source-map-support").install();',
-                             { raw: true, entryOnly: false })
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+      compress: {
+        warnings: false
+      }
+    })
   ],
-  devtool: 'eval',
+  devtool: 'source-map',
   module: {
     loaders: [
       {
