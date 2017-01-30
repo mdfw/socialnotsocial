@@ -1,0 +1,99 @@
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+
+body
+{
+	background-color: White;
+	/* For testing only*/
+	font-family: 'Open Sans', sans-serif;
+	font-size: 18px;
+	/*letter-spacing: 0.03em;*/
+}
+
+div
+{
+	/*border: 1px solid Chocolate;*/
+	/* For testing only */
+}
+
+.content
+{
+	max-width: 970px;
+	margin: 0 auto;
+}
+
+.top-navigation
+{
+	background-color: #459691;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 9999;
+	height: 50px;
+}
+
+.top-title {
+  float: left;
+  font-family: 'Amatic SC', cursive;
+  font-size: 35px;
+  font-weight: 700;
+  width: 100%;
+}
+
+.welcome {
+  float: right;
+  line-height: 50px;
+  font-weight: 600;
+}
+img {
+    vertical-align: middle;
+}
+.topSpacer {
+  height: 70px;
+  position: relative;
+}
+
+.text-header {
+  font-size: 1.6em;
+  font-weight: strong;
+}
+
+.loginHints {
+  font-size: .8em;
+  text-decoration: none;
+}
+
+.marketingTextLarge {
+  font-size: 2em;
+}
+
+.marketingTextMedium  {
+  font-size: 1.5em;
+}
+
+.marketingSpacing {
+  margin-top: 20px;
+}
+.newPost {
+  position: relative;
+}
+.board {
+  max-width: 500px;
+   margin-left: auto ;
+  margin-right: auto ;
+}
+.newPost {
+  
+}
+.post {
+  max-width: 500px;
+  margin: 5px;
+  padding: 5px;
+}
+.post-subject {
+  color: gray;
+}
+.post-content {
+  color: black;
+}
