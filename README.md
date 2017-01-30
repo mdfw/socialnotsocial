@@ -44,11 +44,12 @@ Allows a user to post a status message to facebook and send to multiple email ad
 * As a user, I should be able to post a message to share.
 
 ### Future
-* As a user, I should be able to add phone numbers to receive text messages
-* As a user, I should be abel to send a status update to text message folks.
 * As a user, I should be able to configure Facebook.
 * As a user, I should be able to post a status update with one picture.
 * As a user, I should be able to post that status update to Facebook and email addresses.
 * As a user, I should be able to add multiple email addresses to my 'send to' bucket
 
 
+## Initial interface sketches
+
+![Design sketches](https://github.com/mdfw/socialnotsocial/blob/master/readme/designsketches.pdf "Design sketches")
