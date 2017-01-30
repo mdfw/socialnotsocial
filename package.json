@@ -5,13 +5,16 @@
   "main": "build/server.js",
   "scripts": {
     "start": "run-p _start:mainserver _start:apiserver",
-    "_start:mainserver": "nodemon -w build/server.js",
-    "_start:apiserver": "nodemon build/apiserver/server.js -w build/apiserver/server.js",
-    "dev": "run-p watch lint serve",
+    "_start:mainserver": "node build/server.js",
+    "_start:apiserver": "node build/apiserver/server.js",
+    "dev": "run-p watch lint serve:dev",
     "test": "mocha --recursive --compilers js:babel-core/register",
     "build": "run-s build:*",
     "clean": "rimraf build",
     "serve": "npm start",
+    "serve:dev": "run-p _start:mainserver _start:apiserver",
+    "_serve:dev:mainserver": "nodemon -w build/server.js",
+    "_serve:dev:apiserver": "nodemon build/apiserver/server.js -w build/apiserver/server.js",
     "watch": "run-p watch:*",
     "lint": "run-p lint:js _watch:lint:js",
     "mkdir": "mkdirp build",
@@ -47,7 +50,14 @@
     "_build:assets": "cpr src/assets build/public/assets",
     "watch:assets": "run-s build:assets _watch:assets",
     "_watch:assets": "chokidar src/assets/**/* -c \"npm run build:assets\"",
-    "watch:git": "chokidar * -c \"git diff --shortstat\""
+    "watch:git": "chokidar * -c \"git diff --shortstat\"",
+    "deploy": "deploy:build",
+    "deploy:build": "run-s build:html deploy:build:js build:css build:assets",
+    "deploy:build:js": "run-s clean:js mkdir:js deploy:_build:js",
+    "deploy:_build:js": "run-p deploy:_build:js:server deploy:_build:js:apiserver deploy:_build:js:client",
+    "deploy:_build:js:server": "webpack --config webpack.server.prod.config.js",
+    "deploy:_build:js:client": "webpack --config webpack.client.prod.config.js",
+    "deploy:_build:js:apiserver": "webpack --config webpack.apiserver.prod.config.js"
   },
   "author": "Mark Williams <mark@mdfw.me>",
   "license": "UNLICENSED",
@@ -80,7 +90,7 @@
     "rimraf": "^2.5.4",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
-    "webpack": "^1.13.1"
+    "webpack": "^1.14.0"
   },
   "dependencies": {
     "base58": "^0.1.0",
@@ -88,6 +98,7 @@
     "body-parser": "^1.15.2",
     "connect-redis": "^3.2.0",
     "cookie-parser": "^1.4.3",
+    "cpr": "^2.0.2",
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
     "express-brute": "^1.0.1",
@@ -102,7 +113,6 @@
     "mongoose": "^4.7.6",
     "morgan": "^1.7.0",
     "nodemailer": "^2.7.0",
-    "nodemon": "^1.11.0",
     "npm-run-all": "^3.1.2",
     "owasp-password-strength-test": "^1.3.0",
     "passport": "^0.3.2",
@@ -121,7 +131,6 @@
     "redux-devtools-extension": "^1.0.0",
     "redux-thunk": "^2.1.0",
     "serve-favicon": "^2.3.2",
-    "validator": "^6.2.1",
-    "webpack": "^1.14.0"
+    "validator": "^6.2.1"
   }
 }
