@@ -8,7 +8,7 @@ dotenv.config();
 // Bring in Envvars from .env.
 const envVars = [
   'REDIS_URL',
-  'MONGO_URL',
+  'MONGODB_URI',
   'NODE_ENV',
   'API_SERVER_PORT',
   'MAIN_SERVER_PORT',
