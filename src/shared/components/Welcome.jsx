@@ -3,6 +3,7 @@ import Paper from 'material-ui/Paper';
 import SendAsset from 'material-ui/svg-icons/content/send';
 import SocialShareAsset from 'material-ui/svg-icons/social/share';
 import LockAsset from 'material-ui/svg-icons/action/lock-outline';
+import WarningAsset from 'material-ui/svg-icons/alert/warning';
 import Register from '../containers/RegisterForm';
 
 const container = {
@@ -44,6 +45,12 @@ const MarketingBits = () => (
     <div className="marketingSpacing">
       <LockAsset color="#459691" style={svgStyle} />
       <span className="marketingTextMedium">or keep it to yourself.</span>
+    </div>
+    <div className="marketingSpacing">
+      <WarningAsset color="#c94f49" style={svgStyle} />
+      <span className="marketingTextMedium">
+        Note: This is a work in progress and some (most) functionality is nigh.
+      </span>
     </div>
   </div>
 );
