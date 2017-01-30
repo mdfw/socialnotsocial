@@ -4,6 +4,7 @@ import httpProxy from 'http-proxy';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import favicon from 'serve-favicon';
 
 // import React from 'react';
 // import { renderToString } from 'react-dom/server';
@@ -28,6 +29,8 @@ if (!ourPort) {
 }
 
 const app = express();
+
+app.use(favicon('build/public/assets/favicon.ico'));
 
 /* Configure middleware */
 /* Helmet - help secure Express/Connect apps with various HTTP headers */
