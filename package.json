@@ -51,10 +51,10 @@
     "watch:assets": "run-s build:assets _watch:assets",
     "_watch:assets": "chokidar src/assets/**/* -c \"npm run build:assets\"",
     "watch:git": "chokidar * -c \"git diff --shortstat\"",
-    "deploy": "deploy:build",
-    "deploy:build": "run-s build:html deploy:build:js build:css build:assets",
+    "deploy": "run-s deploy:build",
+    "deploy:build": "run-s build:html build:css build:assets deploy:build:js",
     "deploy:build:js": "run-s clean:js mkdir:js deploy:_build:js",
-    "deploy:_build:js": "run-p deploy:_build:js:server deploy:_build:js:apiserver deploy:_build:js:client",
+    "deploy:_build:js": "run-s deploy:_build:js:server deploy:_build:js:apiserver deploy:_build:js:client",
     "deploy:_build:js:server": "webpack --config webpack.server.prod.config.js",
     "deploy:_build:js:client": "webpack --config webpack.client.prod.config.js",
     "deploy:_build:js:apiserver": "webpack --config webpack.apiserver.prod.config.js"
@@ -75,6 +75,7 @@
     "chai": "^3.5.0",
     "chai-enzyme": "^0.5.1",
     "chokidar-cli": "^1.2.0",
+    "compression-webpack-plugin": "^0.3.2",
     "cpr": "^2.0.0",
     "enzyme": "^2.4.1",
     "eslint": "^3.12.2",
@@ -130,6 +131,7 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^1.0.0",
     "redux-thunk": "^2.1.0",
+    "require-environment-variables": "^1.1.2",
     "serve-favicon": "^2.3.2",
     "validator": "^6.2.1"
   }
