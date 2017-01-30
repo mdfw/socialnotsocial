@@ -211,7 +211,7 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
     }
     // Set the submitting flag
     dispatch(submittingAccountInfo());
-    fetch('/api/v1/register', {
+    fetch('/api/v1/account', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -223,18 +223,26 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
         password: password,
       }),
     })
-    .then(checkAccountReturn)
-    .then(function processJsonResponse(response) {
-      return response.json();
-    })
-    .then(function addToStore(data) {
-      return dispatchAccountData(dispatch, data);
-    })
-    .then(dispatchNewAccountFormClear(dispatch))
-    .then(function goHome() {
-      return dispatch(
-        push('/'),
-      );
+    .then(function processReturn(response) {
+      if (response.status === 201) {
+        console.log('account created');
+        return Promise.resolve(response.json())
+        .then(function sendAccountData(data) {
+          return dispatchAccountData(dispatch, data);
+        })
+        .then(dispatchNewAccountFormClear(dispatch))
+        .then(function goHome() {
+          return dispatch(
+            push('/'),
+          );
+        });
+      } else if (response.status === 409) {
+        console.log(`login failed with text: ${response.statusText}`);
+        return dispatch(
+          submitAccountError(response.statusText, 422),
+        );
+      }
+      return null;
     })
     .catch(function submitError(error) {
       const errMsg = error.message;
