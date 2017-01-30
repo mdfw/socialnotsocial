@@ -43,10 +43,13 @@ const addAccountEndpoint = (req, res) => {
       });
     })
     .catch((err) => {
-      let errorMessage = 'Account could not be created.';
       if (err.code === 11000) {
-        errorMessage = 'Account with that email already exists';
-      } else if (err.message) {
+        res.statusMessage = 'Account with that email already exists'; // eslint-disable-line no-param-reassign
+        res.status(409).end();
+        return;
+      }
+      let errorMessage = 'Account could not be created.';
+      if (err.message) {
         errorMessage = err.message;
       }
       res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
