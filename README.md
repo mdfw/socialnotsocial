@@ -52,4 +52,14 @@ Allows a user to post a status message to facebook and send to multiple email ad
 
 ## Initial interface sketches
 
-![Design sketches](https://github.com/mdfw/socialnotsocial/blob/master/readme/designsketches.pdf "Design sketches")
+*Login*
+
+![LoginSketch](https://github.com/mdfw/socialnotsocial/blob/master/readme/designSketchLogin.png "Login")
+
+*Register*
+
+![RegisterSketch](https://github.com/mdfw/socialnotsocial/blob/master/readme/designSketchRegister.png "Register")
+
+*Share page with posts*
+
+![ShareSketch](https://github.com/mdfw/socialnotsocial/blob/master/readme/designSketchPost.png "Share")
