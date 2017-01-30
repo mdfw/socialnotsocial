@@ -37,14 +37,14 @@ app.use(favicon('build/public/assets/favicon.ico'));
 app.use(helmet());
 app.use(morgan('combined'));
 
-if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
+/*if (process.env.NODE_ENV && process.env.NODE_ENV === 'production') {
   app.get('*.js', (req, res, next) => {
     req.url = `${req.url}.gz`; // eslint-disable-line no-param-reassign
     res.set('Content-Encoding', 'gzip');
     next();
   });
 }
-
+*/
 app.use(express.static('build/public'));
 
 /* Proxy all api calls through to the api server */
