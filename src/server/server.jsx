@@ -83,11 +83,12 @@ app.use((req, res) => {
 */
 
 const server = http.createServer(app);
-server.listen(ourPort);
+const port = process.env.PORT || ourPort;
+server.listen(port);
 server.on('listening', function reportOnListen(error) {
   if (error) {
     console.log(`Main Server ERROR on startup: ${error}`);
   } else {
-    console.log(`Main Server listening on http://localhost:${ourPort}.`);
+    console.log(`Main Server listening on http://localhost:${port}.`);
   }
 });
