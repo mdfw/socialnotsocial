@@ -35,19 +35,19 @@ const DEFAULT_CREATE_POST_FORM = {
 };
 
 const DEFAULT_FORM_STATE = {
-  [REG_FORM_NAME]: DEFAULT_REGFORM,
-  [LOGIN_FORM_NAME]: DEFAULT_LOGINFORM,
-  [CREATE_POST_FORM_NAME]: DEFAULT_CREATE_POST_FORM,
+  [REG_FORM_NAME]: JSON.parse(JSON.stringify(DEFAULT_REGFORM)),
+  [LOGIN_FORM_NAME]: JSON.parse(JSON.stringify(DEFAULT_LOGINFORM)),
+  [CREATE_POST_FORM_NAME]: JSON.parse(JSON.stringify(DEFAULT_CREATE_POST_FORM)),
 };
 
 function emptyStateForForm(formId) {
   switch (formId) {
     case REG_FORM_NAME:
-      return DEFAULT_REGFORM;
+      return JSON.parse(JSON.stringify(DEFAULT_REGFORM));
     case LOGIN_FORM_NAME:
-      return DEFAULT_LOGINFORM;
+      return JSON.parse(JSON.stringify(DEFAULT_LOGINFORM));
     case CREATE_POST_FORM_NAME:
-      return DEFAULT_LOGINFORM;
+      return JSON.parse(JSON.stringify(DEFAULT_CREATE_POST_FORM));
     default:
       return {};
   }
@@ -68,7 +68,8 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE, action) 
     }
     case FORM_CLEAR: {
       const formId = action.formId;
-      newstate[formId] = emptyStateForForm(formId);
+      const emptyState = emptyStateForForm(formId);
+      newstate[formId] = emptyState;
       break;
     }
     default:
