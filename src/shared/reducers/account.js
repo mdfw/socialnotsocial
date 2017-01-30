@@ -14,6 +14,7 @@ import {
 import {
   FORM_UPDATE,
   LOGIN_FORM_NAME,
+  REG_FORM_NAME,
 } from '../actions/forms';
 
 const DEFAULT_ACCOUNT_STATE = {
@@ -32,6 +33,7 @@ const DEFAULT_ACCOUNT_STATE = {
   submitError: null,
   submitErrorStatusCode: null,
 };
+// TODO: Do the errors above belong here or with the forms they are triggered by?
 
 const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, action) {
   let newstate = state;
@@ -95,6 +97,13 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
           ...state,
           loginError: null,
           loginErrorStatusCode: null,
+        };
+      }
+      if ((state.submitError || state.submitErrorStatusCode) && action.formId === REG_FORM_NAME) {
+        newstate = {
+          ...state,
+          submitError: null,
+          submitErrorStatusCode: null,
         };
       }
       break;
