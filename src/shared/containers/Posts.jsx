@@ -4,9 +4,16 @@ import { fetchPosts } from '../actions/posts';
 import Post from '../components/Post';
 
 /* Renders if there are no posts */
+const noPostsStyle = {
+  textAlign: 'center',
+  fontSize: '20px',
+  color: '#4376a3',
+  marginTop: '30px',
+};
+
 const NoPosts = () => (
-  <div id="noPosts">
-    There are no posts to show.
+  <div id="noPosts" style={noPostsStyle}>
+    There are no posts to show. Yet.
   </div>
 );
 
