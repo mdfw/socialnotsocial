@@ -46,12 +46,10 @@ passport.use(new Strategy(
  * deserializing.
  */
 passport.serializeUser(function serializeAccount(account, callback) {
-  console.log('Serializing user. This id: ', account.accountId);
   callback(null, account.accountId);
 });
 
 passport.deserializeUser(function deserializeAccount(accountId, callback) {
-  console.log(`Deserializing user based on ${accountId}`);
   Account.findOneAccount(accountId)
   .then(function determineAction(theAccount) {
     return callback(null, theAccount);
