@@ -20,6 +20,10 @@ module.exports = {
   },
   externals: nodeModules,
   plugins: [
+    new webpack.DefinePlugin({
+      // A common mistake is not stringifying the "production" string.
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
     new webpack.IgnorePlugin(/\.(css|less)$/),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
