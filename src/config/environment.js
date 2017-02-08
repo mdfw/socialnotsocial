@@ -6,10 +6,14 @@ import requireEnv from 'require-environment-variables';
  *
  * However, we aren't going to load these in production as it could lead to sloppy deploys.
  */
-if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  console.log(`Environment: ${process.env.NODE_ENV} - loading DEV environment vars.`);
   dotenv.load();
+} else if (process.env.NODE_ENV && process.env.NODE_ENV === 'test') {
+  console.log('Environment: loading TEST environment vars.');
+  dotenv.load({ path: './envTest' });
 } else {
-  dotenv.load();
+  console.log(`Environment: did NOT load environment variables from .env for ${process.env.NODE_ENV}. This is not a problem if you define your environment variables outside of the file system as you should.`);
 }
 
 /* If any of the environment variables(process.env.REDIS_URL) don't exist,
@@ -18,8 +22,7 @@ if (process.env.NODE_ENV && process.env.NODE_ENV !== 'production') {
  */
 requireEnv([
   'REDIS_URL',
-  'MONGODB_URI',
-  'API_SERVER_PORT',
+  'DATABASE_URL',
   'MAIN_SERVER_PORT',
   'ACCOUNT_PEPPER_1',
   'ACCOUNT_ENCRYPT_CURRENT_PEPPER',
