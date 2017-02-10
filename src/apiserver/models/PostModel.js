@@ -27,10 +27,6 @@ const Post = (sequelize, DataTypes) => {
         type: DataTypes.STRING(5000),
         allowNull: false,
       },
-      subject: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
       edited: {
         type: DataTypes.BOOLEAN,
       },
