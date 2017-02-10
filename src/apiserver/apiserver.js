@@ -9,7 +9,6 @@ import passport from 'passport';
 import { accountRoutes, recipientRoutes, authenticationRoutes, postRoutes } from './modules';
 /* Configurations */
 import '../config/environment';
-import mongooseConnection from '../config/mongoConnect';
 import redisClient from '../config/redisConnect';
 
 const RedisStore = require('connect-redis')(session);
