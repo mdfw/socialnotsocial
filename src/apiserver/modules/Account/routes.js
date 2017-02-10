@@ -1,12 +1,19 @@
 import { Router } from 'express';
-import { addAccountEndpoint, getAccountInfoEndpoint } from './controller';
 import { ensureLoggedIn } from '../Authentication';
-
+import {
+  addUserEndpoint,
+  getUserInfoEndpoint,
+  updateUserEndpoint,
+  updatePasswordEndpoint
+} from './controller';
+ 
 const routes = new Router();
 
-routes.route('/account')
-  .post(addAccountEndpoint);
-
-routes.get('/account', ensureLoggedIn(), getAccountInfoEndpoint);
+routes.route('/user')
+  .post(addUserEndpoint);
+  
+routes.get('/user', ensureLoggedIn(), getUserInfoEndpoint);
+routes.put('/user', ensureLoggedIn(), updateUserEndpoint);
+routes.put('/password', ensureLoggedIn(), updatePasswordEndpoint);
 
 export default routes;

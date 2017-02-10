@@ -1,5 +1,4 @@
-import accountRoutes from './routes';
-import Account from './model';
-import * as AccountController from './controller';
+import userRoutes from './routes';
+import * as UserController from './controller';
 
-export { accountRoutes, Account, AccountController };
+export { userRoutes, UserController };

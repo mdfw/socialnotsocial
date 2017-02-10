@@ -1,80 +1,90 @@
-import Account from './model';
+const models = require('../../models');
 
-/* Returns either the current account's accountId or, if onBehalfOfId is passed in
- *  to the body, it will verify if the current account can act on behalf of the passed
+const User = models.User;
+
+/* Returns either the current user's id or, if onBehalfOfId is passed in
+ *  to the body, it will verify if the current user can act on behalf of the passed
  *  in id and return that.
- *  @param {object} req - the request object that has a user account attached
- *  @returns {string} accountId - the accountId to use in searches.
+ *  @param {object} req - the request object that has a user attached
+ *  @returns {string} id - a user id to use in searches.
  *   TODO: need to move it to it's own module since we're duplicating it in every controller.
  */
-const activeAccountId = function getAccount(req) {
-  const currentAccount = req.user;
+const activeUsertId = function getUser(req) {
+  const currentUser = req.user;
   const onBehalfOfId = req.body.onBehalfOfId;
   if (onBehalfOfId && onBehalfOfId.length > 0) {
-    if (currentAccount && currentAccount.canActOnBehalfOf(onBehalfOfId)) {
+    if (currentUser && currentUser.canActOnBehalfOf(onBehalfOfId)) {
       return onBehalfOfId;
     }
   }
-  if (req.user && req.user.accountId) {
-    return req.user.accountId;
+  if (req.user && req.user.id) {
+    return req.user.id;
   }
   return null;
 };
 
-/* Adds an account to the Accounts database based on the fields passed in.
+/* Adds an user to the Users database based on the fields passed in.
  * Params needed in body:
  *   @param {string} email - the email address
  *   @param {string} password - the user's password. Must pass owasp tests.
- *   @param {string} displayName - the name to display on the users page.
+ *   @param {string} displayName - the name to display on the user's page.
  */
-const addAccountEndpoint = (req, res) => {
+const addUserEndpoint = (req, res) => {
   const { email, password, displayName } = req.body;
-  const newAccount = new Account({ email, password, displayName });
-  newAccount.setPassword(password)
+  const newUser = User.build({
+    email: email,
+    displayName: displayName,
+  });
+  newUser.setPassword(password)
     .then(() => { // eslint-disable-line arrow-body-style
-      return newAccount.save();
+      return newUser.save();
     })
-    .then((createdAccount) => {
-      const cleanedAccount = createdAccount.toJSON();
+    .then((createdUser) => {
+      req.login(createdUser, function loginFailed(error) {
+        console.log(`Failed login after creation: ${error}`);
+      });
+      const createdUser = createdUser.toJSON();
       res.status(201).json({
         success: true,
         message: 'Successfully Registered',
-        account: cleanedAccount,
+        user: createdUser,
       });
     })
     .catch((err) => {
+      // TODO: this only works on mongoose. Have to dig into the err object to see where to pick up.
       if (err.code === 11000) {
-        res.statusMessage = 'Account with that email already exists'; // eslint-disable-line no-param-reassign
+        res.statusMessage = 'User with that email already exists'; // eslint-disable-line no-param-reassign
         res.status(409).end();
         return;
       }
-      let errorMessage = 'Account could not be created.';
+      let errorMessage = 'User could not be created.';
       if (err.message) {
-        errorMessage = err.message;
+        errorMessage = err.message.replace(/(\r\n|\n|\r)/gm, ' ');
       }
       res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
-      res.status(422).end();
+      // TODO: Return errors better. The err object has an errors array that could be parsed.
+      res.status(422).send(JSON.stringify({ errors: err.message }));
     });
 };
 
-/* Get account info for accountId.
+/* Get user info for id.
  * Params needed in req.body:
- *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
+ *   @param (number=} onBehalfOfId - (optional) The user's id to act on behalf of if current user
  *      can act on behalf of it.
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the search parameters.
+ *  @param {number} id of user - Will be pulled from req.user.
+ *  Uses activeUsertId() to get the search parameters.
  */
-const getAccountInfoEndpoint = (req, res) => { // eslint-disable-line consistent-return
-  const accountId = activeAccountId(req);
-  if (!accountId) {
-    return res.status(422).json({ success: false, message: 'No accountId provided' });
+const getUserInfoEndpoint = (req, res) => { // eslint-disable-line consistent-return
+  const userId = activeUsertId(req);
+  if (!userId) {
+    return res.status(422).json({ success: false, message: 'Not logged in.' });
   }
-  Account.findOneAccount(accountId, false)
+  User.findById(userId)
     .then((item) => {
       const cleanedItem = item.toJSON();
       res.status(201).json({
         success: true,
-        account: cleanedItem,
+        user: cleanedItem,
       });
     })
     .catch((err) => {
@@ -83,11 +93,67 @@ const getAccountInfoEndpoint = (req, res) => { // eslint-disable-line consistent
     });
 };
 
-const updateAccountEndpoint = (req, res) => {
-  res.status(418).json({
-    message: 'Brewing',
-  });
+/* Update non-password information on user.
+  */
+const updateUserEndpoint = (req, res) => {
+  const userId = activeUsertId(req);
+  if (!userId) {
+    return res.status(422).json({ success: false, message: 'Not logged in.' });
+  }
+  const { email, displayName } = req.body;
+  User.findById(userId)
+    .then((item) => {
+      item.email = email;
+      item.displayName = displayName;
+      return item.save();
+    })
+    .catch((err) => {
+      res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+      res.status(422).end();
+    });
 };
 
-export { addAccountEndpoint, updateAccountEndpoint, getAccountInfoEndpoint };
+/* Update password endpoint
+ * Requires old and new password.
+ * First validates old password then updates to the new password.
+ */
+const updatePasswordEndpoint = (req, res) => {
+  const userId = activeUsertId(req);
+  if (!userId) {
+    return res.status(422).json({ success: false, message: 'Not logged in.' });
+  }
+  const { oldPassword, newPassword } = req.body;
+  let foundUser = null;
+  User.findById(userId)
+    .then(function comparePass(theUser) {
+      foundUser = theUser;
+      return theUser.comparePassword(oldPassword);
+    })
+    .then(function wasPasswordValid(passwordsMatched) {
+      if (!passwordsMatched) {
+        throw new Error('Could not verify user');
+      }
+      return foundUser;
+    })
+    .then(function updatePass() {
+      foundUser.setPassword(newPassword)
+    })
+    .then(() => {
+      foundUser.save();
+    })
+    .then(function returnCompleted() {
+      res.status(200).end();
+    })
+    .catch((err) => {
+      res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+      res.status(422).end();
+    });
+};
+
+export {
+  addUserEndpoint,
+  getUserInfoEndpoint,
+  updateUserEndpoint,
+  updatePasswordEndpoint
+};
 
