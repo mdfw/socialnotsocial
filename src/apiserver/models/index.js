@@ -4,6 +4,7 @@ import Media from './MediaModel';
 import Post from './PostModel';
 import Recipient from './RecipientModel';
 import User from './UserModel';
+import UserValidation from './UserValidation';
 
 const allConfigs = {
   development: {
@@ -63,6 +64,8 @@ const recipientModel = Recipient(sequelize, Sequelize);
 db[recipientModel.name] = recipientModel;
 const userModel = User(sequelize, Sequelize);
 db[userModel.name] = userModel;
+const userValidationModel = UserValidation(sequelize, Sequelize);
+db[userValidationModel.name] = userValidationModel;
 
 
 /* Do associations */

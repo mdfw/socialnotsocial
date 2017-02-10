@@ -8,6 +8,7 @@ const UserType = {
   ADMIN: 'admin',
   CUSTSERVICE: 'custservice',
   BANNED: 'banned',
+  DEMO: 'demo',
 };
 
 /* A user is the core part of the system */
@@ -117,12 +118,20 @@ const User = (sequelize, DataTypes) => {
             this.encryptedPasswordPepperId,
           );
         },
+        canActOnBehalfOf = function canActOnBehalfOf(accountId) {  // eslint-disable-line
+          if (this.accountType === AccountType.ADMIN
+            || this.accountType === AccountType.CUSTSERVICE) {
+            return true;
+          }
+          return false;
+        },
       },
       classMethods: {
         associate: function associateModels(models) {
           User.hasMany(models.Post);
           User.hasMany(models.Recipient);
           User.hasMany(models.Media);
+          User.hasMany(models.UserValidation);
         },
       },
     },
