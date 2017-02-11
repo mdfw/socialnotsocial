@@ -19,7 +19,7 @@ function signinUser(req, res, next) {
       res.status(201).json({
         success: true,
         message: 'Logged in',
-        account: user,
+        user: user,
       });
     });
   })(req, res, next);

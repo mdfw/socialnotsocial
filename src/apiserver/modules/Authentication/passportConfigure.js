@@ -1,6 +1,8 @@
 import { Strategy } from 'passport-local';
 import passport from 'passport';
-import Account from '../Account/model';
+import models from '../../models';
+
+const Account = models.Account;
 
 /* Configure the local strategy for use by Passport.
  *
@@ -16,7 +18,7 @@ passport.use(new Strategy(
   },
   function snsLocalStrategy(email, password, callback) {
     let foundAccount = null;
-    Account.findOneByEmail(email)
+    Account.find({ where: { email: email } })
       .then(function comparePass(theAccount) {
         foundAccount = theAccount;
         return theAccount.comparePassword(password);
@@ -46,11 +48,11 @@ passport.use(new Strategy(
  * deserializing.
  */
 passport.serializeUser(function serializeAccount(account, callback) {
-  callback(null, account.accountId);
+  callback(null, account.id);
 });
 
 passport.deserializeUser(function deserializeAccount(accountId, callback) {
-  Account.findOneAccount(accountId)
+  Account.findById(accountId)
   .then(function determineAction(theAccount) {
     return callback(null, theAccount);
   })
