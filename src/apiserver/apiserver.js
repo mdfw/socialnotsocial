@@ -6,7 +6,9 @@ import session from 'express-session';
 import morgan from 'morgan';
 import passport from 'passport';
 /* Routes */
-import { accountRoutes, recipientRoutes, authenticationRoutes, postRoutes } from './modules';
+// import { userRoutes, recipientRoutes, authenticationRoutes, postRoutes } from './modules';
+import { userRoutes, authenticationRoutes, postRoutes } from './modules';
+
 /* Configurations */
 import '../config/environment';
 import redisClient from '../config/redisConnect';
@@ -19,6 +21,7 @@ if (!port) {
 }
 
 const app = express();
+
 
 /* Middleware setup */
 app.use((err, req, res, next) => {
@@ -39,7 +42,8 @@ app.use(passport.session());
 app.use(morgan('combined'));
 
 /* Routes */
-app.use('/api/v1', [accountRoutes, recipientRoutes, authenticationRoutes, postRoutes]);
+// app.use('/api/v1', [userRoutes, recipientRoutes, authenticationRoutes, postRoutes]);
+app.use('/api/v1', [userRoutes, authenticationRoutes, postRoutes]);
 
 app.get('/', function baseReturn(req, res) {
   res.send('Hello - this is the api server. You probably want a more interesting endpoint.');
@@ -53,7 +57,6 @@ process.on('SIGTERM', () => {
 app.on('close', () => {
   console.log('Closing redis.');
   redisClient.quit();
-  mongooseConnection.close();
 });
 
 /* Start the API Server */

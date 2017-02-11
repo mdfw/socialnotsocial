@@ -4,16 +4,16 @@ import {
   addUserEndpoint,
   getUserInfoEndpoint,
   updateUserEndpoint,
-  updatePasswordEndpoint
+  updatePasswordEndpoint,
 } from './controller';
- 
+
 const routes = new Router();
 
-routes.route('/user')
+routes.route('/users')
   .post(addUserEndpoint);
-  
-routes.get('/user', ensureLoggedIn(), getUserInfoEndpoint);
-routes.put('/user', ensureLoggedIn(), updateUserEndpoint);
+
+routes.get('/users', ensureLoggedIn(), getUserInfoEndpoint);
+routes.put('/users', ensureLoggedIn(), updateUserEndpoint);
 routes.put('/password', ensureLoggedIn(), updatePasswordEndpoint);
 
 export default routes;

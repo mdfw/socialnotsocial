@@ -1,4 +1,8 @@
-import { Post, PostStatus } from './model';
+import { PostStatus } from '../../models/PostModel';
+
+const models = require('../../models');
+
+const Post = models.Post;
 
 /* Returns either the current account's accountId or, if onBehalfOfId is passed in
  *  to the body, it will verify if the current account can act on behalf of the passed

@@ -1,4 +1,4 @@
-import { idier } from '../../../shared/helpers/idier';
+import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
 import { appraiseEmail } from '../../shared/helpers/appraise';
 
 /* Enum for the Recipient.type field */
@@ -9,19 +9,18 @@ const RecipientType = {
 };
 /* A recipient is a person or system where posts will be sent.
  */
-const Recipient = (sequelize, DataTypes) => {
-  const RecipientDefinition = sequelize.define(
+const RecipientDefinition = (sequelize, DataTypes) => {
+  const Recipient = sequelize.define(
     'Recipient', {
       id: {
         type: DataTypes.BIGINT,
         field: 'id',
-        defaultValue: sequelize.literal("idier()"),
         primaryKey: true,
       },
       type: {
         type: DataTypes.ENUM,
         values: [RecipientType.EMAIL, RecipientType.TEXT, RecipientType.REMOVED],
-        defaultValue : RecipientType.EMAIL,        
+        defaultValue: RecipientType.EMAIL,
       },
       displayName: {
         type: DataTypes.STRING,
@@ -42,18 +41,27 @@ const Recipient = (sequelize, DataTypes) => {
       },
       validatedAt: {
         type: DataTypes.DATE,
+        field: 'validated_at',
       },
-      unsubscribedAt:  {
+      unsubscribedAt: {
         type: DataTypes.DATE,
+        field: 'unsubscribed_at',
       },
       unsubscribedReason: {
         type: DataTypes.STRING,
-      }
+      },
     },
     {
       underscored: true,
       paranoid: true,
       timestamps: true,
+      hooks: {
+        beforeValidate: function addId(recipient) {
+          if (!recipient.id) {
+            recipient.id = idier(); // eslint-disable-line no-param-reassign
+          }
+        },
+      },
       classMethods: {
         associate: function associateModels(models) {
           Recipient.belongsTo(models.User);
@@ -62,7 +70,7 @@ const Recipient = (sequelize, DataTypes) => {
       },
     },
   );
-  return RecipientDefinition;
+  return Recipient;
 };
 
-export { Recipient, RecipientType };
+export { RecipientDefinition, RecipientType };

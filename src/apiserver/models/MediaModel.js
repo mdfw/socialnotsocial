@@ -1,4 +1,4 @@
-import { idier } from '../../../shared/helpers/idier';
+import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
 
 /* The type of media */
 const MediaType = {
@@ -7,15 +7,14 @@ const MediaType = {
 };
 
 /* A piece of media that is uploaded.
- * Currently supports MediaType
+ * Currently supports MediaType.
  */
-const Media = (sequelize, DataTypes) => {
-  const MediaDefinition = sequelize.define(
+const MediaDefinition = (sequelize, DataTypes) => {
+  const Media = sequelize.define(
     'Media', {
       id: {
         type: DataTypes.BIGINT,
         field: 'id',
-        defaultValue: sequelize.literal("idier()"),
         primaryKey: true,
       },
       url: {
@@ -23,12 +22,12 @@ const Media = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isUrl: true,
-        }
+        },
       },
       type: {
         type: DataTypes.ENUM,
         values: [MediaType.PHOTO, MediaType.VIDEO],
-        defaultValue : MediaType.PHOTO,        
+        defaultValue: MediaType.PHOTO,
       },
       width: {
         type: DataTypes.INTEGER,
@@ -44,15 +43,22 @@ const Media = (sequelize, DataTypes) => {
       underscored: true,
       paranoid: true,
       timestamps: true,
+      hooks: {
+        beforeValidate: function addId(media) {
+          if (!media.id) {
+            media.id = idier(); // eslint-disable-line no-param-reassign
+          }
+        },
+      },
       classMethods: {
         associate: function associateModels(models) {
           Media.belongsTo(models.User);
-          Media.belongsToMany(models.Post, {through: 'PostMedia'});
+          Media.belongsToMany(models.Post, { through: 'PostMedia' });
         },
       },
     },
   );
-  return MediaDefinition;
+  return Media;
 };
 
-export { Media, MediaType };
+export { MediaDefinition, MediaType };

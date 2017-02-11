@@ -43,14 +43,16 @@ const addUserEndpoint = (req, res) => {
       req.login(createdUser, function loginFailed(error) {
         console.log(`Failed login after creation: ${error}`);
       });
-      const createdUser = createdUser.toJSON();
+      const cleanUser = createdUser.toJSON();
       res.status(201).json({
         success: true,
         message: 'Successfully Registered',
-        user: createdUser,
+        user: cleanUser,
       });
     })
     .catch((err) => {
+      console.log(err);
+      console.dir(err);
       // TODO: this only works on mongoose. Have to dig into the err object to see where to pick up.
       if (err.code === 11000) {
         res.statusMessage = 'User with that email already exists'; // eslint-disable-line no-param-reassign
@@ -95,7 +97,7 @@ const getUserInfoEndpoint = (req, res) => { // eslint-disable-line consistent-re
 
 /* Update non-password information on user.
   */
-const updateUserEndpoint = (req, res) => {
+const updateUserEndpoint = (req, res) => { // eslint-disable-line consistent-return
   const userId = activeUsertId(req);
   if (!userId) {
     return res.status(422).json({ success: false, message: 'Not logged in.' });
@@ -103,9 +105,10 @@ const updateUserEndpoint = (req, res) => {
   const { email, displayName } = req.body;
   User.findById(userId)
     .then((item) => {
-      item.email = email;
-      item.displayName = displayName;
-      return item.save();
+      const foundUser = item;
+      foundUser.email = email;
+      foundUser.displayName = displayName;
+      return foundUser.save();
     })
     .catch((err) => {
       res.statusMessage = err.message; // eslint-disable-line no-param-reassign
@@ -117,7 +120,7 @@ const updateUserEndpoint = (req, res) => {
  * Requires old and new password.
  * First validates old password then updates to the new password.
  */
-const updatePasswordEndpoint = (req, res) => {
+const updatePasswordEndpoint = (req, res) => { // eslint-disable-line consistent-return
   const userId = activeUsertId(req);
   if (!userId) {
     return res.status(422).json({ success: false, message: 'Not logged in.' });
@@ -136,10 +139,10 @@ const updatePasswordEndpoint = (req, res) => {
       return foundUser;
     })
     .then(function updatePass() {
-      foundUser.setPassword(newPassword)
+      return foundUser.setPassword(newPassword);
     })
-    .then(() => {
-      foundUser.save();
+    .then(function saveUser() {
+      return foundUser.save();
     })
     .then(function returnCompleted() {
       res.status(200).end();
@@ -154,6 +157,6 @@ export {
   addUserEndpoint,
   getUserInfoEndpoint,
   updateUserEndpoint,
-  updatePasswordEndpoint
+  updatePasswordEndpoint,
 };
 

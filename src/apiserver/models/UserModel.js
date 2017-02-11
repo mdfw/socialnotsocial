@@ -1,6 +1,6 @@
 import { encryptPassword, passwordsMatch } from './passwordEncryption';
 import { appraisePassword, appraiseEmail, appraiseDisplayName } from '../../shared/helpers/appraise';
-import { idier } from '../../../shared/helpers/idier';
+import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
 
 /* A type of user */
 const UserType = {
@@ -12,21 +12,20 @@ const UserType = {
 };
 
 /* A user is the core part of the system */
-const User = (sequelize, DataTypes) => {
-  const UserDefinition = sequelize.define(
+const UserDefinition = (sequelize, DataTypes) => {
+  const User = sequelize.define(
     'User', {
       id: {
         type: DataTypes.BIGINT,
         field: 'id',
-        defaultValue: sequelize.literal("idier()"),
         primaryKey: true,
       },
       userType: {
         type: DataTypes.ENUM,
         values: [UserType.NORMAL, UserType.ADMIN, UserType.CUSTSERVICE, UserType.BANNED],
-        defaultValue : UserType.NORMAL,        
+        defaultValue: UserType.NORMAL,
         allowNull: false,
-      }
+      },
       displayName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -67,12 +66,20 @@ const User = (sequelize, DataTypes) => {
         },
       },
       validatedAt: {
-        DataTypes.DATE,
-      }
+        type: DataTypes.DATE,
+        field: 'validated_at',
+      },
     },
     {
       underscored: true,
       paranoid: true,
+      hooks: {
+        beforeValidate: function addId(user) {
+          if (!user.id) {
+            user.id = idier(); // eslint-disable-line no-param-reassign
+          }
+        },
+      },
       instanceMethods: {
         setPassword: function setPassword(password) {
           const self = this;
@@ -111,16 +118,16 @@ const User = (sequelize, DataTypes) => {
           delete values.deletedAt;
           return values;
         },
-        comparePassword(candidate) {
+        comparePassword: function comparePass(candidate) {
           return passwordsMatch(
             candidate,
             this.encryptedPasswordHash,
             this.encryptedPasswordPepperId,
           );
         },
-        canActOnBehalfOf = function canActOnBehalfOf(accountId) {  // eslint-disable-line
-          if (this.accountType === AccountType.ADMIN
-            || this.accountType === AccountType.CUSTSERVICE) {
+        canActOnBehalfOf: function behalfOf(accountId) { // eslint-disable-line no-unused-vars
+          if (this.userType === UserType.ADMIN
+            || this.userType === UserType.CUSTSERVICE) {
             return true;
           }
           return false;
@@ -136,7 +143,7 @@ const User = (sequelize, DataTypes) => {
       },
     },
   );
-  return UserDefinition;
+  return User;
 };
 
-export { User, UserType };
+export { UserDefinition, UserType };
