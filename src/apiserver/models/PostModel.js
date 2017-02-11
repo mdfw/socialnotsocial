@@ -1,5 +1,8 @@
 import { idier } from '../../../shared/helpers/idier';
 
+/* The maximum we can return from a search */
+const MAX_RETURN_LIMIT = 100;
+
 /* Enum for the post.status field */
 const PostStatus = {
   DRAFT: 'draft',
@@ -44,6 +47,49 @@ const Post = (sequelize, DataTypes) => {
       },
     },
   );
+  
+  /* Find all posts for a userId
+   * @param {string} userId - the userId to search for
+   * @param {number} limit - the number to find.
+   * @param {number} beforeId - the identifier to sort before. If this is passed, limit is used.
+   */
+  Post.findAllForUser = function(userId, limit = 20, offset = 0, beforeId) {
+    if (!userId) {
+      throw new Error('No userId provided');
+    }
+    
+    let userWhere = `id: ${userId}`;
+    
+    let beforeIdWhere = '';
+    if (beforeId && beforeId > 0) {
+      beforeIdWhere = `, id : {$lt: ${beforeId}}`;
+    }
+
+    let limiter = limit;
+    if (limiter > MAX_RETURN_LIMIT) {
+      limiter = MAX_RETURN_LIMIT;
+    }
+    const limitClause = `, limit: ${limiter}`;
+    let offsetClause = '';
+    if (offset > 0) {
+      offsetClause = `, offset: ${offset}`;
+    }
+    const orderClause = 'order: id DESC';
+    const queryJSON = `{ where: { ${userWhere}${beforeIdWhere} }${limitClause}${offsetClause} ${orderClause}}`;
+    const query = JSON.parse(queryJSON);
+    return this.findAll(query);
+  };
+
+  /* Determine total number of posts for account
+   * @param {number} - accountId
+   */
+  Post.totalForUser = function countPosts(userId) {
+    return Post.findAndCountAll({
+      where: { UserId: userId },
+    });
+  };
+    
+  
   return PostDefinition;
 };
 
