@@ -4,7 +4,7 @@ import { RecipientType } from './constants';
 
 /* A recipient is a person or system where posts will be sent.
  */
-const RecipientDefinition = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const Recipient = sequelize.define(
     'Recipient', {
       id: {
@@ -67,5 +67,3 @@ const RecipientDefinition = (sequelize, DataTypes) => {
   );
   return Recipient;
 };
-
-export default RecipientDefinition ;

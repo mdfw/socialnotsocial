@@ -1,9 +1,9 @@
 import Sequelize from 'sequelize';
-import ApprisalDefinition from './ApprisalModel';
-import { MediaDefinition } from './MediaModel';
-import { PostDefinition } from './PostModel';
-import { RecipientDefinition } from './RecipientModel';
-import { UserDefinition } from './UserModel';
+import Apprisal from './ApprisalModel';
+import Media from './MediaModel';
+import Post from './PostModel';
+import Recipient from './RecipientModel';
+import User from './UserModel';
 import UserValidation from './UserValidation';
 import {
   UserType,
@@ -61,16 +61,21 @@ sequelize
 /* Create the models
  * TODO: This is a manual update nightmare.
  */
-const apprisalModel = ApprisalDefinition(sequelize, Sequelize);
+const apprisalModel = Apprisal(sequelize, Sequelize);
 db[apprisalModel.name] = apprisalModel;
-const mediaModel = MediaDefinition(sequelize, Sequelize);
+
+const mediaModel = Media(sequelize, Sequelize);
 db[mediaModel.name] = mediaModel;
-const postModel = PostDefinition(sequelize, Sequelize);
+
+const postModel = Post(sequelize, Sequelize);
 db[postModel.name] = postModel;
-const recipientModel = RecipientDefinition(sequelize, Sequelize);
+
+const recipientModel = Recipient(sequelize, Sequelize);
 db[recipientModel.name] = recipientModel;
-const userModel = UserDefinition(sequelize, Sequelize);
+
+const userModel = User(sequelize, Sequelize);
 db[userModel.name] = userModel;
+
 const userValidationModel = UserValidation(sequelize, Sequelize);
 db[userValidationModel.name] = userValidationModel;
 
@@ -83,7 +88,7 @@ Object.keys(db).forEach(function associateThem(modelName) {
 
 /* Push the models to the database */
 sequelize
-  .sync() //   .sync({ force: true }) <= removed as this drops the table
+  .sync({ force: true }) //   .sync({ force: true }) <= removed as this drops the table
   .then(() => {
     console.log('Success: Synced models to database.');
   }, function trapSyncError(err) {

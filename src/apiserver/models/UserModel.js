@@ -4,7 +4,7 @@ import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-un
 import { UserType } from './constants';
 
 /* A user is the core part of the system */
-const UserDefinition = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User', {
       id: {
@@ -62,7 +62,7 @@ const UserDefinition = (sequelize, DataTypes) => {
         field: 'validated_at',
       },
       validated: {
-        type: DataTypes.BOOL,
+        type: DataTypes.BOOLEAN,
       },
     },
     {
@@ -140,5 +140,3 @@ const UserDefinition = (sequelize, DataTypes) => {
   );
   return User;
 };
-
-export default UserDefinition;

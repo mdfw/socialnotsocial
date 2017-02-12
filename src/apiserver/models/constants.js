@@ -31,7 +31,6 @@ const RecipientType = {
   FACEBOOK: 'facebook',
 };
 
-
 export {
   UserType,
   MediaType,

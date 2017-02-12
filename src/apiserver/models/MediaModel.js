@@ -5,7 +5,7 @@ import { MediaType } from './constants';
 /* A piece of media that is uploaded.
  * Currently supports MediaType.
  */
-const MediaDefinition = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const Media = sequelize.define(
     'Media', {
       id: {
@@ -56,5 +56,3 @@ const MediaDefinition = (sequelize, DataTypes) => {
   );
   return Media;
 };
-
-export default MediaDefinition;

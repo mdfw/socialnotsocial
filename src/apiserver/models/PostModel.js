@@ -4,7 +4,7 @@ import { PostStatus, MAX_POST_SEARCH_RETURN_LIMIT } from './constants';
 /* A post is the atomic messages of the user
  * https://developers.facebook.com/docs/graph-api/reference/v2.8/post
  */
-const PostDefinition = (sequelize, DataTypes) => {
+module.exports = (sequelize, DataTypes) => {
   const Post = sequelize.define(
     'Post', {
       id: {
@@ -89,5 +89,3 @@ const PostDefinition = (sequelize, DataTypes) => {
 
   return Post;
 };
-
-export default PostDefinition;
