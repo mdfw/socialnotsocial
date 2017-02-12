@@ -1,14 +1,6 @@
 import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
+import { PostStatus, MAX_POST_SEARCH_RETURN_LIMIT } from './constants';
 
-/* The maximum we can return from a search */
-const MAX_RETURN_LIMIT = 100;
-
-/* Enum for the post.status field */
-const PostStatus = {
-  DRAFT: 'draft',
-  POSTED: 'posted',
-  REMOVED: 'removed',
-};
 /* A post is the atomic messages of the user
  * https://developers.facebook.com/docs/graph-api/reference/v2.8/post
  */
@@ -72,8 +64,8 @@ const PostDefinition = (sequelize, DataTypes) => {
     }
 
     let limiter = limit;
-    if (limiter > MAX_RETURN_LIMIT) {
-      limiter = MAX_RETURN_LIMIT;
+    if (limiter > MAX_POST_SEARCH_RETURN_LIMIT) {
+      limiter = MAX_POST_SEARCH_RETURN_LIMIT;
     }
     const limitClause = `, limit: ${limiter}`;
     let offsetClause = '';
@@ -98,4 +90,4 @@ const PostDefinition = (sequelize, DataTypes) => {
   return Post;
 };
 
-export { PostDefinition, PostStatus };
+export default PostDefinition;

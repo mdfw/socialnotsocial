@@ -1,12 +1,7 @@
 import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
 import { appraiseEmail } from '../../shared/helpers/appraise';
+import { RecipientType } from './constants';
 
-/* Enum for the Recipient.type field */
-const RecipientType = {
-  EMAIL: 'email',
-  TEXT: 'text',
-  FACEBOOK: 'facebook',
-};
 /* A recipient is a person or system where posts will be sent.
  */
 const RecipientDefinition = (sequelize, DataTypes) => {
@@ -73,4 +68,4 @@ const RecipientDefinition = (sequelize, DataTypes) => {
   return Recipient;
 };
 
-export { RecipientDefinition, RecipientType };
+export default RecipientDefinition ;

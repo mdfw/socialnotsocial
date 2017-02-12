@@ -1,10 +1,6 @@
 import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
+import { MediaType } from './constants';
 
-/* The type of media */
-const MediaType = {
-  VIDEO: 'video',
-  PHOTO: 'photo',
-};
 
 /* A piece of media that is uploaded.
  * Currently supports MediaType.
@@ -61,4 +57,4 @@ const MediaDefinition = (sequelize, DataTypes) => {
   return Media;
 };
 
-export { MediaDefinition, MediaType };
+export default MediaDefinition;

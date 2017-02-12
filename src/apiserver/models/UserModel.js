@@ -1,15 +1,7 @@
 import { encryptPassword, passwordsMatch } from './passwordEncryption';
 import { appraisePassword, appraiseEmail, appraiseDisplayName } from '../../shared/helpers/appraise';
 import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
-
-/* A type of user */
-const UserType = {
-  NORMAL: 'normal',
-  ADMIN: 'admin',
-  CUSTSERVICE: 'custservice',
-  BANNED: 'banned',
-  DEMO: 'demo',
-};
+import { UserType } from './constants';
 
 /* A user is the core part of the system */
 const UserDefinition = (sequelize, DataTypes) => {
@@ -68,6 +60,9 @@ const UserDefinition = (sequelize, DataTypes) => {
       validatedAt: {
         type: DataTypes.DATE,
         field: 'validated_at',
+      },
+      validated: {
+        type: DataTypes.BOOL,
       },
     },
     {
@@ -146,4 +141,4 @@ const UserDefinition = (sequelize, DataTypes) => {
   return User;
 };
 
-export { UserDefinition, UserType };
+export default UserDefinition;

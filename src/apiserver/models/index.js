@@ -5,6 +5,13 @@ import { PostDefinition } from './PostModel';
 import { RecipientDefinition } from './RecipientModel';
 import { UserDefinition } from './UserModel';
 import UserValidation from './UserValidation';
+import {
+  UserType,
+  MediaType,
+  PostStatus,
+  MAX_POST_SEARCH_RETURN_LIMIT,
+  RecipientType,
+} from './constants';
 
 const allConfigs = {
   development: {
@@ -76,7 +83,7 @@ Object.keys(db).forEach(function associateThem(modelName) {
 
 /* Push the models to the database */
 sequelize
-  .sync({ force: true }) //   .sync({ force: true }) <= removed as this drops the table
+  .sync() //   .sync({ force: true }) <= removed as this drops the table
   .then(() => {
     console.log('Success: Synced models to database.');
   }, function trapSyncError(err) {
@@ -86,5 +93,14 @@ sequelize
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+const models = db;
+export {
+  models,
+  UserType,
+  MediaType,
+  PostStatus,
+  MAX_POST_SEARCH_RETURN_LIMIT,
+  RecipientType,
+}
+;
 
