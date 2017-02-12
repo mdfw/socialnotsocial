@@ -52,7 +52,7 @@ const destroyUserSession = function destroyUserSession(req, res, user) {
  * proxying for convenience.
  * TODO: We're hitting the db every session. Store more data in session? Then, how to ban?
  */
-const authUserSession = function authUserSession(req, res, next) {
+const validateUserSession = function validateUserSession(req, res, next) {
   if (req.session && req.session.user) {
     User.findById(req.session.user.id).then((user) => {
       if (user) {
@@ -69,20 +69,56 @@ const authUserSession = function authUserSession(req, res, next) {
   }
 };
 
+/* Authenticates a user with email and password.
+ * Creates a session on valid authentication.
+ */
+const authenticateUser = function authenticateUser(req, res, body) {
+  const email = body.email;
+  const password = body.password;
+  if (!email || !password) {
+    const err = new Error('Email and password required.');
+    throw err;
+  }
+  let foundUser = null;
+  console.log(`Finding an account ${email} pass: ${password}`);
+  User.find({ where: { email: email } })
+    .then(function comparePass(theUser) {
+      foundUser = theUser;
+      console.log('found user');
+      console.dir(theUser);
+      return theUser.comparePassword(password);
+    })
+    .then(function returnAccount(passwordsMatched) {
+      if (!passwordsMatched) {
+        throw new Error('Could not verify account');
+      }
+      console.log('Returning password Match');
+      createUserSession(req, res, foundUser);
+      return foundUser;
+    });
+};
 
 /**
  * Ensure a user is logged in before allowing them to continue their request.
  *
  * If a user isn't logged in, they'll be sent a 403.
  */
-const requireLogin = function requireLogin(req, res, next) {
-  if (!req.user) {
-    res.statusMessage = 'Requires login.'; // eslint-disable-line no-param-reassign
-    res.status(403).end();
-  } else {
-    next();
-  }
+const requireLogin = function requireLogin() {
+  return function areWeAuthenticated(req, res, next) {
+    if (req && !req.user) {
+      res.statusMessage = 'Requires login.'; // eslint-disable-line no-param-reassign
+      res.status(403).end();
+    } else {
+      next();
+    }
+  };
 };
 
 /* eslint-enable no-param-reassign */
-export { authUserSession, createUserSession, destroyUserSession, requireLogin };
+export {
+  validateUserSession,
+  createUserSession,
+  destroyUserSession,
+  authenticateUser,
+  requireLogin,
+};

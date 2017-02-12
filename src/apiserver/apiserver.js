@@ -4,7 +4,8 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import session from 'express-session';
 import morgan from 'morgan';
-import passport from 'passport';
+import { validateUserSession } from './modules/Authentication/warrant';
+
 /* Routes */
 // import { userRoutes, recipientRoutes, authenticationRoutes, postRoutes } from './modules';
 import { userRoutes, authenticationRoutes, postRoutes } from './modules';
@@ -37,8 +38,7 @@ app.use(session({
   saveUninitialized: false,
   store: new RedisStore({ client: redisClient }),
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(validateUserSession);
 app.use(morgan('combined'));
 
 /* Routes */
