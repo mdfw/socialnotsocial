@@ -14,7 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       type: {
         type: DataTypes.ENUM,
-        values: [RecipientType.EMAIL, RecipientType.TEXT, RecipientType.REMOVED],
+        values: [RecipientType.EMAIL,
+          RecipientType.TEXT,
+          RecipientType.POST,
+          RecipientType.FACEBOOK,
+          RecipientType.REMOVED,
+        ],
         defaultValue: RecipientType.EMAIL,
       },
       displayName: {
