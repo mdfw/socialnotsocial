@@ -2,7 +2,7 @@ import { Strategy } from 'passport-local';
 import passport from 'passport';
 import models from '../../models';
 
-const Account = models.Account;
+const User = models.User;
 
 /* Configure the local strategy for use by Passport.
  *
@@ -17,24 +17,29 @@ passport.use(new Strategy(
     passwordField: 'password',
   },
   function snsLocalStrategy(email, password, callback) {
-    let foundAccount = null;
-    Account.find({ where: { email: email } })
-      .then(function comparePass(theAccount) {
-        foundAccount = theAccount;
-        return theAccount.comparePassword(password);
+    let foundUser = null;
+    console.log(`Finding an account ${email} pass: ${password}`);
+    User.find({ where: { email: email } })
+      .then(function comparePass(theUser) {
+        foundUser = theUser;
+        console.log('found user');
+        console.dir(theUser);
+        return theUser.comparePassword(password);
       })
       .then(function returnAccount(passwordsMatched) {
         if (!passwordsMatched) {
           throw new Error('Could not verify account');
         }
-        return foundAccount;
+        console.log('Returning password Match')
+        return foundUser;
       })
-      .then(function returnAccount(accountToReturn) {
-        callback(null, accountToReturn);
+      .then(function returnAccount(userToReturn) {
+        console.log('returning user');
+        callback(null, userToReturn);
       })
       .catch(function catchAuthFailure(err) {
         console.log(`Passport authentication failed: Unknown error: ${err}`);
-        return callback(null, false, { message: 'Could not authenticate account' });
+        return callback(null, false, { message: 'Could not authenticate user' });
       });
   }));
 
@@ -48,11 +53,13 @@ passport.use(new Strategy(
  * deserializing.
  */
 passport.serializeUser(function serializeAccount(account, callback) {
+  console.log('Serializing user');
+  console.dir(account);
   callback(null, account.id);
 });
 
 passport.deserializeUser(function deserializeAccount(accountId, callback) {
-  Account.findById(accountId)
+  User.findById(accountId)
   .then(function determineAction(theAccount) {
     return callback(null, theAccount);
   })
