@@ -1,3 +1,5 @@
+import { createUserSession, destroyUserSession } from '../Authentication/warrant';
+
 const models = require('../../models');
 
 const User = models.User;
@@ -40,9 +42,9 @@ const addUserEndpoint = (req, res) => {
       return newUser.save();
     })
     .then((createdUser) => {
-      req.login(createdUser, function loginFailed(error) {
-        console.log(`Failed login after creation: ${error}`);
-      });
+      console.log('Created User');
+      createUserSession(req, res, createdUser);
+      console.log('Finished login');
       const cleanUser = createdUser.toJSON();
       res.status(201).json({
         success: true,
@@ -51,6 +53,7 @@ const addUserEndpoint = (req, res) => {
       });
     })
     .catch((err) => {
+      destroyUserSession(req, res);
       console.log(err);
       console.dir(err);
       // TODO: this only works on mongoose. Have to dig into the err object to see where to pick up.

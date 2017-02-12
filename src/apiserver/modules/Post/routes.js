@@ -5,12 +5,12 @@ import {
   updatePostEndpoint,
   removePostEndpoint,
 } from './controller';
-import { ensureLoggedIn } from '../Authentication';
+import { requireLogin } from '../Authentication/warrant';
 
 const routes = new Router();
-routes.get('/posts', ensureLoggedIn(), getPostsEndpoint);
-routes.post('/posts', ensureLoggedIn(), addPostEndpoint);
-routes.put('/posts/:postId', ensureLoggedIn(), updatePostEndpoint);
-routes.delete('/posts/:postId', ensureLoggedIn(), removePostEndpoint);
+routes.get('/posts', requireLogin(), getPostsEndpoint);
+routes.post('/posts', requireLogin(), addPostEndpoint);
+routes.put('/posts/:postId', requireLogin(), updatePostEndpoint);
+routes.delete('/posts/:postId', requireLogin(), removePostEndpoint);
 
 export default routes;
