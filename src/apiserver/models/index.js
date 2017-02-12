@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import chalk from 'chalk';
 import Apprisal from './ApprisalModel';
 import Media from './MediaModel';
 import Post from './PostModel';
@@ -54,7 +55,7 @@ sequelize
   .then(() => {
     console.log('Success: Connection to Postgres established .');
   }, function trapError(err) {
-    console.log('FAILURE: Unable to connect to the Postgres database:', err);
+    console.log(chalk.red('FAILURE: Unable to connect to the Postgres database:'), err);
   });
 
 
@@ -92,7 +93,7 @@ sequelize
   .then(() => {
     console.log('Success: Synced models to database.');
   }, function trapSyncError(err) {
-    console.log('FAILURE: An error occurred while creating the table:', err);
+    console.log(chalk.red('FAILURE: An error occurred while creating the table:'), err);
   });
 
 db.sequelize = sequelize;

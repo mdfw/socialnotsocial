@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import session from 'express-session';
 import morgan from 'morgan';
+import chalk from 'chalk';
 import { validateUserSession } from './modules/Authentication/warrant';
 
 /* Routes */
@@ -63,9 +64,9 @@ app.on('close', () => {
 const server = Server(app);
 server.listen(port, function reportOnListen(error) {
   if (error) {
-    console.log(`API Server ERROR on startup: ${error}`);
+    console.log(chalk.red(`API Server ERROR on startup: ${error}`));
   } else {
-    console.log(`API Server listening on http://localhost:${port}.`);
+    console.log(chalk.bold.green(`API Server listening on http://localhost:${port}.`));
   }
 });
 
