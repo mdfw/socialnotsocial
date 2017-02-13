@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ensureLoggedIn } from '../Authentication';
+import { requireLogin } from '../Authentication/warrant';
 import {
   addUserEndpoint,
   getUserInfoEndpoint,
@@ -12,8 +12,8 @@ const routes = new Router();
 routes.route('/users')
   .post(addUserEndpoint);
 
-routes.get('/users', ensureLoggedIn(), getUserInfoEndpoint);
-routes.put('/users', ensureLoggedIn(), updateUserEndpoint);
-routes.put('/password', ensureLoggedIn(), updatePasswordEndpoint);
+routes.get('/users', requireLogin(), getUserInfoEndpoint);
+routes.put('/users', requireLogin(), updateUserEndpoint);
+routes.put('/passwords', requireLogin(), updatePasswordEndpoint);
 
 export default routes;

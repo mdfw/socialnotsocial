@@ -1,6 +1,6 @@
 import { createUserSession, destroyUserSession } from '../Authentication/warrant';
 
-const models = require('../../models');
+import { models } from '../../models';
 
 const User = models.User;
 
@@ -32,6 +32,9 @@ const activeUsertId = function getUser(req) {
  *   @param {string} displayName - the name to display on the user's page.
  */
 const addUserEndpoint = (req, res) => {
+  console.log('user');
+  console.dir(models);
+
   const { email, password, displayName } = req.body;
   const newUser = User.build({
     email: email,
@@ -98,8 +101,15 @@ const getUserInfoEndpoint = (req, res) => { // eslint-disable-line consistent-re
     });
 };
 
-/* Update non-password information on user.
-  */
+/* Update user info
+ * Requires values in the body of the req.
+ *  @param {Object} req - The http request object.
+ *  @param {Object} res - The http response object.
+ * Possible options (not all have to be passed):
+ *     @param {String} email - the new email address
+ *      TODO: validate the new email
+ *     @param {String} displayName - the new displayName
+ */
 const updateUserEndpoint = (req, res) => { // eslint-disable-line consistent-return
   const userId = activeUsertId(req);
   if (!userId) {
@@ -109,9 +119,20 @@ const updateUserEndpoint = (req, res) => { // eslint-disable-line consistent-ret
   User.findById(userId)
     .then((item) => {
       const foundUser = item;
-      foundUser.email = email;
-      foundUser.displayName = displayName;
+      if (email && email.length > 0) {
+        foundUser.email = email;
+      }
+      if (displayName && displayName.length > 0) {
+        foundUser.displayName = displayName;
+      }
       return foundUser.save();
+    })
+    .then((user) => {
+      const cleanedUser = user.toJSON();
+      res.status(200).json({
+        success: true,
+        user: cleanedUser,
+      });
     })
     .catch((err) => {
       res.statusMessage = err.message; // eslint-disable-line no-param-reassign
@@ -121,19 +142,24 @@ const updateUserEndpoint = (req, res) => { // eslint-disable-line consistent-ret
 
 /* Update password endpoint
  * Requires old and new password.
- * First validates old password then updates to the new password.
+ * First validates current password then updates to the new password.
+ *  @param {Object} req - The http request object.
+ *  @param {Object} res - The http response object.
+ *  Required in req object:
+ *     @param {String} password - the current password
+ *     @param {String} newPassword - the new password
  */
 const updatePasswordEndpoint = (req, res) => { // eslint-disable-line consistent-return
   const userId = activeUsertId(req);
   if (!userId) {
     return res.status(422).json({ success: false, message: 'Not logged in.' });
   }
-  const { oldPassword, newPassword } = req.body;
+  const { password, newPassword } = req.body;
   let foundUser = null;
   User.findById(userId)
     .then(function comparePass(theUser) {
       foundUser = theUser;
-      return theUser.comparePassword(oldPassword);
+      return theUser.comparePassword(password);
     })
     .then(function wasPasswordValid(passwordsMatched) {
       if (!passwordsMatched) {
