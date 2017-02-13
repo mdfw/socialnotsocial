@@ -1,4 +1,17 @@
-import ensureLoggedIn from './ensureLoggedIn';
-import authenticationRoutes from './routes';
+import sessionsRoutes from './routes';
+import {
+  validateUserSession,
+  createUserSession,
+  destroyUserSession,
+  authenticateUser,
+  requireLogin,
+} from './warrant';
 
-export { ensureLoggedIn, authenticationRoutes };
+export {
+  sessionsRoutes,
+  validateUserSession,
+  createUserSession,
+  destroyUserSession,
+  authenticateUser,
+  requireLogin,
+};
