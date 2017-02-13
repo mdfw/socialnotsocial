@@ -1,44 +1,22 @@
-import { PostStatus } from '../../models/PostModel';
-
-const models = require('../../models');
+import { models } from '../../models';
+import { proxyUserId } from '../Authentication';
 
 const Post = models.Post;
 
-/* Returns either the current account's accountId or, if onBehalfOfId is passed in
- *  to the body, it will verify if the current account can act on behalf of the passed
- *  in id and return that.
- *  @param {object} req - the request object that has a user account attached
- *  @returns {string} accountId - the accountId to use in searches.
- *   TODO: need to move it to it's own module since we're duplicating it in every controller.
- */
-const activeAccountId = function getAccount(req) {
-  const currentAccount = req.user;
-  const onBehalfOfId = req.body.onBehalfOfId;
-  if (onBehalfOfId && onBehalfOfId.length > 0) {
-    if (currentAccount && currentAccount.canActOnBehalfOf(onBehalfOfId)) {
-      return onBehalfOfId;
-    }
-  }
-  if (req.user && req.user.accountId) {
-    return req.user.accountId;
-  }
-  return null;
-};
 
 /* Get all of the posts for the accountId.
  * Params needed in req.body:
- *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
+ *   @param (number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
  *      can act on behalf of it.
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the search parameters.
+ *  Uses proxyUserId() to get the userId to search user.
  */
 const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-return
-  const accountId = activeAccountId(req);
-  if (!accountId) {
-    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
-  Post.findAllForId(accountId, false)
+  Post.findAllForUser(userId)
     .then((items) => {
       const cleanedItems = items.map(function jsonify(mappedItem) {
         return mappedItem.toJSON();
@@ -57,35 +35,31 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
 /* Adds a post to the Post database based on the fields passed in.
  * Params needed in req.body:
  *   @param {string} message - the main message body
- *   @param {string=} subject (optional) - subject of the post.
  *   @param {array[number]} mediaIds - the mediaIds associated with this post.
  *   @param {string=} status (optional) - Must be one of PostStatus (see Post model).
- *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
+ *   @param (number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
  *      can act on behalf of it.
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the accountId to search for.
+ *  Uses proxyUserId() to get the userId to post under.
  */
 const addPostEndpoint = (req, res) => {
-  const accountId = activeAccountId(req);
-  if (!accountId) {
-    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
-  const { message, subject, mediaIds, status } = req.body;
-  const newItem = new Post({
+  const { message, status } = req.body;
+  const newPost = Post.build({
     message: message,
-    subject: subject,
-    mediaIds: mediaIds,
     status: status,
-    ownerAccountId: accountId,
+    user_id: userId,
   });
-  newItem.save()
+  newPost.save()
     .then((createdItem) => {
       const cleanedPost = createdItem.toJSON();
       res.status(201).json({
         success: true,
         message: 'Successfully created post',
-        recipient: cleanedPost,
+        post: cleanedPost,
       });
     })
     .catch((err) => {
@@ -102,19 +76,17 @@ const addPostEndpoint = (req, res) => {
 
 /* Updates a post
  *   @param {string} message - the main message body
- *   @param {string=} subject (optional) - subject of the post.
  *   @param {array[number]} mediaIds - the mediaIds associated with this post.
  *   @param {string=} status (optional) - Must be one of PostStatus (see Post model).
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
  *  @param (number) postId - Will be pulled from req.params or req.body (body takes priority)
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the accountId to search for.
+ *  Uses proxyUserId() to get the userId to map.
  */
 const updatePostEndpoint = (req, res) => {
-  const accountId = activeAccountId(req);
-  if (!accountId) {
-    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
   let itemId = req.params.postId;
@@ -124,18 +96,21 @@ const updatePostEndpoint = (req, res) => {
   if (!itemId) {
     res.status(422).json({ success: false, messages: 'No PostId provided.' });
   }
-  const { message, subject, mediaIds, status } = req.body;
+  const { message, mediaIds, status } = req.body;
   const updates = {};
   if (message && message.length > 0) updates.message = message;
-  if (subject && subject.length > 0) updates.subject = subject;
-  if (mediaIds && mediaIds.length > 0) updates.mediaIds = mediaIds;
   if (status && status.length > 0) updates.status = status;
 
   if (Object.keys(updates).length === 0) {
     res.status(422).json({ success: false, messages: 'Nothing to update.' });
   }
-  Post.update(itemId, accountId, updates)
+  Post.updatePost(itemId, userId, updates)
     .then((updatedItem) => {
+      if (!updatedItem) {
+        res.statusMessage = 'Post was not found.'; // eslint-disable-line no-param-reassign
+        res.status(404).end();
+        return;
+      }
       res.status(200).json({
         success: true,
         message: 'Successfully updated post',
@@ -143,6 +118,7 @@ const updatePostEndpoint = (req, res) => {
       });
     })
     .catch((err) => {
+      console.dir(err);
       let errorMessage = 'Post could not be updated.';
       if (err.message) {
         errorMessage = err.message;
@@ -162,9 +138,9 @@ const updatePostEndpoint = (req, res) => {
  *  Uses activeAccountId() to get the accountId to search for.
  */
 const removePostEndpoint = (req, res) => {
-  const accountId = activeAccountId(req);
-  if (!accountId) {
-    res.statusMessage = 'No accountId provided'; // eslint-disable-line no-param-reassign
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
   let itemId = req.params.postId;
@@ -175,8 +151,13 @@ const removePostEndpoint = (req, res) => {
     res.statusMessage = 'No postId provided.'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
-  Post.update(itemId, accountId, { status: PostStatus.REMOVED })
-    .then(() => {
+  Post.deletePost(itemId, userId)
+    .then((updatedItem) => {
+      if (!updatedItem) {
+        res.statusMessage = 'Post was not found.'; // eslint-disable-line no-param-reassign
+        res.status(404).end();
+        return;
+      }
       res.status(204).end();
     })
     .catch((err) => {

@@ -55,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   /* Find all posts for a userId
    * @param {string} userId - the userId to search for
    * @param {number} limit - the number to find.
+   * @param {number} offset - The number to skip.
    * @param {number} beforeId - the identifier to sort before. If this is passed, limit is used.
    */
   Post.findAllForUser = function findAllForUser(userId, limit = 20, offset = 0, beforeId) {
@@ -93,15 +94,44 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  /* Update a post
+   * @param {number} - id: The id of the post
+   * @param {number} - userId: The id of the user
+   * @param {object} - updates: The fields and values to update
+   * Returns: Either an updated post or null if it couldn't be found
+   */
   Post.updatePost = function updatePost(id, userId, updates) {
-    Post.findById(id)
+    return Post.findOne({ where: { id: id, user_id: userId } })
     .then((foundItem) => {
+      if (!foundItem) {
+        return null;
+      }
       const foundPost = foundItem;
       const fieldsToUpdateKeys = Object.keys(updates);
       fieldsToUpdateKeys.forEach(function modifyItem(key) {
         foundPost[key] = updates[key];
       });
       return foundPost.save();
+    });
+  };
+
+  /* Delete a post
+   * @param {number} - id: The id of the post
+   * @param {number} - userId: The id of the user
+   * Returns: Either an deleted post or null if it couldn't be found
+   */
+  Post.deletePost = function updatePost(id, userId) {
+    return Post.findOne({ where: { id: id, user_id: userId } })
+    .then((foundItem) => { // eslint-disable-line consistent-return
+      if (!foundItem) {
+        return null;
+      }
+      const foundPost = foundItem;
+      foundPost.status = PostStatus.REMOVED;
+      return foundPost.save();
+    })
+    .then((thisPost) => { // eslint-disable-line arrow-body-style
+      return thisPost.destroy();
     });
   };
 
