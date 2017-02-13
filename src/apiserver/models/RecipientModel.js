@@ -1,5 +1,6 @@
-import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
+import { idier, passGen } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
 import { appraiseEmail } from '../../shared/helpers/appraise';
+import { deAesHash, aesHash } from './passwordEncryption';
 import { RecipientType, RecipientStatus, MAX_POST_SEARCH_RETURN_LIMIT } from './constants';
 
 /* A recipient is a person or system where posts will be sent.
@@ -47,6 +48,15 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      accessTokenEncrypted: {
+        type: DataTypes.STRING,
+        field: 'access_token_hash',
+        allowNull: false,
+      },
+      accessTokenPepper: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       validatedAt: {
         type: DataTypes.DATE,
         field: 'validated_at',
@@ -78,6 +88,36 @@ module.exports = (sequelize, DataTypes) => {
           if (!recipient.id) {
             recipient.id = idier(); // eslint-disable-line no-param-reassign
           }
+          if (!recipient.accessToken) {
+            const token = passGen(15, true, '.');
+            console.log(`Recipient token: ${token}`);
+            recipient.setAccessToken(token); // eslint-disable-line no-param-reassign
+          }
+        },
+      },
+      instanceMethods: {
+        setAccessToken: function setAccessToken(token) {
+          const self = this;
+          if (!token || token.length < 15) {
+            throw new Error('Invalid token passed to recipient. This is an internal error.');
+          }
+          const encryptedValue = aesHash(token, process.env.TOKEN_ENCRYPT_CURRENT_PEPPER);
+          self.accessTokenEncrypted = encryptedValue.encrypted;
+          self.accessTokenPepper = encryptedValue.pepperId;
+        },
+        getAccessToken: function getAccessToken() {
+          const self = this;
+          return deAesHash(
+            self.accessTokenEncrypted,
+            self.accessTokenPepper,
+          );
+        },
+        toJSON: function stripValues() {
+          const values = Object.assign({}, this.get());
+          delete values.accessTokenEncrypted;
+          delete values.accessTokenPepper;
+          delete values.deletedAt;
+          return values;
         },
       },
       classMethods: {
