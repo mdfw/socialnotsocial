@@ -18,15 +18,21 @@ const bcryptHash = function bcryptHash(passwordhash) {
   return hash(passwordhash, saltRounds);
 };
 
-/* Encrypts the bcrypted string using aes256 using a pepper stored
+/* Encrypts the input using aes256 using a pepper stored
  *   in the environment. This is what should be finally saved.
  */
-const aesHash = function aesHash(passwordhash) {
-  const currentPepperId = process.env.ACCOUNT_ENCRYPT_CURRENT_PEPPER;
+const aesHash = function aesHash(toEncrypt, pepperId = process.env.ACCOUNT_ENCRYPT_CURRENT_PEPPER) {
+  const currentPepperId = pepperId;
+  if (!currentPepperId) {
+    throw new Error('Could not encrypt item - no pepper information available');
+  }
   const pepper = process.env[currentPepperId];
+  if (!pepper) {
+    throw new Error('Could not encrypt item - no pepper available');
+  }
   const algorithm = 'aes-256-ctr';
   const cipher = crypto.createCipher(algorithm, pepper);
-  let crypted = cipher.update(passwordhash, 'utf8', 'hex');
+  let crypted = cipher.update(toEncrypt, 'utf8', 'hex');
   crypted += cipher.final('hex');
   return { encrypted: crypted, pepperId: currentPepperId };
 };
@@ -42,17 +48,17 @@ const encryptPassword = function encryptPassword(rawPassword) {
   .then(aesHash);
 };
 
-/* Decrypts the encrypted bcrypt hash using aes256 using a pepper stored
- *   in the environment. Should use this only with the bcrypted, hashed password.
+/* Decrypts an encrypted value using aes256 using a pepper stored
+ *   in the environment.
  */
-const deAesHash = function deAesHash(passwordhash, pepperId) {
+const deAesHash = function deAesHash(toDecrypt, pepperId) {
   const pepper = process.env[pepperId];
   if (!pepper) {
     return new Error('Pepper not found.');
   }
   const algorithm = 'aes-256-ctr';
   const decipher = crypto.createDecipher(algorithm, pepper);
-  let decrypted = decipher.update(passwordhash, 'hex', 'utf8');
+  let decrypted = decipher.update(toDecrypt, 'hex', 'utf8');
   decrypted += decipher.final('utf8');
   return decrypted;
 };
