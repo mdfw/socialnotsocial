@@ -38,8 +38,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       classMethods: {
         associate: function associateModels(models) {
-          Apprisal.belongsTo(models.Post);
-          Apprisal.belongsTo(models.Recipient);
+          Apprisal.belongsTo(models.Post, {
+            foreignKey: {
+              field: 'post_id',
+              allowNull: false,
+            },
+            onDelete: 'cascade',
+          });
+          Apprisal.belongsTo(models.Recipient, {
+            foreignKey: {
+              field: 'recipient_id',
+              allowNull: false,
+            },
+            onDelete: 'cascade',
+          });
         },
       },
     },

@@ -64,7 +64,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       classMethods: {
         associate: function associateModels(models) {
-          Recipient.belongsTo(models.User);
+          Recipient.belongsTo(models.User, {
+            foreignKey: {
+              field: 'user_id',
+              allowNull: false,
+            },
+            onDelete: 'cascade',
+          });
           Recipient.hasMany(models.Apprisal);
         },
       },

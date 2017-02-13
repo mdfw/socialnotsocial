@@ -38,7 +38,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       classMethods: {
         associate: function associateModels(models) {
-          Post.belongsTo(models.User);
+          Post.belongsTo(models.User, {
+            foreignKey: {
+              field: 'user_id',
+              allowNull: false,
+            },
+            onDelete: 'cascade',
+          });
           Post.belongsToMany(models.Media, { through: 'PostMedia' });
           Post.hasMany(models.Apprisal);
         },
@@ -56,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
       throw new Error('No userId provided');
     }
 
-    const userWhere = `id: ${userId}`;
+    const userWhere = `"user_id": "${userId}"`;
 
     let beforeIdWhere = '';
     if (beforeId && beforeId > 0) {
@@ -67,13 +73,13 @@ module.exports = (sequelize, DataTypes) => {
     if (limiter > MAX_POST_SEARCH_RETURN_LIMIT) {
       limiter = MAX_POST_SEARCH_RETURN_LIMIT;
     }
-    const limitClause = `, limit: ${limiter}`;
+    const limitClause = `, "limit": "${limiter}", `;
     let offsetClause = '';
     if (offset > 0) {
-      offsetClause = `, offset: ${offset}`;
+      offsetClause = `, "offset": "${offset}", `;
     }
-    const orderClause = 'order: id DESC';
-    const queryJSON = `{ where: { ${userWhere}${beforeIdWhere} }${limitClause}${offsetClause} ${orderClause}}`;
+    const orderClause = '"order": "id DESC"';
+    const queryJSON = `{ "where": { ${userWhere}${beforeIdWhere} }${limitClause}${offsetClause} ${orderClause}}`;
     const query = JSON.parse(queryJSON);
     return this.findAll(query);
   };
@@ -84,6 +90,18 @@ module.exports = (sequelize, DataTypes) => {
   Post.totalForUser = function countPosts(userId) {
     return Post.findAndCountAll({
       where: { UserId: userId },
+    });
+  };
+
+  Post.updatePost = function updatePost(id, userId, updates) {
+    Post.findById(id)
+    .then((foundItem) => {
+      const foundPost = foundItem;
+      const fieldsToUpdateKeys = Object.keys(updates);
+      fieldsToUpdateKeys.forEach(function modifyItem(key) {
+        foundPost[key] = updates[key];
+      });
+      return foundPost.save();
     });
   };
 
