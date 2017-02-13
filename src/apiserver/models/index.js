@@ -12,6 +12,7 @@ import {
   PostStatus,
   MAX_POST_SEARCH_RETURN_LIMIT,
   RecipientType,
+  RecipientStatus,
 } from './constants';
 
 const allConfigs = {
@@ -107,6 +108,5 @@ export {
   PostStatus,
   MAX_POST_SEARCH_RETURN_LIMIT,
   RecipientType,
-}
-;
-
+  RecipientStatus,
+};

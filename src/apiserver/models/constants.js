@@ -23,14 +23,21 @@ const PostStatus = {
 /* The maximum we can return from a search */
 const MAX_POST_SEARCH_RETURN_LIMIT = 100;
 
-
 /* Enum for the Recipient.type field */
 const RecipientType = {
   EMAIL: 'rt_email',
   TEXT: 'rt_text',
   POST: 'rt_post',
   FACEBOOK: 'rt_facebook',
-  REMOVED: 'rt_removed',
+};
+
+/* Enum for the Recipient.status field */
+const RecipientStatus = {
+  VALIDATING: 'rs_validating',
+  ACTIVE: 'rs_active',
+  REMOVED: 'rs_removed',
+  BOUNCING: 'rs_bounding',
+  UNSUBSCRIBED: 'rs_unsubscribed',
 };
 
 export {
@@ -39,4 +46,5 @@ export {
   PostStatus,
   MAX_POST_SEARCH_RETURN_LIMIT,
   RecipientType,
+  RecipientStatus,
 };
