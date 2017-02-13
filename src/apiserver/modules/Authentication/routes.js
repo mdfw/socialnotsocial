@@ -25,7 +25,7 @@ routes.route('/sessions')
 
 routes.route('/sessions')
   .delete(function logThemOut(req, res) {
-    destroyUserSession();
+    destroyUserSession(req, res);
     res.status(204).end();
   });
 
@@ -34,8 +34,9 @@ routes.route('/sessions')
  */
 routes.route('/sessions')
   .get(function isAuthenticated(req, res) {
-    if (!req.user) {
+    if (req.user) {
       res.status(204).end();
+      return;
     }
     res.status(403).end();
   });
