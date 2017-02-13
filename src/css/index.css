@@ -97,3 +97,28 @@ img {
 .post-content {
   color: black;
 }
+
+.sns-text-field {
+  margin: 10px;
+  margin-top: 20px;
+  text-align: left;
+}
+.sns-text-field-title-holder {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.sns-text-field-input-holder {
+}
+
+.sns-text-field-input {
+  font-size: 18px;
+  padding: 5px 10px;
+  width: 100%;
+}
+ 
+.sns-text-field-error-text {
+  color: red;
+  font-size: 14px;
+  margin-left: 10px;
+}

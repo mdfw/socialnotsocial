@@ -1,8 +1,8 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router';
+import TextField from './ui/TextField';
 
 /* SubmitProgress shows a spinner while we wait for account creation.
   */
@@ -98,7 +98,7 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
             <TextField
               name="displayName"
               hintText="Your full name"
-              floatingLabelText="Your Name"
+              labelText="Your Name"
               errorText={errors.displayName}
               value={displayNameValue}
               type="text"
@@ -112,7 +112,7 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
             <TextField
               name="email"
               hintText="Email"
-              floatingLabelText="Email"
+              labelText="Email"
               value={emailValue}
               errorText={errors.email}
               type="text"
@@ -127,7 +127,7 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
               name="password"
               hintText=""
               value={passswordValue}
-              floatingLabelText="Password"
+              labelText="Password"
               type={passwordFieldType}
               errorText={errors.password}
               onChange={this.onChange}
