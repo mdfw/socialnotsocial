@@ -47,12 +47,8 @@ const addRecipientEndpoint = (req, res) => {
     displayName: displayName,
     user_id: userId,
   });
-  console.log('Heres the new recipient');
-  console.dir(newRecipient);
   newRecipient.save()
     .then((createdRecipient) => {
-      console.log('Created new recipient: ');
-      console.dir(createdRecipient);
       res.status(201).json({
         success: true,
         message: 'Successfully created recipient',
@@ -108,8 +104,6 @@ const updateRecipientEndpoint = (req, res) => {
   }
   Recipient.updateRecipient(recipientId, userId, updates)
     .then((updatedRecipient) => {
-      console.log('Updated recipient: ');
-      console.dir(updatedRecipient);
       if (!updatedRecipient) {
         res.statusMessage = 'Recipient was not found.'; // eslint-disable-line no-param-reassign
         res.status(404).end();
