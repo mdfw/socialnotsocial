@@ -1,48 +1,33 @@
-import { Recipient, RecipientStatus } from './model';
+import { models } from '../../models';
+import { proxyUserId } from '../Authentication';
 
-/* Returns either the current account's accountId or, if onBehalfOfId is passed in
- *  to the body, it will verify if the current account can act on behalf of the passed
- *  in id and return that.
- *  @param {object} req - the request object that has a user account attached
- *  @returns {string} accountId - the accountId to use in searches.
- */
-const activeAccountId = function getAccount(req) {
-  const currentAccount = req.user;
-  const onBehalfOfId = req.body.onBehalfOfId;
-  if (onBehalfOfId && onBehalfOfId.length > 0) {
-    if (currentAccount && currentAccount.canActOnBehalfOf(onBehalfOfId)) {
-      return onBehalfOfId;
-    }
-  }
-  return req.user.accountId;
-};
+const Recipient = models.Recipient;
 
-/* Get all of the recipients for the accountId.
+/* Get all of the recipients for the userId.
  * Params needed in req.body:
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the search parameters.
+ *  Uses proxyUserId() to get the search parameters.
  */
 const getRecipientsEndpoint = (req, res) => { // eslint-disable-line consistent-return
-  const accountId = activeAccountId(req);
-  if (!accountId) {
-    return res.status(422).json({ success: false, message: 'No accountId provided' });
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
-  Recipient.findAllForId(accountId, false)
+  Recipient.findAllForUser(userId)
     .then((recipients) => {
       const cleanRecipients = recipients.map(function jsonify(recipient) {
         return recipient.toJSON();
       });
-      console.log('Found these recipients');
-      console.dir(recipients);
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         recipients: cleanRecipients,
       });
     })
     .catch((err) => {
-      res.status(422).json({ success: false, message: err.message });
+      res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+      res.status(404).end();
     });
 };
 
@@ -50,18 +35,17 @@ const getRecipientsEndpoint = (req, res) => { // eslint-disable-line consistent-
  * Params needed in req.body:
  *   @param {string} email - the email address
  *   @param {string} displayName - the displayName for the recipient.
- *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
+ *   @param (number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
  *      can act on behalf of it.
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the accountId to search for.
+ *  Uses proxyUserId() to get the userId to search for.
  */
 const addRecipientEndpoint = (req, res) => {
   const { email, displayName } = req.body;
-  const accountId = activeAccountId(req);
-  const newRecipient = new Recipient({
+  const userId = proxyUserId(req);
+  const newRecipient = Recipient.build({
     email: email,
     displayName: displayName,
-    ownerAccountId: accountId,
+    user_id: userId,
   });
   console.log('Heres the new recipient');
   console.dir(newRecipient);
@@ -69,7 +53,6 @@ const addRecipientEndpoint = (req, res) => {
     .then((createdRecipient) => {
       console.log('Created new recipient: ');
       console.dir(createdRecipient);
-      console.dir(createdRecipient.toObject());
       res.status(201).json({
         success: true,
         message: 'Successfully created recipient',
@@ -80,12 +63,11 @@ const addRecipientEndpoint = (req, res) => {
       console.log('Recipient creation error: ');
       console.dir(err);
       let errorMessage = 'Recipient could not be created.';
-      if (err.code === 11000) {
-        errorMessage = 'Recipient already exists';
-      } else if (err.message) {
+      if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
@@ -100,29 +82,39 @@ const addRecipientEndpoint = (req, res) => {
  *  Uses activeAccountId() to get the accountId to search for.
  */
 const updateRecipientEndpoint = (req, res) => {
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
   let recipientId = req.params.recipientId;
   if (req.body.recipientId) {
     recipientId = req.body.recipientId;
   }
   const { email, displayName, status } = req.body;
   if (!recipientId) {
-    res.status(422).json({ success: false, messages: 'No recipientId provided.' });
+    res.statusMessage = 'No recipientId provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
 
-  const accountId = activeAccountId(req);
   const updates = {};
   if (email && email.length > 0) updates.email = email;
   if (displayName && displayName.length > 0) updates.displayName = displayName;
   if (status && status.length > 0) updates.status = status;
 
   if (Object.keys(updates).length === 0) {
-    res.status(422).json({ success: false, messages: 'Nothing to update.' });
+    res.statusMessage = 'Nothing to update'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
-  Recipient.update(recipientId, accountId, updates)
+  Recipient.updateRecipient(recipientId, userId, updates)
     .then((updatedRecipient) => {
       console.log('Updated recipient: ');
       console.dir(updatedRecipient);
-      console.dir(updatedRecipient.toObject());
+      if (!updatedRecipient) {
+        res.statusMessage = 'Recipient was not found.'; // eslint-disable-line no-param-reassign
+        res.status(404).end();
+        return;
+      }
       res.status(201).json({
         success: true,
         message: 'Successfully updated recipient',
@@ -136,47 +128,49 @@ const updateRecipientEndpoint = (req, res) => {
       if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 
 
-/* Removes a recipient (marks the status to 'removed')
+/* Removes a post (marks the status to 'removed')
  * Params needed in req.body:
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
- *  @param (number) recipientId - Will be pulled from req.params or req.body (body takes priority)
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the accountId to search for.
+ *  @param (number) postId - Will be pulled from req.params or req.body (body takes priority)
+ *  Uses proxyUserId() to get the userId to search for.
  */
 const removeRecipientEndpoint = (req, res) => {
-  let recipientId = req.params.recipientId;
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
+  let itemId = req.params.recipientId;
   if (req.body.recipientId) {
-    recipientId = req.body.recipientId;
+    itemId = req.body.recipientId;
   }
-  if (!recipientId) {
-    res.status(422).json({ success: false, messages: 'No recipientId provided.' });
+  if (!itemId) {
+    res.statusMessage = 'No recipientId provided.'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
-
-  const accountId = activeAccountId(req);
-  Recipient.update(recipientId, accountId, { status: RecipientStatus.REMOVED })
-    .then((updatedRecipient) => {
-      console.log('Updated recipient: ');
-      console.dir(updatedRecipient);
-      console.dir(updatedRecipient.toObject());
-      res.status(201).json({
-        success: true,
-        message: 'Successfully removed recipient',
-      });
+  Recipient.deleteRecipient(itemId, userId)
+    .then((updatedItem) => {
+      if (!updatedItem) {
+        res.statusMessage = 'Recipient was not found.'; // eslint-disable-line no-param-reassign
+        res.status(404).end();
+        return;
+      }
+      res.status(204).end();
     })
     .catch((err) => {
-      console.log('Recipient removal error: ');
-      console.dir(err);
       let errorMessage = 'Recipient could not be removed.';
       if (err.message) {
         errorMessage = err.message;
       }
-      res.status(422).json({ success: false, messages: errorMessage });
+      res.statusMessage = errorMessage; // eslint-disable-line no-param-reassign
+      res.status(422).end();
     });
 };
 

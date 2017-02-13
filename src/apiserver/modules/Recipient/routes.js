@@ -1,11 +1,16 @@
 import { Router } from 'express';
-import { getRecipientsEndpoint, addRecipientEndpoint, updateRecipientEndpoint, removeRecipientEndpoint } from './controller';
-import { ensureLoggedIn } from '../Authentication';
+import { requireLogin } from '../Authentication/warrant';
+import {
+  getRecipientsEndpoint,
+  addRecipientEndpoint,
+  updateRecipientEndpoint,
+  removeRecipientEndpoint,
+} from './controller';
 
 const routes = new Router();
-routes.get('/recipients', ensureLoggedIn(), getRecipientsEndpoint);
-routes.post('/recipients', ensureLoggedIn(), addRecipientEndpoint);
-routes.put('/recipients/:recipientId', ensureLoggedIn(), updateRecipientEndpoint);
-routes.delete('/recipients/:recipientId', ensureLoggedIn(), removeRecipientEndpoint);
+routes.get('/recipients', requireLogin(), getRecipientsEndpoint);
+routes.post('/recipients', requireLogin(), addRecipientEndpoint);
+routes.put('/recipients/:recipientId', requireLogin(), updateRecipientEndpoint);
+routes.delete('/recipients/:recipientId', requireLogin(), removeRecipientEndpoint);
 
 export default routes;
