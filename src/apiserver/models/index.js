@@ -89,7 +89,7 @@ Object.keys(db).forEach(function associateThem(modelName) {
 
 /* Push the models to the database */
 sequelize
-  .sync({ force: true }) //   .sync({ force: true }) <= removed as this drops the table
+  .sync() //   .sync({ force: true }) <= removed as this drops the table
   .then(() => {
     console.log('Success: Synced models to database.');
   }, function trapSyncError(err) {
