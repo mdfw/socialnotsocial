@@ -1,8 +1,12 @@
+/* Sessions endpoint creates sessions
+ *  These would be equivalent to login/logout
+ */
 import { Router } from 'express';
 import { authenticateUser, destroyUserSession } from './warrant';
 
 const routes = new Router();
 
+/* Calls authenticateUser to log in a user */
 function signinUser(req, res) {
   const body = req.body;
   authenticateUser(req, res, body)
@@ -23,6 +27,8 @@ function signinUser(req, res) {
 routes.route('/sessions')
   .post(signinUser);
 
+
+/* Clears the session info, effectively logging out a user */
 routes.route('/sessions')
   .delete(function logThemOut(req, res) {
     destroyUserSession(req, res);
@@ -30,7 +36,6 @@ routes.route('/sessions')
   });
 
 /* Checks if a user is currently authenticated.
- * Technically, checks the cookie.
  */
 routes.route('/sessions')
   .get(function isAuthenticated(req, res) {
