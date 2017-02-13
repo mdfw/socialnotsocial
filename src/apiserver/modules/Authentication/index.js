@@ -1,4 +1,5 @@
 import sessionsRoutes from './routes';
+import proxyUserId from './proxyUser';
 import {
   validateUserSession,
   createUserSession,
@@ -14,4 +15,5 @@ export {
   destroyUserSession,
   authenticateUser,
   requireLogin,
+  proxyUserId,
 };
