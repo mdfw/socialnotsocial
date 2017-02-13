@@ -49,11 +49,16 @@ const toNumericId = function toNumericId(idString) {
 
 /* Password generator
  * Creates a 12 digit password with letters and numbers.
+ * @param {number} length - lenght of password
+ * @param {bool} numbers - inlcude numbers
+ * @param {string} exclude - characters to exclude
 */
-const passGen = function passGen() {
+const passGen = function passGen(length = 12, numbers = true, exclude = '') {
   const password = generator.generate({
-    length: 12,
-    numbers: true,
+    length: length,
+    numbers: numbers,
+    exclude: exclude,
+    strict: true,
   });
   return password;
 };
