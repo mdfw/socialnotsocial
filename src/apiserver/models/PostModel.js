@@ -86,11 +86,11 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /* Determine total number of posts for account
-   * @param {number} - accountId
+   * @param {number} - userId
    */
   Post.totalForUser = function countPosts(userId) {
     return Post.findAndCountAll({
-      where: { UserId: userId },
+      where: { user_id: userId },
     });
   };
 

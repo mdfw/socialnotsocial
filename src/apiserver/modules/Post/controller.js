@@ -94,7 +94,8 @@ const updatePostEndpoint = (req, res) => {
     itemId = req.body.postId;
   }
   if (!itemId) {
-    res.status(422).json({ success: false, messages: 'No PostId provided.' });
+    res.statusMessage = 'No post id provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
   const { message, mediaIds, status } = req.body;
   const updates = {};
@@ -102,7 +103,8 @@ const updatePostEndpoint = (req, res) => {
   if (status && status.length > 0) updates.status = status;
 
   if (Object.keys(updates).length === 0) {
-    res.status(422).json({ success: false, messages: 'Nothing to update.' });
+    res.statusMessage = 'Nothing to update'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
   }
   Post.updatePost(itemId, userId, updates)
     .then((updatedItem) => {
