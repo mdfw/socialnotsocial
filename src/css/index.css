@@ -115,6 +115,10 @@ img {
   font-size: 18px;
   padding: 5px 10px;
   width: 100%;
+  border-radius: 5px;
+  border-color: #bdc7d8;
+  border-width: 1px;
+  border-style: solid;
 }
  
 .sns-text-field-error-text {
