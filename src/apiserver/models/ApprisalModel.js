@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         field: 'first_viewed_at',
       },
+      canRespond: { // Can the recipient of this apprisal respond? Overrides canRespond on recipient
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     {
       underscored: true,

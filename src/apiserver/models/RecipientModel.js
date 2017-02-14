@@ -48,14 +48,23 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      // Each recipient gets an access token. Combined with Apprisal.id, makes for the link
+      // Advantage: if the token is stolen, can be recomputed and renders all apprisals with this
+      //   token invalid. Encrypted because if db hacked, could be used to see all data. (issue?)
       accessTokenEncrypted: {
         type: DataTypes.STRING,
         field: 'access_token_hash',
         allowNull: false,
       },
+      // Pepper for the AES string used in the accessToken Encryption.
       accessTokenPepper: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      // Can a user respond? This can be overridden by Apprisals
+      canRespond: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
       },
       validatedAt: {
         type: DataTypes.DATE,
@@ -92,6 +101,9 @@ module.exports = (sequelize, DataTypes) => {
             const token = passGen(15, true, '.');
             console.log(`Recipient token: ${token}`);
             recipient.setAccessToken(token); // eslint-disable-line no-param-reassign
+          }
+          if (recipient.type === RecipientType.FACEBOOK) {
+            recipient.canRespond = false; // eslint-disable-line no-param-reassign
           }
         },
       },
