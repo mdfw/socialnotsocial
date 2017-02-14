@@ -21,6 +21,7 @@ const errorStyle = {
   color: '#c94f49',
   marginTop: '10px',
   marginBottom: '5px',
+  fontSize: '14px',
 };
 
 const LoginError = ({ errorMessage }) => {
