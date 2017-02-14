@@ -136,8 +136,7 @@ const updatePostEndpoint = (req, res) => {
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
  *  @param (number) postId - Will be pulled from req.params or req.body (body takes priority)
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the accountId to search for.
+ *  Uses proxyUserId() to get the userId to search for.
  */
 const removePostEndpoint = (req, res) => {
   const userId = proxyUserId(req);
