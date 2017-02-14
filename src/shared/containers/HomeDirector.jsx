@@ -23,10 +23,15 @@ function checkForSessionCookie() {
  *   they will go to home, otherwise we might test a login or send them to the welcome screen.
  */
 function HomeDirector(props) {
+  console.log('HomeDirector - start');
   let direction = <Welcome />;
   if (props.authenticated && props.accountId) {
-    direction = <App><Home /></App>;
+    console.log('HomeDirector:: Authenticated');
+    direction = <App />;
+    console.log('HomeDirector:: Authenticated done');
+    console.dir(direction);
   } else if (checkForSessionCookie()) {
+    console.log('HomeDirector:: Checking for session');
     direction = <HomeDirectorLogin />;
   }
   return (

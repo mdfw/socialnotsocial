@@ -21,18 +21,18 @@ function dispatchAccountData(dispatch, data) {
   console.log('dispatchAccountData:');
   console.dir(data);
 
-  const account = data.account;
-  if (!account.displayName ||
-    account.displayName.length === 0 ||
-    !account.email ||
-    account.email.length === 0 ||
-    !account.accountId ||
-    account.accountId.length === 0
+  const user = data.user;
+  if (!user.displayName ||
+    user.displayName.length === 0 ||
+    !user.email ||
+    user.email.length === 0 ||
+    !user.id ||
+    user.id.length === 0
   ) {
     throw new Error('Invalid account information returned.');
   }
   return dispatch(
-    receiveAccountInfo(account),
+    receiveAccountInfo(user),
   );
 }
 
@@ -54,7 +54,7 @@ function checkAccountReturn(response) {
 // -------- //
 const fetchAccountAPI = function fetchAccountAPI() {
   return function fetchPageDispatch(dispatch) {
-    const url = '/api/v1/account';
+    const url = '/api/v1/users';
     return fetch(url, {
       credentials: 'same-origin',
     })
@@ -211,7 +211,7 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
     }
     // Set the submitting flag
     dispatch(submittingAccountInfo());
-    fetch('/api/v1/account', {
+    fetch('/api/v1/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -241,6 +241,9 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
         return dispatch(
           submitAccountError(response.statusText, 422),
         );
+      } else if (response.status) {
+        console.log(`login failed with error: ${response.status}: ${response.statusText}`);
+        throw new Error(`Creating user failed. Error is: ${response.statusText}`);
       }
       return null;
     })

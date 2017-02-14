@@ -8,10 +8,10 @@ function receiveAccountInfo(account) {
     displayName: account.displayName,
     email: account.email,
     accountType: account.type,
-    dateCreated: account.dateCreated,
-    accountId: account.accountId,
-    authenticated: account.authenticated,
-    fetching: account.fetching,
+    dateCreated: account.created_at,
+    accountId: Number(account.id),
+    authenticated: true,
+    fetching: false,
   };
 }
 
