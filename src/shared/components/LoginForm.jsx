@@ -1,8 +1,7 @@
 import React from 'react';
-import TextField from './ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Link } from 'react-router';
+import TextField from './ui/TextField';
 
 /* SubmitProgress shows a spinner while we wait for account creation.
   */
