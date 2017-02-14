@@ -22,6 +22,7 @@ const errorStyle = {
   color: '#c94f49',
   marginTop: '10px',
   marginBottom: '5px',
+  fontSize: '14px',
 };
 
 const RegistrationError = ({ errorMessage }) => {
@@ -90,6 +91,7 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
           <div className="signup-text-header">
             Sign up - it&apos;s free
           </div>
+          {errorInfo}
           <div>
             <TextField
               name="displayName"
@@ -131,7 +133,6 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
               onFocus={this.onFocus}
             />
           </div>
-          {errorInfo}
           <div>
             <RaisedButton
               label="Create account"
