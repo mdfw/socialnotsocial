@@ -102,7 +102,6 @@ module.exports = (sequelize, DataTypes) => {
           delete values.encryptedPasswordHash;
           delete values.encryptedPasswordPepperId;
           delete values.deletedAt;
-          delete values.userType;
           return values;
         },
         // TODO: We really need a profile table but this works for now.
