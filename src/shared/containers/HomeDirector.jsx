@@ -4,6 +4,7 @@ import cookie from 'react-cookie';
 import Home from './Home';
 import Welcome from '../components/Welcome';
 import HomeDirectorLogin from './HomeDirectorLogin';
+import App from '../containers/App';
 
 /* Checks for the specific snssl cookie that indicates if someone is logged in.
  * The session may still be dead, but we'll skip the check if this cookie isn't there.
@@ -24,7 +25,7 @@ function checkForSessionCookie() {
 function HomeDirector(props) {
   let direction = <Welcome />;
   if (props.authenticated && props.accountId) {
-    direction = <Home />;
+    direction = <App><Home /></App>;
   } else if (checkForSessionCookie()) {
     direction = <HomeDirectorLogin />;
   }

@@ -1,27 +1,9 @@
 import React from 'react';
-import Paper from 'material-ui/Paper';
 import SendAsset from 'material-ui/svg-icons/content/send';
 import SocialShareAsset from 'material-ui/svg-icons/social/share';
-import LockAsset from 'material-ui/svg-icons/action/lock-outline';
-import WarningAsset from 'material-ui/svg-icons/alert/warning';
-import Register from '../containers/RegisterForm';
-
-const container = {
-  marginTop: '20px',
-  display: 'flex',
-};
-
-const box = {
-  minimumWidth: '300px',
-  padding: '50px',
-};
-
-const paperStyle = {
-  padding: 20,
-  textAlign: 'center',
-  display: 'inline-block',
-  width: '400px',
-};
+import CameraAsset from 'material-ui/svg-icons/image/photo-camera';
+import RegisterForm from '../containers/RegisterForm';
+import LoginForm from '../containers/LoginForm';
 
 const svgStyle = {
   verticalAlign: 'middle',
@@ -29,45 +11,112 @@ const svgStyle = {
 };
 
 const MarketingBits = () => (
-  <div id="marketingBits">
-    <span className="marketingTextLarge">Your life shared.<br />...or not.</span>
-    <div className="marketingSpacing">
-      <span className="marketingTextMedium">Post your thoughts and pictures and share them:</span>
+  <div className="welcome-page-marketing">
+    <div className="marketingTextMedium">
+      <CameraAsset color="#459691" style={svgStyle} />Moments.
+    </div>
+    <div className="marketingTextMedium">
+      <SendAsset color="#459691" style={svgStyle} />Shared.
+    </div>
+    <div className="marketingTextMedium">
+      <SocialShareAsset color="#459691" style={svgStyle} />Everywhere.
     </div>
     <div className="marketingSpacing">
-      <SocialShareAsset color="#459691" style={svgStyle} />
-      <span className="marketingTextMedium">via social media</span>
+      Post your thoughts and pictures and share them on Facebook or send them in an email.
+      <br /><br />
+      Your family will <i>love</i> you for it.
     </div>
-    <div className="marketingSpacing">
-      <SendAsset color="#459691" style={svgStyle} />
-      <span className="marketingTextMedium">via email</span>
-    </div>
-    <div className="marketingSpacing">
-      <LockAsset color="#459691" style={svgStyle} />
-      <span className="marketingTextMedium">or keep it to yourself.</span>
-    </div>
-    <div className="marketingSpacing">
-      <WarningAsset color="#c94f49" style={svgStyle} />
-      <span className="marketingTextMedium">
-        Note: This is a work in progress and some (most) functionality is nigh.
-      </span>
+    <div style={{ margin: '30px' }}>
+      <img
+        className="logo"
+        src="assets/dandelion.svg"
+        alt="Social, Not Social logo"
+        width="70"
+        height="70"
+      />
     </div>
   </div>
 );
 
-const Welcome = function Welcome() {
-  return (
-    <div style={container}>
-      <div style={box}>
-        <MarketingBits />
-      </div>
-      <div style={box}>
-        <Paper zDepth={2} style={paperStyle}>
-          <Register />
-        </Paper>
-      </div>
-    </div>
-  );
+const Login = ({ onClick }) => (
+  <div className="welcome-page-signup">
+    <LoginForm />
+    <hr
+      style={{
+        border: 0,
+        height: '0.5px',
+        marginTop: '10px',
+        backgroundImage: 'linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0))',
+      }}
+    />
+    <span style={{ fontSize: '12px' }}>Need an account? <button onClick={onClick}>Sign Up</button></span>
+  </div>
+);
+Login.propTypes = {
+  onClick: React.PropTypes.func.isRequired,
 };
+
+const Register = ({ onClick }) => (
+  <div className="welcome-page-signup">
+    <RegisterForm />
+    <hr
+      style={{
+        border: 0,
+        height: '0.5px',
+        marginTop: '10px',
+        backgroundImage: 'linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0))',
+      }}
+    />
+    <span style={{ fontSize: '12px' }}>Already have an account? <button onClick={onClick}>Login</button></span>
+  </div>
+);
+Register.propTypes = {
+  onClick: React.PropTypes.func.isRequired,
+};
+
+class Welcome extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      form: 1,
+    };
+    this.onClick = this.onClick.bind(this);
+  }
+  onClick() {
+    if (this.state.form === 1) {
+      this.setState({
+        form: 2,
+      });
+    } else {
+      this.setState({
+        form: 1,
+      });
+    }
+  }
+  render() {
+    let whichForm = <Register onClick={this.onClick} />;
+    if (this.state.form === 2) {
+      whichForm = <Login onClick={this.onClick} />;
+    }
+    return (
+      <div id="welcome" className="welcome-page-hero">
+        <div className="welcome-page-box">
+
+          <div className="welcome-page-title">
+            Social, not Social
+          </div>
+          <div className="welcome-page-lower">
+            {whichForm}
+            <MarketingBits />
+          </div>
+        </div>
+        <div className="image-acknowledgement">
+          Image: <i>Bubble reflection</i> by Isabelle Acatauass&uacute; Alves Almeida
+        </div>
+      </div>
+    );
+  }
+}
+
 
 module.exports = Welcome;

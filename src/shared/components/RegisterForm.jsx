@@ -1,7 +1,6 @@
 import React from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Link } from 'react-router';
 import TextField from './ui/TextField';
 
 /* SubmitProgress shows a spinner while we wait for account creation.
@@ -88,11 +87,8 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
     return (
       <div>
         <form onSubmit={this.onSubmit}>
-          <div className="text-header">
-            Sign up for Social, Not Social
-          </div>
-          <div>
-            <Link to="/login" className="loginHints">or Log in</Link>
+          <div className="signup-text-header">
+            Sign up - it&apos;s free
           </div>
           <div>
             <TextField

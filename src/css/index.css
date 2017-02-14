@@ -7,7 +7,55 @@ body
 	/* For testing only*/
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
+	margin: 0;
 	/*letter-spacing: 0.03em;*/
+}
+
+.welcome-page-hero {
+  background-image: url('../assets/bubble_hero.jpg');
+  position: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-color: #2e9f98;
+  text-align: center;
+}
+
+.welcome-page-box {
+  background: rgba(255,255,255,0.95);
+  border-radius: 10px;
+  width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  padding: 30px;
+}
+
+.welcome-page-title {
+  font-family: 'Amatic SC', cursive;
+  font-size: 50px;
+  font-weight: 700;
+  text-align: center;
+}
+.welcome-page-lower {
+  display: flex;
+  margin-top: 10px;
+}
+.welcome-page-marketing {
+  padding: 20px;
+  width: 600px;
+}
+.welcome-page-signup {
+  background-color:  rgb(255, 255, 255);
+  box-shadow: lightgrey;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: lightblue;
+  border-style: solid;
+  width: 500px;
+  margin: 10px;
+  padding: 10px;
 }
 
 div
@@ -65,7 +113,8 @@ img {
 }
 
 .marketingTextLarge {
-  font-size: 2em;
+  font-size: 2
+  em;
 }
 
 .marketingTextMedium  {
@@ -98,6 +147,12 @@ img {
   color: black;
 }
 
+.signup-text-header .login-text-header{
+  text-align: left;
+  text-size: 14px;
+  text-weight: bold;
+}
+
 .sns-text-field {
   margin: 10px;
   margin-top: 20px;
@@ -125,4 +180,13 @@ img {
   color: red;
   font-size: 14px;
   margin-left: 10px;
+}
+
+.image-acknowledgement {
+   opacity: 0.8;
+   position: fixed;
+   bottom: 5px;
+   left: 10px;
+   font-size: 12px;
+   color: white;
 }

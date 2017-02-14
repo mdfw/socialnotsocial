@@ -1,5 +1,5 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
+import TextField from './ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'react-router';
@@ -85,18 +85,15 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
     return (
       <div>
         <form onSubmit={this.onSubmit}>
-          <div className="text-header">
-            Log in to Social, Not Social
-          </div>
-          <div>
-            <Link to="/signup" className="loginHints">or Sign up</Link>
+          <div className="login-text-header">
+            Log in
           </div>
           {errorInfo}
           <div>
             <TextField
               name="email"
               hintText="Email"
-              floatingLabelText="Email"
+              labelText="Email"
               value={emailValue}
               errorText={errors.email}
               type="text"
@@ -111,7 +108,7 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
               name="password"
               hintText=""
               value={passwordValue}
-              floatingLabelText="Password"
+              labelText="Password"
               disabled={loggingIn}
               type={passwordFieldType}
               errorText={errors.password}
@@ -128,9 +125,6 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
               disabled={loggingIn || !errors.formReady}
               type="submit"
             />
-          </div>
-          <div className="loginHints">
-            Forgot password?
           </div>
         </form>
         <LoginProgress loggingIn={loggingIn} />
