@@ -73,12 +73,11 @@ function dispatchNewPostFormClear(dispatch) {
 }
 /* The heavy lifting work of adding a post.
  * @param {string} message
- * @param {string=} subject
  * Calls to the api endpoint to create a post. If successful, clears form,
  *   and calls the fetch.
  * TODO: probably better to just insert into the posts array instead of calling back.
  */
-const addPostAPI = function addPostAPI(message, subject) {
+const addPostAPI = function addPostAPI(message) {
   return function fetchAddPostDispatch(dispatch) {
     if (!message || message.length === 0) {
       throw new Error('Missing message for post.');
@@ -95,7 +94,6 @@ const addPostAPI = function addPostAPI(message, subject) {
       credentials: 'same-origin',
       body: JSON.stringify({
         message: message,
-        subject: subject,
       }),
     })
     .then(checkAPIReturn)

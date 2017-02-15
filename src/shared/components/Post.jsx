@@ -9,7 +9,6 @@ function Post(props) {
   return (
     <div className="post">
       <Paper zDepth={1} style={postContainerStyle}>
-        <div className="post-subject">{ props.subject }</div>
         <div className="post-content">{ props.message }</div>
       </Paper>
     </div>
@@ -18,7 +17,6 @@ function Post(props) {
 
 Post.propTypes = {
   message: React.PropTypes.string,
-  subject: React.PropTypes.string,
 };
 
 

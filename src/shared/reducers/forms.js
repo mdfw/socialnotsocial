@@ -26,7 +26,6 @@ const DEFAULT_LOGINFORM = {
 };
 
 const DEFAULT_CREATE_POST_FORM = {
-  subject: '',
   message: '',
   fieldsTouched: [],
   fieldsExited: [],

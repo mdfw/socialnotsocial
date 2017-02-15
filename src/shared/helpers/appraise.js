@@ -139,15 +139,6 @@ const appraisePostMessage = function appraisePostMessage(postMessage) {
   return messages;
 };
 
-/* Tests for the presense of a post subject.
- *  Runs no checks.
- *  Here for future functionality.
- */
-/* eslint-disable no-unused-vars */
-const appraisePostSubject = function appraisePostSubject(postSubject) {
-  return [];
-};
-/* eslint-enable no-unused-vars */
 
 export {
   appraiseThese,
@@ -157,6 +148,5 @@ export {
   appraisePasswordExtra,
   appraisePasswordErrors,
   appraiseAccountId,
-  appraisePostSubject,
   appraisePostMessage,
 };

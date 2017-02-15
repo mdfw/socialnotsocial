@@ -30,9 +30,9 @@ function fetchPosts() {
 }
 
 
-function submitNewPost(message, subject) {
+function submitNewPost(message) {
   return (dispatch) => {
-    dispatch(addPostAPI(message, subject));
+    dispatch(addPostAPI(message));
   };
 }
 
