@@ -105,7 +105,6 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
       submitting,
       errors,
       messageValue,
-      subjectValue,
     } = this.props;
     let errorDialog = null;
     if (this.props.errors.submitError) {
@@ -140,38 +139,6 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
       outlineColor: '#4798ad',
     };
 
-    const subjectStyle = {
-      borderWidth: '1px',
-      borderColor: 'lightGrey',
-      borderTopColor: 'transparent',
-      borderLeftColor: 'transparent',
-      borderRightColor: 'transparent',
-      fontFamily: 'Open Sans',
-      fontSize: '14px',
-      outlineWidth: '1px',
-      outlineColor: '#4798ad',
-      width: '100%',
-    };
-
-    const subjectLabelStyle = {
-      fontFamily: 'Open Sans',
-      fontSize: '14px',
-      color: 'gray',
-      marginTop: '4px',
-      float: 'left',
-    };
-
-    const subjectAreaStyle = {
-      overflow: 'hidden',
-      width: '100%',
-    };
-
-    const subjectInputContainerStyle = {
-      display: 'block',
-      overflow: 'hidden',
-      padding: '0 4px 0 6px',
-    };
-
     return (
       <div style={createPostPaperStyle}>
         {errorDialog}
@@ -191,22 +158,6 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
               style={textAreaStyle}
               aria-label="Message content"
             />
-          </div>
-          <div style={subjectAreaStyle}>
-            <label htmlFor="subject" style={subjectLabelStyle}>Subject</label>
-            <span style={subjectInputContainerStyle}>
-              <input
-                type="text"
-                name="subject"
-                placeholder="(optional)"
-                value={subjectValue}
-                disabled={submitting}
-                onChange={this.onChange}
-                onBlur={this.onBlur}
-                onFocus={this.onFocus}
-                style={subjectStyle}
-              />
-            </span>
           </div>
           <div>
             <RaisedButton
@@ -233,7 +184,6 @@ CreatePostForm.propTypes = {
   submitting: React.PropTypes.bool,
   errors: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
   messageValue: React.PropTypes.string,
-  subjectValue: React.PropTypes.string,
 };
 
 export default CreatePostForm;
