@@ -103,7 +103,7 @@ class Welcome extends React.Component {
         <div className="welcome-page-box">
 
           <div className="welcome-page-title">
-            Social, not Social
+            Social, not Social Beta
           </div>
           <div className="welcome-page-lower">
             {whichForm}
