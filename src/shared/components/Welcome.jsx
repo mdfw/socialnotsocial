@@ -97,7 +97,7 @@ class Welcome extends React.Component {
     }
     this.setState({
       form: formId,
-    })
+    });
   }
   render() {
     let whichForm = <Register onClick={this.onClick} />;
@@ -109,7 +109,7 @@ class Welcome extends React.Component {
         <div className="welcome-page-box">
 
           <div className="welcome-page-title">
-            Social, not Social Beta
+            Social, not Social <span className="welcome-page-title-beta">(Beta)</span>
           </div>
           <div className="welcome-page-lower">
             {whichForm}

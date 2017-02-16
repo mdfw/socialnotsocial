@@ -51,9 +51,16 @@ div
 
 .welcome-page-title {
   font-family: 'Comfortaa', serif;
-  font-size: 50px;
+  font-size: 40px;
   font-weight: 700;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.welcome-page-title-beta {
+  font-family: 'Comfortaa', serif;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 .welcome-page-lower {
