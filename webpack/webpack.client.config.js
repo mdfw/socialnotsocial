@@ -13,6 +13,9 @@ module.exports = {
   },    
   devtool: 'inline-source-map',
   module: {
+    noParse: [
+      /aws/
+    ],
     loaders: [
       {
         test: /.jsx?$/,

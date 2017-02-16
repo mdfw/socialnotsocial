@@ -26,6 +26,9 @@ module.exports = {
   ],
   devtool: 'eval',
   module: {
+    noParse: [
+      /aws/
+    ],
     loaders: [
       {
         test: /.(jsx|js)?$/,
