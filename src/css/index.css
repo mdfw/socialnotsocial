@@ -11,6 +11,23 @@ body
 	/*letter-spacing: 0.03em;*/
 }
 
+div
+{
+	/*border: 1px solid Chocolate;*/
+	/* For testing only */
+}
+
+.content
+{
+	max-width: 970px;
+	margin: 0 auto;
+}
+
+.welcome {
+  float: right;
+  line-height: 50px;
+}
+
 .welcome-page-hero {
   background-image: url('../assets/bubble_hero.jpg');
   position: fixed;
@@ -33,19 +50,22 @@ body
 }
 
 .welcome-page-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Comfortaa', serif;
   font-size: 50px;
   font-weight: 700;
   text-align: center;
 }
+
 .welcome-page-lower {
   display: flex;
   margin-top: 10px;
 }
+
 .welcome-page-marketing {
   padding: 20px;
   width: 600px;
 }
+
 .welcome-page-signup {
   background-color:  rgb(255, 255, 255);
   box-shadow: lightgrey;
@@ -56,18 +76,6 @@ body
   width: 500px;
   margin: 10px;
   padding: 10px;
-}
-
-div
-{
-	/*border: 1px solid Chocolate;*/
-	/* For testing only */
-}
-
-.content
-{
-	max-width: 970px;
-	margin: 0 auto;
 }
 
 .top-navigation
@@ -81,19 +89,26 @@ div
 	height: 50px;
 }
 
-.top-title {
+.top-navigation-left {
   float: left;
-  font-family: 'Amatic SC', cursive;
-  font-size: 35px;
-  font-weight: 700;
   width: 100%;
 }
 
-.welcome {
-  float: right;
+.top-title {
+  font-family: 'Comfortaa', serif;
+  font-size: 20px;
   line-height: 50px;
-  font-weight: 600;
+  width: 100%;
+  color: white;
 }
+
+.top-navigation-user {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+
+}
+
 img {
     vertical-align: middle;
 }
@@ -124,24 +139,35 @@ img {
 .marketingSpacing {
   margin-top: 20px;
 }
+
+.board {
+  max-width: 600px;
+  margin-left: auto ;
+  margin-right: auto ;
+}
+
 .newPost {
   position: relative;
 }
-.board {
-  max-width: 500px;
-   margin-left: auto ;
-  margin-right: auto ;
-}
-.newPost {
-  
-}
+
 .post {
-  max-width: 500px;
-  margin: 5px;
-  padding: 5px;
+  max-width: 600px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px;
+  border-color: rgba(128, 128, 128, 0.10);
+  border-style: solid;
 }
+
 .post-content {
   color: black;
+}
+
+.post-time {
+  font-size: 10px;
+  color: gray;
+  margin-left: 5px;
+  margin-top: 5px;
 }
 
 .signup-text-header .login-text-header{
