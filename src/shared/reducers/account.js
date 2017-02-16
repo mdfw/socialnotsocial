@@ -17,25 +17,27 @@ import {
   REG_FORM_NAME,
 } from '../actions/forms';
 
-const DEFAULT_ACCOUNT_STATE = {
-  displayName: '',
-  email: '',
-  type: '',
-  dateCreated: '',
-  accountId: null,
-  authenticated: false,
-  fetching: false,
-  fetchError: null,
-  loggingIn: false,
-  loginError: null,
-  loginErrorStatusCode: null,
-  submitting: false,
-  submitError: null,
-  submitErrorStatusCode: null,
-};
+const DEFAULT_ACCOUNT_STATE = () => (
+  {
+    displayName: '',
+    email: '',
+    type: '',
+    dateCreated: '',
+    accountId: null,
+    authenticated: false,
+    fetching: false,
+    fetchError: null,
+    loggingIn: false,
+    loginError: null,
+    loginErrorStatusCode: null,
+    submitting: false,
+    submitError: null,
+    submitErrorStatusCode: null,
+  }
+);
 // TODO: Do the errors above belong here or with the forms they are triggered by?
 
-const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, action) {
+const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE(), action) {
   let newstate = state;
   switch (action.type) {
     case RECEIVE_ACCOUNT_INFO: {
@@ -133,7 +135,7 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE, ac
       break;
     }
     case CLEAR_ACCOUNT_INFO: {
-      newstate = DEFAULT_ACCOUNT_STATE;
+      newstate = DEFAULT_ACCOUNT_STATE();
       break;
     }
     default:

@@ -10,50 +10,62 @@ import {
   CREATE_POST_FORM_NAME,
 } from '../actions/forms';
 
-const DEFAULT_REGFORM = {
-  displayName: '',
-  email: '',
-  password: '',
-  fieldsTouched: [],
-  fieldsExited: [],
-};
+import {
+  CLEAR_ACCOUNT_INFO,
+} from '../actions/account';
 
-const DEFAULT_LOGINFORM = {
-  email: '',
-  password: '',
-  fieldsTouched: [],
-  fieldsExited: [],
-};
+const DEFAULT_REGFORM = () => (
+  {
+    displayName: '',
+    email: '',
+    password: '',
+    fieldsTouched: [],
+    fieldsExited: [],
+  }
+);
 
-const DEFAULT_CREATE_POST_FORM = {
-  message: '',
-  fieldsTouched: [],
-  fieldsExited: [],
-  submitting: false,
-  submitError: null,
-};
+const DEFAULT_LOGINFORM = () => (
+  {
+    email: '',
+    password: '',
+    fieldsTouched: [],
+    fieldsExited: [],
+  }
+);
 
-const DEFAULT_FORM_STATE = {
-  [REG_FORM_NAME]: JSON.parse(JSON.stringify(DEFAULT_REGFORM)),
-  [LOGIN_FORM_NAME]: JSON.parse(JSON.stringify(DEFAULT_LOGINFORM)),
-  [CREATE_POST_FORM_NAME]: JSON.parse(JSON.stringify(DEFAULT_CREATE_POST_FORM)),
-};
+const DEFAULT_CREATE_POST_FORM = () => (
+  {
+    message: '',
+    fieldsTouched: [],
+    fieldsExited: [],
+    submitting: false,
+    submitError: null,
+  }
+);
+
+const DEFAULT_FORM_STATE = () => (
+  {
+    [REG_FORM_NAME]: DEFAULT_REGFORM(),
+    [LOGIN_FORM_NAME]: DEFAULT_LOGINFORM(),
+    [CREATE_POST_FORM_NAME]: DEFAULT_CREATE_POST_FORM(),
+  }
+);
 
 function emptyStateForForm(formId) {
   switch (formId) {
     case REG_FORM_NAME:
-      return JSON.parse(JSON.stringify(DEFAULT_REGFORM));
+      return DEFAULT_REGFORM();
     case LOGIN_FORM_NAME:
-      return JSON.parse(JSON.stringify(DEFAULT_LOGINFORM));
+      return DEFAULT_LOGINFORM();
     case CREATE_POST_FORM_NAME:
-      return JSON.parse(JSON.stringify(DEFAULT_CREATE_POST_FORM));
+      return DEFAULT_CREATE_POST_FORM();
     default:
       return {};
   }
 }
 
-const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE, action) {
-  const newstate = Object.assign({}, state);
+const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE(), action) {
+  let newstate = Object.assign({}, state);
   switch (action.type) {
     case FORM_UPDATE: {
       const formId = action.formId;
@@ -69,6 +81,10 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE, action) 
       const formId = action.formId;
       const emptyState = emptyStateForForm(formId);
       newstate[formId] = emptyState;
+      break;
+    }
+    case CLEAR_ACCOUNT_INFO: {
+      newstate = DEFAULT_FORM_STATE();
       break;
     }
     default:

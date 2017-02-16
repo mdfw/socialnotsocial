@@ -61,7 +61,8 @@ export default function buildRoutes(store = {}) {
   };
 
   const needsAuth = function needsAuth(nextState, replace) {
-    return requireAuth(store.getState(), nextState, replace);
+    const curState = store.getState();
+    return requireAuth(curState, nextState, replace);
   };
 
   return (

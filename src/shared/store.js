@@ -4,13 +4,22 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import thunkMiddleware from 'redux-thunk';
 import { accountReducer, formReducer, postsReducer } from './reducers/';
+import { CLEAR_ACCOUNT_INFO } from './actions/account';
 
-const allReducers = combineReducers({
+const appReducer = combineReducers({
   account: accountReducer,
   routing: routerReducer,
   posts: postsReducer,
   forms: formReducer,
 });
+
+const allReducers = (state, action) => {
+  if (action.type === CLEAR_ACCOUNT_INFO) {
+    const { routing } = state;
+    state = { routing }; // eslint-disable-line no-param-reassign
+  }
+  return appReducer(state, action);
+};
 
 const routerReduxMiddleware = routerMiddleware(browserHistory);
 
