@@ -1,16 +1,39 @@
 import React from 'react';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import cookie from 'react-cookie';
+import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import HomeDirector from '../containers/HomeDirector';
-import LoginPage from '../components/LoginPage';
-import RegisterPage from '../components/RegisterPage';
+import Home from '../containers/Home';
+import App from '../containers/App';
+import Welcome from '../components/Welcome';
+import CheckLogin from '../containers/CheckLogin';
 
-/*
+
+/* Checks for the specific snssl cookie that indicates if someone is logged in.
+ * The session may still be dead, but we'll skip the check if this cookie isn't there.
+ * The snssl cookie is just an indicator of logged in status. It's separate from the
+ *    snss session cookie, but that one is only http.
+ */
+function checkForSessionCookie() {
+  const sessionCookieContent = cookie.load('snssl');
+  if (sessionCookieContent && sessionCookieContent.length > 0) {
+    return true;
+  }
+  return false;
+}
+
+
 function requireAuth(state, nextState, replace) {
   if (!state.account.authenticated) {
+    if (checkForSessionCookie()) {
+      replace({
+        pathname: '/checklogin',
+        state: { nextPathname: nextState.location.pathname },
+      });
+      return;
+    }
     replace({
-      pathname: '/app/login',
+      pathname: '/welcome',
       state: { nextPathname: nextState.location.pathname },
     });
   }
@@ -24,29 +47,31 @@ function hasAuth(state, nextState, replace) {
     });
   }
 }
-*/
+
 
 export default function buildRoutes(store = {}) {
-  // const state = store.getState();
   let history = browserHistory;
 
   if (store) {
     history = syncHistoryWithStore(browserHistory, store);
   }
-/*
+
   const checkForAuth = function checkForAuth(nextState, replace) {
-    return hasAuth(state, nextState, replace);
+    return hasAuth(store.getState(), nextState, replace);
   };
 
   const needsAuth = function needsAuth(nextState, replace) {
-    return requireAuth(state, nextState, replace);
+    return requireAuth(store.getState(), nextState, replace);
   };
-*/
+
   return (
     <Router history={history}>
-      <Route path="/" component={HomeDirector}>
-        <Route path="/login" component={LoginPage} />
-        <Route path="/signup" component={RegisterPage} />
+      <Redirect from="/login" to="/welcome" />
+      <Redirect from="/signup" to="/welcome" />
+      <Route path="/checklogin" component={CheckLogin} />
+      <Route path="/welcome" component={Welcome} onEnter={checkForAuth} />
+      <Route path="/" component={App} onEnter={needsAuth}>
+        <IndexRoute component={Home} />
       </Route>
     </Router>
   );
