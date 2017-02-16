@@ -1,22 +1,11 @@
 import { connect } from 'react-redux';
 import React from 'react';
-// import { push } from 'react-router-redux';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import { IconButton } from 'material-ui';
+import SettingsButton from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import { logoutAccount } from '../actions/account';
-
-const welcomeButtonStyle = {
-  float: 'right',
-  fontSize: '16px',
-  fontWeight: 700,
-  padding: '10px 20px 10px 20px',
-  textDecoration: 'none',
-  backgroundColor: '#459691',
-  border: 0,
-  outline: 0,
-  cursor: 'pointer',
-};
 
 const headerRightStyle = {
   display: 'flex',
@@ -24,9 +13,6 @@ const headerRightStyle = {
   height: '50px',
 };
 
-const buttonTextStyle = {
-  marginRight: '15px',
-};
 
 class HeaderLoggedButton extends React.Component {
   constructor(props) {
@@ -67,19 +53,14 @@ class HeaderLoggedButton extends React.Component {
   }
 
   render() {
-    const welcomeText = `Welcome, ${this.props.displayName}`;
+    const welcomeText = `For: ${this.props.displayName}`;
     return (
       <span id="HeaderRight" style={headerRightStyle}>
-        <button type="button" style={welcomeButtonStyle} onClick={this.handleButtonTap}>
-          <span style={buttonTextStyle}>{welcomeText}</span>
-          <img
-            className="logo"
-            src="assets/sun.svg"
-            alt="settings"
-            width="20"
-            height="20"
-          />
-        </button>
+        <span className="top-navigation-user">{welcomeText}</span>
+        <IconButton tooltip="Settings" onClick={this.handleButtonTap}>
+          <SettingsButton color="white" />
+        </IconButton>
+
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
