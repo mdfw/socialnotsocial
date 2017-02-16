@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import { validateUserSession } from './modules/Authentication/warrant';
 
 /* Routes */
-import { userRoutes, recipientRoutes, sessionsRoutes, postRoutes } from './modules';
+import { userRoutes, recipientRoutes, sessionsRoutes, postRoutes, mediaRoutes } from './modules';
 
 /* Configurations */
 import '../config/environment';
@@ -43,7 +43,7 @@ app.use(morgan('combined'));
 
 /* Routes */
 // app.use('/api/v1', [userRoutes, recipientRoutes, authenticationRoutes, postRoutes]);
-app.use('/api/v1', [userRoutes, recipientRoutes, sessionsRoutes, postRoutes]);
+app.use('/api/v1', [userRoutes, recipientRoutes, sessionsRoutes, postRoutes, mediaRoutes]);
 
 app.get('/', function baseReturn(req, res) {
   res.send('Hello - this is the api server. You probably want a more interesting endpoint.');
