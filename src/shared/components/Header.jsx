@@ -1,7 +1,5 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { Link } from 'react-router';
-import { SvgIcon } from 'material-ui';
 import HeaderLoggedInButton from './HeaderLoggedInButton';
 
 
