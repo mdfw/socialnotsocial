@@ -19,9 +19,6 @@ import { formClear, REG_FORM_NAME, LOGIN_FORM_NAME } from './forms';
  *  this have agreement on what to expect?
  */
 function dispatchAccountData(dispatch, data) {
-  console.log('dispatchAccountData:');
-  console.dir(data);
-
   const user = data.user;
   if (!user.displayName ||
     user.displayName.length === 0 ||
@@ -119,7 +116,6 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
     })
     .then(function processReturn(response) {
       if (response.status === 201 || response.status === 200) {
-        console.log('login ok');
         return Promise.resolve(response.json())
         .then(function sendAccountData(data) {
           return dispatchAccountData(dispatch, data);
@@ -179,7 +175,7 @@ const logoutAccountAPI = function logoutAccountAPI() {
     })
     .then(function goHome() {
       return dispatch(
-        push('/'),
+        push('/welcome'),
       );
     })
     .catch(function submitError(error) {
@@ -234,7 +230,6 @@ const addAccountAPI = function addAccountAPI(displayName, email, password) {
     })
     .then(function processReturn(response) {
       if (response.status === 201) {
-        console.log('account created');
         return Promise.resolve(response.json())
         .then(function sendAccountData(data) {
           return dispatchAccountData(dispatch, data);
