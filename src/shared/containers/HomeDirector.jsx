@@ -27,7 +27,7 @@ function HomeDirector(props) {
   let direction = <Welcome />;
   if (props.authenticated && props.accountId) {
     console.log('HomeDirector:: Authenticated');
-    direction = <App />;
+    direction = <App><Home /></App>;
     console.log('HomeDirector:: Authenticated done');
     console.dir(direction);
   } else if (checkForSessionCookie()) {
