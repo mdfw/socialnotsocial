@@ -1,9 +1,13 @@
 import React from 'react';
+import cookie from 'react-cookie';
 import SendAsset from 'material-ui/svg-icons/content/send';
 import SocialShareAsset from 'material-ui/svg-icons/social/share';
 import CameraAsset from 'material-ui/svg-icons/image/photo-camera';
 import RegisterForm from '../containers/RegisterForm';
 import LoginForm from '../containers/LoginForm';
+
+const FORM_REGISTER = 1;
+const FORM_LOGIN = 2;
 
 const svgStyle = {
   verticalAlign: 'middle',
@@ -77,25 +81,27 @@ Register.propTypes = {
 class Welcome extends React.Component {
   constructor(props) {
     super(props);
+    let formId = FORM_REGISTER;
+    if (cookie.load('snsslih') === 'y') {
+      formId = FORM_LOGIN;
+    }
     this.state = {
-      form: 1,
+      form: formId,
     };
     this.onClick = this.onClick.bind(this);
   }
   onClick() {
-    if (this.state.form === 1) {
-      this.setState({
-        form: 2,
-      });
-    } else {
-      this.setState({
-        form: 1,
-      });
+    let formId = FORM_REGISTER;
+    if (this.state.form === FORM_REGISTER) {
+      formId = FORM_LOGIN;
     }
+    this.setState({
+      form: formId,
+    })
   }
   render() {
     let whichForm = <Register onClick={this.onClick} />;
-    if (this.state.form === 2) {
+    if (this.state.form === FORM_LOGIN) {
       whichForm = <Login onClick={this.onClick} />;
     }
     return (

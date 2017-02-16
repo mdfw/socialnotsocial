@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
+import cookie from 'react-cookie';
 import {
   submittingAccountInfo,
   receiveAccountInfo,
@@ -125,6 +126,14 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
         })
         .then(dispatchLoginFormClear(dispatch))
         .then(function goHome() {
+          const tenYearsHence = new Date();
+          tenYearsHence.setYear(tenYearsHence.getFullYear() + 10);
+          cookie.save('snsslih', 'y', {
+            expires: tenYearsHence,
+            httpOnly: false,
+            secure: false,
+            path: '/',
+          });
           return dispatch(
             push('/'),
           );
