@@ -18,10 +18,11 @@ const NoPosts = () => (
 );
 
 /* Renders a list of posts */
+// Need delete/edit
 const AllPosts = ({ posts }) => (
   <div>
     {posts.map(post => (
-      <Post message={post.message} key={post.id} />
+      <Post message={post.message} createdAt={post.created_at} key={post.id} />
     ))}
   </div>
 );
