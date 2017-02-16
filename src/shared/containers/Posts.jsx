@@ -21,7 +21,7 @@ const NoPosts = () => (
 const AllPosts = ({ posts }) => (
   <div>
     {posts.map(post => (
-      <Post message={post.message} key={post.postId} />
+      <Post message={post.message} key={post.id} />
     ))}
   </div>
 );
