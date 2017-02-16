@@ -180,7 +180,7 @@ module.exports = (sequelize, DataTypes) => {
     return this.findAll(query);
   };
 
-  /* Determine total number of posts for account
+  /* Determine total number of recipients for user
    * @param {number} - userId
    */
   Recipient.totalForUser = function countAll(userId) {
@@ -190,12 +190,12 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /* Update a Recipient
-   * @param {number} - id: The id of the post
+   * @param {number} - id: The id of the item
    * @param {number} - userId: The id of the user
    * @param {object} - updates: The fields and values to update
-   * Returns: Either an updated post or null if it couldn't be found
+   * Returns: Either an updated recipient or null if it couldn't be found
    */
-  Recipient.updateRecipient = function updatePost(id, userId, updates) {
+  Recipient.updateRecipient = function updateRecipient(id, userId, updates) {
     return Recipient.findOne({ where: { id: id, user_id: userId } })
     .then((foundItem) => {
       if (!foundItem) {
@@ -211,11 +211,11 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /* Delete a Recipient
-   * @param {number} - id: The id of the post
+   * @param {number} - id: The id of the item
    * @param {number} - userId: The id of the user
-   * Returns: Either an deleted post or null if it couldn't be found
+   * Returns: Either an deleted recipient or null if it couldn't be found
    */
-  Recipient.deleteRecipient = function updatePost(id, userId) {
+  Recipient.deleteRecipient = function deleteRecipient(id, userId) {
     return Recipient.findOne({ where: { id: id, user_id: userId } })
     .then((foundItem) => { // eslint-disable-line consistent-return
       if (!foundItem) {
