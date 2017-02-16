@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import thunkMiddleware from 'redux-thunk';
-import { accountReducer, formReducer, postsReducer } from './reducers/';
+import { accountReducer, formReducer, postsReducer, recipientsReducer } from './reducers/';
 import { CLEAR_ACCOUNT_INFO } from './actions/account';
 
 const appReducer = combineReducers({
@@ -11,6 +11,7 @@ const appReducer = combineReducers({
   routing: routerReducer,
   posts: postsReducer,
   forms: formReducer,
+  recipients: recipientsReducer,
 });
 
 const allReducers = (state, action) => {
