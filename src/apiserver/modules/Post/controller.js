@@ -2,6 +2,7 @@ import { models } from '../../models';
 import { proxyUserId } from '../Authentication';
 
 const Post = models.Post;
+const Media = models.Media;
 
 
 /* Get all of the posts for the accountId.
@@ -16,7 +17,18 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
     res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
-  Post.findAllForUser(userId)
+  Post.findAllForUser(
+    userId,
+    {
+      includeTables:
+      [{
+        model: Media,
+        attributes: ['url'],
+        through: {
+          attributes: [],
+        },
+      }],
+    })
     .then((items) => {
       const cleanedItems = items.map(function jsonify(mappedItem) {
         return mappedItem.toJSON();
@@ -47,14 +59,34 @@ const addPostEndpoint = (req, res) => {
     res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
-  const { message, status } = req.body;
+  const { message, status, mediaIds } = req.body;
   const newPost = Post.build({
     message: message,
     status: status,
     user_id: userId,
   });
+  let createdId = null;
   newPost.save()
     .then((createdItem) => {
+      createdId = createdItem.id;
+      console.log('created item');
+      console.dir(createdItem);
+      if (mediaIds && mediaIds.length > 0) {
+        return createdItem.setMedia(mediaIds);
+      }
+      console.log('Got here, but maybe should not have');
+      return createdItem;
+    })
+    .then(() => {
+      console.log('We set media, now for find and associate');
+      return Post.find({
+        where: { id: createdId },
+        include: [Media],
+      });
+    })
+    .then((createdItem) => {
+      console.log('created item');
+      console.dir(JSON.stringify(createdItem));
       const cleanedPost = createdItem.toJSON();
       res.status(201).json({
         success: true,
@@ -101,6 +133,7 @@ const updatePostEndpoint = (req, res) => {
   const updates = {};
   if (message && message.length > 0) updates.message = message;
   if (status && status.length > 0) updates.status = status;
+  if (mediaIds && mediaIds.length > 0) updates.mediaIds = mediaIds;
 
   if (Object.keys(updates).length === 0) {
     res.statusMessage = 'Nothing to update'; // eslint-disable-line no-param-reassign

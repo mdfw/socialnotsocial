@@ -58,31 +58,49 @@ module.exports = (sequelize, DataTypes) => {
    * @param {number} offset - The number to skip.
    * @param {number} beforeId - the identifier to sort before. If this is passed, limit is used.
    */
-  Post.findAllForUser = function findAllForUser(userId, limit = 20, offset = 0, beforeId) {
+  Post.findAllForUser = function findAllForUser(userId, options) {
+    let limit = 20;
+    if (options.limit) {
+      limit = options.limit;
+    }
+    let offset = 0;
+    if (options.limit) {
+      offset = options.offset;
+    }
+    let beforeId = null;
+    if (options.beforeId) {
+      beforeId = options.beforeId;
+    }
+    let includeTables = [];
+    if (options.includeTables) {
+      includeTables = options.includeTables;
+    }
+
     if (!userId) {
       throw new Error('No userId provided');
     }
+    const whereClause = {};
 
-    const userWhere = `"user_id": "${userId}"`;
+    whereClause.where = { user_id: Number(userId) };
 
-    let beforeIdWhere = '';
     if (beforeId && beforeId > 0) {
-      beforeIdWhere = `, id : {$lt: ${beforeId}}`;
+      whereClause.id = { $lt: beforeId };
     }
 
     let limiter = limit;
     if (limiter > MAX_POST_SEARCH_RETURN_LIMIT) {
       limiter = MAX_POST_SEARCH_RETURN_LIMIT;
     }
-    const limitClause = `, "limit": "${limiter}", `;
-    let offsetClause = '';
+    whereClause.limit = limiter;
+
     if (offset > 0) {
-      offsetClause = `, "offset": "${offset}", `;
+      whereClause.offset = offset;
     }
-    const orderClause = '"order": "id DESC"';
-    const queryJSON = `{ "where": { ${userWhere}${beforeIdWhere} }${limitClause}${offsetClause} ${orderClause}}`;
-    const query = JSON.parse(queryJSON);
-    return this.findAll(query);
+    whereClause.order = 'id DESC';
+    if (includeTables) {
+      whereClause.include = includeTables;
+    }
+    return this.findAll(whereClause);
   };
 
   /* Determine total number of posts for account
@@ -120,7 +138,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {number} - userId: The id of the user
    * Returns: Either an deleted post or null if it couldn't be found
    */
-  Post.deletePost = function updatePost(id, userId) {
+  Post.deletePost = function deletePost(id, userId) {
     return Post.findOne({ where: { id: id, user_id: userId } })
     .then((foundItem) => { // eslint-disable-line consistent-return
       if (!foundItem) {
