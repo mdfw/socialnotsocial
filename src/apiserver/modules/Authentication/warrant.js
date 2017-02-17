@@ -15,7 +15,6 @@ const User = models.User;
  *  @param {Object} user - A user object.
  */
 const createUserSession = function createUserSession(req, res, user) {
-  console.log('creating session');
   const cleanUser = {
     id: user.id,
     displayName: user.displayName,
@@ -42,8 +41,6 @@ const destroyUserSession = function destroyUserSession(req, res, user) {
   if (req.session) {
     req.session.destroy();
     res.clearCookie('snssl');
-    console.log('Destroyed user session');
-    console.dir(res);
   }
 };
 /* eslint-enable no-unused-vars */
@@ -56,7 +53,6 @@ const destroyUserSession = function destroyUserSession(req, res, user) {
  * TODO: We're hitting the db every session. Store more data in session? Then, how to ban?
  */
 const validateUserSession = function validateUserSession(req, res, next) {
-  console.log('validating session');
   if (req.session && req.session.user) {
     User.findById(req.session.user.id).then((user) => {
       if (user) {
@@ -84,19 +80,21 @@ const authenticateUser = function authenticateUser(req, res, body) {
     throw err;
   }
   let foundUser = null;
-  console.log(`Finding an account ${email} pass: ${password}`);
   return User.find({ where: { email: email } })
+    .then(function checkForUser(theUser) {
+      if (theUser) {
+        return theUser;
+      }
+      throw new Error('Could not verify account');
+    })
     .then(function comparePass(theUser) {
       foundUser = theUser;
-      console.log('found user');
-      console.dir(theUser);
       return theUser.comparePassword(password);
     })
     .then(function returnAccount(passwordsMatched) {
       if (!passwordsMatched) {
         throw new Error('Could not verify account');
       }
-      console.log('Returning password Match');
       createUserSession(req, res, foundUser);
       return foundUser;
     });
