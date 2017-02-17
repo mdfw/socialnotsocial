@@ -54,5 +54,50 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   );
+
+   /* Determine total number of media for account
+   * @param {number} - userId
+   */
+  Media.totalForUser = function countAll(userId) {
+    return Media.findAndCountAll({
+      where: { user_id: userId },
+    });
+  };
+
+  /* Update a Media
+   * @param {number} - id: The id of the post
+   * @param {number} - userId: The id of the user
+   * @param {object} - updates: The fields and values to update
+   * Returns: Either an updated post or null if it couldn't be found
+   */
+  Media.updateRecipient = function updateMedia(id, userId, updates) {
+    return Media.findOne({ where: { id: id, user_id: userId } })
+    .then((foundItem) => {
+      if (!foundItem) {
+        return null;
+      }
+      const foundMedia = foundItem;
+      const fieldsToUpdateKeys = Object.keys(updates);
+      fieldsToUpdateKeys.forEach(function modifyItem(key) {
+        foundMedia[key] = updates[key];
+      });
+      return foundMedia.save();
+    });
+  };
+
+  /* Delete a Media
+   * @param {number} - id: The id
+   * @param {number} - userId: The id of the user
+   * Returns: Either an deleted media or null if it couldn't be found
+   */
+  Media.deleteMedia = function deleteMedia(id, userId) {
+    return Media.findOne({ where: { id: id, user_id: userId } })
+    .then((thisMedia) => { // eslint-disable-line arrow-body-style
+      if (thisMedia) {
+        return thisMedia.destroy();
+      }
+      return null;
+    });
+  };
   return Media;
 };
