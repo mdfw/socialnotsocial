@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
+import { Link } from 'react-router';
 import HeaderLoggedInButton from './HeaderLoggedInButton';
 
 
@@ -9,10 +10,10 @@ const Header = props => (
       <div className="content">
         <div className="top-navigation-left">
           <span className="top-title">
-            Social, Not Social <span className="title-beta">(Beta)</span>
+            <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Social, Not Social</Link> <span className="title-beta">(Beta)</span>
           </span>
           <span className="welcome">
-            <HeaderLoggedInButton displayName={props.displayName} />
+            <HeaderLoggedInButton displayName={props.displayName} router={props.router} />
           </span>
         </div>
       </div>
@@ -23,12 +24,16 @@ const Header = props => (
 
 Header.propTypes = {
   displayName: React.PropTypes.string,
+  router: React.PropTypes.shape({
+    push: React.PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 /** redux store map **/
-const mapStateToProps = function mapStateToProps(state) {
+const mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
     displayName: state.account.displayName,
+    router: ownProps.router,
   };
 };
 
