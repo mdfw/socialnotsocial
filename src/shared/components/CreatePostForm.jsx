@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextareaAutosize from 'react-autosize-textarea';
+import ReactS3Uploader from 'react-s3-uploader';
 import Settings from '../settings';
 
 /* SubmitProgress shows a spinner while we wait for account creation.
@@ -66,6 +67,7 @@ SubmitErrorDisplay.propTypes = {
 /* button style for the submit button below */
 const submitButtonStyle = {
   margin: 12,
+  color: 'white',
 };
 
 /* Main registration form component */
@@ -119,6 +121,7 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
       padding: '15px',
       boxShadow: 'rgba(0, 0, 0, 0.156863) 0px 1px 5px, rgba(0, 0, 0, 0.227451) 0px 1px 5px',
       transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+      backgroundColor: 'white',
       marginBottom: '15px',
     };
 
@@ -157,10 +160,31 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
             />
           </div>
           <div>
+            <label htmlFor="image-uploader" className="image-upload-button-label">
+              <i className="image-upload-button-overlay" /> + Add image
+            </label>
+            <ReactS3Uploader
+              signingUrl="/s3/sign"
+              onProgress={this.onUploadProgress}
+              onError={this.onUploadError}
+              onFinish={this.onUploadFinish}
+              signingUrlMethod="GET"
+              accept="image/*"
+              signingUrlWithCredentials={true}
+              contentDisposition="auto"
+              scrubFilename={filename => filename.replace(/[^\w\d_\-\.]+/ig, '')}
+              uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}
+              className="image-upload-button"
+              id="image-uploader"
+              disabled={true}
+            />
+          </div>
+          <div>
             <RaisedButton
               label="Post"
               primary={true} // eslint-disable-line react/jsx-boolean-value
               style={submitButtonStyle}
+              labelColor="white"
               disabled={submitting || !errors.formReady}
               type="submit"
             />
