@@ -26,7 +26,7 @@ class HeaderLoggedButton extends React.Component {
     this.handleSignOut = this.handleSignOut.bind(this);
     this.handleShowRecipients = this.handleShowRecipients.bind(this);
     this.handleGoHome = this.handleGoHome.bind(this);
- }
+  }
 
   handleButtonTap(event) {
     event.preventDefault();
@@ -35,11 +35,9 @@ class HeaderLoggedButton extends React.Component {
       anchorEl: event.currentTarget,
     });
   }
-
   handleSignOut() {
     this.props.dispatch(logoutAccount());
   }
-
   handleRequestClose() {
     this.setState({
       open: false,
@@ -48,7 +46,6 @@ class HeaderLoggedButton extends React.Component {
   handleShowRecipients() {
     this.props.router.push('/recipients');
   }
-  
   handleGoHome() {
     console.log('going home');
     this.props.router.push('/');
@@ -79,7 +76,7 @@ class HeaderLoggedButton extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu onItemTouchTap={this.handleMenuItemTap}>
-            <MenuItem primaryText="Home" onTouchTap={this.goHome} />
+            <MenuItem primaryText="Home" onTouchTap={this.handleGoHome} />
             <MenuItem primaryText="Manage recipients" onTouchTap={this.handleShowRecipients} />
             <MenuItem primaryText="Sign out" onTouchTap={this.handleSignOut} />
           </Menu>
