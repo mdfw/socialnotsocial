@@ -23,7 +23,12 @@ const NoPosts = () => (
 const AllPosts = ({ posts }) => (
   <div>
     {posts.map(post => (
-      <Post message={post.message} createdAt={post.created_at} apprisals={post.Apprisals} key={post.id} />
+      <Post
+        message={post.message}
+        createdAt={post.created_at}
+        apprisals={post.Apprisals}
+        key={post.id}
+      />
     ))}
   </div>
 );
