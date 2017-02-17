@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextareaAutosize from 'react-autosize-textarea';
-import ReactS3Uploader from 'react-s3-uploader';
 import Settings from '../settings';
 
 /* SubmitProgress shows a spinner while we wait for account creation.
@@ -146,7 +145,7 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
           <div>
             <TextareaAutosize
               placeholder="What do you want to share?"
-              maxRows={3}
+              maxRows={500}
               rows={2}
               disabled={submitting}
               onChange={this.onChange}
@@ -162,22 +161,8 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
           <div>
             <label htmlFor="image-uploader" className="image-upload-button-label">
               <i className="image-upload-button-overlay" /> + Add image
+              <input type="file" id="image-uploader" className="image-upload-button" />
             </label>
-            <ReactS3Uploader
-              signingUrl="/s3/sign"
-              onProgress={this.onUploadProgress}
-              onError={this.onUploadError}
-              onFinish={this.onUploadFinish}
-              signingUrlMethod="GET"
-              accept="image/*"
-              signingUrlWithCredentials={true}
-              contentDisposition="auto"
-              scrubFilename={filename => filename.replace(/[^\w\d_\-\.]+/ig, '')}
-              uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}
-              className="image-upload-button"
-              id="image-uploader"
-              disabled={true}
-            />
           </div>
           <div>
             <RaisedButton
