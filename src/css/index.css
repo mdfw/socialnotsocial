@@ -3,7 +3,7 @@ html { box-sizing: border-box; }
 
 body
 {
-	background-color: White;
+	background-color: rgb(239, 239, 239);
 	/* For testing only*/
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
@@ -159,22 +159,60 @@ img {
 
 .post {
   max-width: 600px;
-  margin-bottom: 10px;
-  padding: 8px;
+  margin-bottom: 15px;
+  padding: 10px;
   border: 1px;
   border-color: rgba(128, 128, 128, 0.10);
   border-style: solid;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: rgba(0, 0, 0, 0.156863) 0px 1px 1px, rgba(0, 0, 0, 0.227451) 0px 1px 1px;
+  background-color: white;
 }
 
 .post-content {
   color: black;
+  margin: 8px;
 }
 
 .post-time {
-  font-size: 10px;
+  font-size: 12px;
   color: gray;
+  margin-left: 13px;
+  margin-top: 10px;
+}
+
+.apprisal-holder {
+  padding: 5px;
+  color: gray;
+}
+
+.post-apprisal-shared-with {
+  font-size: 12px;
   margin-left: 5px;
-  margin-top: 5px;
+}
+
+.post-bottom {
+  margin-bottom: 10px;
+}
+
+.image-upload-button-label {
+  border: 0.5px solid rgba(204, 204, 204, 0.54);
+  display: inline-block;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  float: right;
+  color: grey;
+  border-radius: 3px;
+}
+
+.image-upload-button-overlay {
+    border: transparent;
+}
+
+.image-upload-button {
+  border: transparent;
+  display: none;
 }
 
 .signup-text-header .login-text-header{
