@@ -3,11 +3,10 @@ import React from 'react';
 import Header from '../components/Header';
 
 function App(props) {
-  console.log('Loading app');
   return (
     <div id="mainapp">
       <div className="content">
-        <Header />
+        <Header router={props.router} />
         {props.children}
       </div>
     </div>
@@ -16,12 +15,15 @@ function App(props) {
 
 App.propTypes = {
   children: React.PropTypes.node,
+  router: React.PropTypes.shape({
+    push: React.PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 /** redux store map **/
-const mapStateToProps = function mapStateToProps(state, ownprops) {
+const mapStateToProps = function mapStateToProps(state, ownProps) {
   return {
-    children: ownprops.children,
+    children: ownProps.children,
   };
 };
 
