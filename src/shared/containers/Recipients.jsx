@@ -57,7 +57,7 @@ class RecipientsContainer extends React.Component {
         </div>
       );
     } else if (this.props.recipients.length === 0) {
-      return <NoRecipients />
+      return <NoRecipients />;
     }
     return (
       <AllRecipients recipients={this.props.recipients} />
