@@ -160,8 +160,13 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
           </div>
           <div>
             <label htmlFor="image-uploader" className="image-upload-button-label">
-              <i className="image-upload-button-overlay" /> + Add image
-              <input type="file" id="image-uploader" className="image-upload-button" />
+              <i className="image-upload-button-overlay" /> + Add image (disabled)
+              <input 
+                type="file"
+                id="image-uploader"
+                className="image-upload-button"
+                disabled={true}
+              />
             </label>
           </div>
           <div>
