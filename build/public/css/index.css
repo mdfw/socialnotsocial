@@ -3,10 +3,11 @@ html { box-sizing: border-box; }
 
 body
 {
-	background-color: White;
+	background-color: rgb(239, 239, 239);
 	/* For testing only*/
 	font-family: 'Open Sans', sans-serif;
-	font-size: 18px;
+	font-size: 14px;
+	margin: 0;
 	/*letter-spacing: 0.03em;*/
 }
 
@@ -22,6 +23,68 @@ div
 	margin: 0 auto;
 }
 
+.welcome {
+  float: right;
+  line-height: 50px;
+}
+
+.welcome-page-hero {
+  background-image: url('../assets/bubble_hero.jpg');
+  position: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  background-color: #2e9f98;
+  text-align: center;
+}
+
+.welcome-page-box {
+  background: rgba(255,255,255,0.95);
+  border-radius: 10px;
+  width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  padding: 30px;
+}
+
+.welcome-page-title {
+  font-family: 'Comfortaa', serif;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.welcome-page-title-beta {
+  font-family: 'Comfortaa', serif;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.welcome-page-lower {
+  display: flex;
+  margin-top: 10px;
+}
+
+.welcome-page-marketing {
+  padding: 20px;
+  width: 600px;
+}
+
+.welcome-page-signup {
+  background-color:  rgb(255, 255, 255);
+  box-shadow: lightgrey;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: lightblue;
+  border-style: solid;
+  width: 500px;
+  margin: 10px;
+  padding: 10px;
+}
+
 .top-navigation
 {
 	background-color: #459691;
@@ -33,19 +96,26 @@ div
 	height: 50px;
 }
 
-.top-title {
+.top-navigation-left {
   float: left;
-  font-family: 'Amatic SC', cursive;
-  font-size: 35px;
-  font-weight: 700;
   width: 100%;
 }
 
-.welcome {
-  float: right;
+.top-title {
+  font-family: 'Comfortaa', serif;
+  font-size: 20px;
   line-height: 50px;
-  font-weight: 600;
+  width: 100%;
+  color: white;
 }
+
+.top-navigation-user {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+
+}
+
 img {
     vertical-align: middle;
 }
@@ -65,7 +135,8 @@ img {
 }
 
 .marketingTextLarge {
-  font-size: 2em;
+  font-size: 2
+  em;
 }
 
 .marketingTextMedium  {
@@ -75,25 +146,115 @@ img {
 .marketingSpacing {
   margin-top: 20px;
 }
+
+.board {
+  max-width: 600px;
+  margin-left: auto ;
+  margin-right: auto ;
+}
+
 .newPost {
   position: relative;
 }
-.board {
-  max-width: 500px;
-   margin-left: auto ;
-  margin-right: auto ;
-}
-.newPost {
-  
-}
+
 .post {
-  max-width: 500px;
-  margin: 5px;
-  padding: 5px;
+  max-width: 600px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px;
+  border-color: rgba(128, 128, 128, 0.10);
+  border-style: solid;
+  border-radius: 3px 3px 3px 3px;
+  box-shadow: rgba(0, 0, 0, 0.156863) 0px 1px 1px, rgba(0, 0, 0, 0.227451) 0px 1px 1px;
+  background-color: white;
 }
-.post-subject {
-  color: gray;
-}
+
 .post-content {
   color: black;
+  margin: 8px;
+}
+
+.post-time {
+  font-size: 12px;
+  color: gray;
+  margin-left: 13px;
+  margin-top: 10px;
+}
+
+.apprisal-holder {
+  padding: 5px;
+  color: gray;
+}
+
+.post-apprisal-shared-with {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.post-bottom {
+  margin-bottom: 10px;
+}
+
+.image-upload-button-label {
+  border: 0.5px solid rgba(204, 204, 204, 0.54);
+  display: inline-block;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  float: right;
+  color: grey;
+  border-radius: 3px;
+}
+
+.image-upload-button-overlay {
+    border: transparent;
+}
+
+.image-upload-button {
+  border: transparent;
+  display: none;
+}
+
+.signup-text-header .login-text-header{
+  text-align: left;
+  text-size: 14px;
+  text-weight: bold;
+}
+
+.sns-text-field {
+  margin: 10px;
+  margin-top: 20px;
+  text-align: left;
+}
+.sns-text-field-title-holder {
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.sns-text-field-input-holder {
+}
+
+.sns-text-field-input {
+  font-size: 18px;
+  padding: 5px 10px;
+  width: 100%;
+  border-radius: 5px;
+  border-color: #bdc7d8;
+  border-width: 1px;
+  border-style: solid;
+}
+ 
+.sns-text-field-error-text {
+  color: red;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.image-acknowledgement {
+   opacity: 0.8;
+   position: fixed;
+   bottom: 5px;
+   left: 10px;
+   font-size: 12px;
+   color: white;
 }
