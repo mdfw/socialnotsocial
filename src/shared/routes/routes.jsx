@@ -7,7 +7,7 @@ import Home from '../containers/Home';
 import App from '../containers/App';
 import Welcome from '../components/Welcome';
 import CheckLogin from '../containers/CheckLogin';
-
+import Recipients from '../containers/Recipients';
 
 /* Checks for the specific snssl cookie that indicates if someone is logged in.
  * The session may still be dead, but we'll skip the check if this cookie isn't there.
@@ -73,6 +73,7 @@ export default function buildRoutes(store = {}) {
       <Route path="/welcome" component={Welcome} onEnter={checkForAuth} />
       <Route path="/" component={App} onEnter={needsAuth}>
         <IndexRoute component={Home} />
+        <Route path="/recipients" component={Recipients} onEnter={needsAuth} />
       </Route>
     </Router>
   );

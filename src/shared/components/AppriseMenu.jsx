@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import NotImplemented from './NotImplemented';
 
 function recipientInfo(recipientId, recipients) {
   if (!recipientId || !recipients) {
@@ -17,6 +18,7 @@ function recipientInfo(recipientId, recipients) {
   }
   return '';
 }
+
 
 const Apprised = function alreadyShared(props) {
   const already = [];
@@ -42,8 +44,8 @@ const AppriseMore = function shareMore(props) {
   props.recipients.forEach(function eachRecipient(recipient) {
     more.push(
       <div key={recipient.id} className="apprisal-menu-more-recipient">
+        <input type="checkbox" id={recipient.id} value={recipient.displayName} />
         <label htmlFor={recipient.id}>
-          <input type="checkbox" id={recipient.id} value={recipient.displayName} />
           <span className="apprisal-menu-more-recipient-name">{recipient.displayName}</span>
         </label>
         <div className="apprisal-menu-more-recipient-type">email</div>
@@ -67,11 +69,22 @@ class AppriseMenu extends React.Component { // eslint-disable-line react/no-mult
     super();
   }
   render() {
-    console.log('Rendering');
-    return (
-      <div className="apprisal-menu--holder">
+    let whatOn = (
+      <div>
         <AppriseMore recipients={this.props.recipients} />
         <Apprised recipients={this.props.recipients} apprisals={this.props.apprisals} />
+      </div>
+    )
+    if (PRODUCTION) { // eslint-disable-line no-undef
+      whatOn = (
+        <div id="not-implemented-holder" style={{ margin: '20px'}}>
+          <NotImplemented />
+        </div>
+      )
+    }
+    return (
+      <div className="apprisal-menu--holder">
+        {whatOn}
       </div>
     );
   }
