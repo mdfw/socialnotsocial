@@ -52,11 +52,6 @@ app.all('/api/*', function allapiTraffic(req, res) {
   apiProxy.web(req, res, { target: apiServer });
 });
 
-app.use('/s3', require('react-s3-uploader/s3router')({
-  bucket: 'socialnotsocial',
-  headers: { 'Access-Control-Allow-Origin': '*' }, // optional
-}));
-
 /*
 app.use((req, res) => {
   match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
@@ -87,6 +82,11 @@ app.use((req, res) => {
   });
 });
 */
+
+app.get('/*', function redirWelcome(req, res) {
+  res.redirect('/');
+});
+
 
 const server = http.createServer(app);
 const port = process.env.PORT || ourPort;
