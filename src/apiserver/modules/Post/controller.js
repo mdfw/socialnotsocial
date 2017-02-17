@@ -3,6 +3,7 @@ import { proxyUserId } from '../Authentication';
 
 const Post = models.Post;
 const Media = models.Media;
+const Apprisal = models.Apprisal;
 
 
 /* Get all of the posts for the accountId.
@@ -27,6 +28,9 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
         through: {
           attributes: [],
         },
+      },
+      {
+        model: Apprisal,
       }],
     })
     .then((items) => {
