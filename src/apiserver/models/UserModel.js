@@ -13,12 +13,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       userType: {
+        field: 'user_type',
         type: DataTypes.ENUM,
         values: [UserType.NORMAL, UserType.ADMIN, UserType.CUSTSERVICE, UserType.BANNED],
         defaultValue: UserType.NORMAL,
         allowNull: false,
       },
       displayName: {
+        field: 'display_name',
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -44,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       encryptedPasswordHash: {
+        field: 'encrypted_password_hash',
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -51,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       encryptedPasswordPepperId: {
+        field: 'encrypted_password_pepperId',
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

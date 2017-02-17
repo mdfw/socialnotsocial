@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       displayName: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'display_name',
       },
       email: {
         type: DataTypes.STRING,
@@ -60,11 +61,13 @@ module.exports = (sequelize, DataTypes) => {
       accessTokenPepper: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'access_token_pepper',
       },
       // Can a user respond? This can be overridden by Apprisals
       canRespond: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+        field: 'can_respond',
       },
       validatedAt: {
         type: DataTypes.DATE,
@@ -80,6 +83,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       unsubscribedReason: {
         type: DataTypes.STRING,
+        field: 'unsubscribed_reason',
       },
     },
     {

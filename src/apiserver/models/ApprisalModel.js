@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       canRespond: { // Can the recipient of this apprisal respond? Overrides canRespond on recipient
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+        field: 'can_respond',
       },
     },
     {
