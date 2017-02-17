@@ -25,12 +25,8 @@ const allReducers = (state, action) => {
 const routerReduxMiddleware = routerMiddleware(browserHistory);
 
 export default function configureStore(initialState) {
-  console.log('All the reducers');
-  console.dir(allReducers);
   const store = createStore(allReducers, initialState, composeWithDevTools(
     applyMiddleware(thunkMiddleware, routerReduxMiddleware),
   ));
-  console.log('Created store');
-  console.dir(store);
   return store;
 }

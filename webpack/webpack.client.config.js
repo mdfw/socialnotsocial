@@ -12,6 +12,14 @@ module.exports = {
     extensions:         ['', '.js', '.jsx']
   },    
   devtool: 'inline-source-map',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('development')
+      },
+      PRODUCTION: JSON.stringify(true),
+    }),
+  ],
   module: {
     noParse: [
       /aws/
