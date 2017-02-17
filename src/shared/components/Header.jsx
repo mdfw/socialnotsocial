@@ -9,7 +9,7 @@ const Header = props => (
       <div className="content">
         <div className="top-navigation-left">
           <span className="top-title">
-            Social, Not Social (Beta)
+            Social, Not Social <span className="title-beta">(Beta)</span>
           </span>
           <span className="welcome">
             <HeaderLoggedInButton displayName={props.displayName} />

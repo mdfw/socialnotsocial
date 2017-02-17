@@ -1,29 +1,15 @@
 import React from 'react';
 import cookie from 'react-cookie';
-import SendAsset from 'material-ui/svg-icons/content/send';
-import SocialShareAsset from 'material-ui/svg-icons/social/share';
-import CameraAsset from 'material-ui/svg-icons/image/photo-camera';
 import RegisterForm from '../containers/RegisterForm';
 import LoginForm from '../containers/LoginForm';
 
 const FORM_REGISTER = 1;
 const FORM_LOGIN = 2;
 
-const svgStyle = {
-  verticalAlign: 'middle',
-  marginRight: '20px',
-};
-
 const MarketingBits = () => (
   <div className="welcome-page-marketing">
     <div className="marketingTextMedium">
-      <CameraAsset color="#459691" style={svgStyle} />Moments.
-    </div>
-    <div className="marketingTextMedium">
-      <SendAsset color="#459691" style={svgStyle} />Shared.
-    </div>
-    <div className="marketingTextMedium">
-      <SocialShareAsset color="#459691" style={svgStyle} />Everywhere.
+      Moments. Shared. Everywhere.
     </div>
     <div className="marketingSpacing">
       Post your thoughts and pictures and share them on Facebook or send them in an email.
