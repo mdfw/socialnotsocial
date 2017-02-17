@@ -24,7 +24,9 @@ class HeaderLoggedButton extends React.Component {
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleMenuItemTap = this.handleMenuItemTap.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
-  }
+    this.handleShowRecipients = this.handleShowRecipients.bind(this);
+    this.handleGoHome = this.handleGoHome.bind(this);
+ }
 
   handleButtonTap(event) {
     event.preventDefault();
@@ -43,8 +45,16 @@ class HeaderLoggedButton extends React.Component {
       open: false,
     });
   }
-
+  handleShowRecipients() {
+    this.props.router.push('/recipients');
+  }
+  
+  handleGoHome() {
+    console.log('going home');
+    this.props.router.push('/');
+  }
 //   handleMenuItemTap(event, menuItem) {  <--storing in case we need it.
+
   handleMenuItemTap(event) {
     this.setState({
       open: false,
@@ -53,7 +63,7 @@ class HeaderLoggedButton extends React.Component {
   }
 
   render() {
-    const welcomeText = `For: ${this.props.displayName}`;
+    const welcomeText = `${this.props.displayName}`;
     return (
       <span id="HeaderRight" style={headerRightStyle}>
         <span className="top-navigation-user">{welcomeText}</span>
@@ -69,7 +79,8 @@ class HeaderLoggedButton extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu onItemTouchTap={this.handleMenuItemTap}>
-            <MenuItem primaryText="Manage recipients" disabled={true} />
+            <MenuItem primaryText="Home" onTouchTap={this.goHome} />
+            <MenuItem primaryText="Manage recipients" onTouchTap={this.handleShowRecipients} />
             <MenuItem primaryText="Sign out" onTouchTap={this.handleSignOut} />
           </Menu>
         </Popover>
@@ -81,6 +92,9 @@ class HeaderLoggedButton extends React.Component {
 HeaderLoggedButton.propTypes = {
   displayName: React.PropTypes.string,
   dispatch: React.PropTypes.func,
+  router: React.PropTypes.shape({
+    push: React.PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const Container = connect()(HeaderLoggedButton);
