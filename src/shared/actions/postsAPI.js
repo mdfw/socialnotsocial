@@ -15,8 +15,6 @@ import { formUpdate, formClear, CREATE_POST_FORM_NAME } from './forms';
  * Returns the server response object on 201 status
  */
 function checkAPIReturn(response) {
-  console.log('PostsAPI:checkAPIReturn');
-  console.dir(response);
   if (response.status === 201 || response.status === 200) {
     return response;
   }
@@ -31,7 +29,6 @@ function checkAPIReturn(response) {
 // -------- //
 /* The main fetching api for posts - this is exported */
 const fetchPostsAPI = function fetchPostsAPI() {
-  console.log('Fetching posts');
   return function fetchPostsDispatch(dispatch) {
     const url = '/api/v1/posts';
     return fetch(url, {
@@ -42,8 +39,6 @@ const fetchPostsAPI = function fetchPostsAPI() {
       return response.json();
     })
     .then(function returnPostsData(response) {
-      console.log('returnPostsData');
-      console.dir(response);
       return dispatch(
         receivePosts(response.posts),
       );

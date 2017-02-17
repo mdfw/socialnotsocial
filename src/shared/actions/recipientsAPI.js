@@ -29,7 +29,6 @@ function checkAPIReturn(response) {
 // -------- //
 /* The main fetching api for recipients - this is exported */
 const fetchRecipientsAPI = function fetchRecipientsAPI() {
-  console.log('Fetching recipients');
   return function fetchRecipientsDispatch(dispatch) {
     const url = '/api/v1/recipients';
     return fetch(url, {
@@ -40,8 +39,6 @@ const fetchRecipientsAPI = function fetchRecipientsAPI() {
       return response.json();
     })
     .then(function returnRecipientsData(response) {
-      console.log('returnRecipientsData');
-      console.dir(response);
       return dispatch(
         receiveRecipients(response.recipients),
       );
