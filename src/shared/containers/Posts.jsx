@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import { fetchPosts } from '../actions/posts';
+import { fetchRecipients } from '../actions/recipients';
 import Post from '../components/Post';
 
 /* Renders if there are no posts */
@@ -22,7 +23,7 @@ const NoPosts = () => (
 const AllPosts = ({ posts }) => (
   <div>
     {posts.map(post => (
-      <Post message={post.message} createdAt={post.created_at} key={post.id} />
+      <Post message={post.message} createdAt={post.created_at} apprisals={post.Apprisals} key={post.id} />
     ))}
   </div>
 );
@@ -33,6 +34,7 @@ AllPosts.propTypes = {
 /* Main container that manages showing of posts */
 class PostsContainer extends React.Component {
   componentDidMount() {
+    this.props.dispatch(fetchRecipients());
     this.props.dispatch(fetchPosts());
   }
   render() {
