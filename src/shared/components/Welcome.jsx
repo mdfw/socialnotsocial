@@ -15,6 +15,10 @@ const MarketingBits = () => (
       Post your thoughts and pictures and share them on Facebook or send them in an email.
       <br /><br />
       Your family will <i>love</i> you for it.
+      <br /><br />
+      Try it yourself:<br />
+      User: <span>eliza@newhaven.com</span><br />
+      Password: <span>efw23dsesE*HE</span><br />
     </div>
     <div style={{ margin: '30px' }}>
       <img
