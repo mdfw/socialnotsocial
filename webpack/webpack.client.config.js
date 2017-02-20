@@ -17,7 +17,7 @@ module.exports = {
       'process.env': {
         'NODE_ENV': JSON.stringify('development')
       },
-      PRODUCTION: JSON.stringify(true),
+      PRODUCTION: JSON.stringify(false),
     }),
   ],
   module: {
