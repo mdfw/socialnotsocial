@@ -1,4 +1,5 @@
 import { models, UserType } from '../../models';
+import { COOKIE_NAME_INDICATE_SESSION } from '../../../globalConstants';
 
 const User = models.User;
 
@@ -26,7 +27,7 @@ const createUserSession = function createUserSession(req, res, user) {
   req.session.user = cleanUser;
   req.user = cleanUser;
   res.locals.user = cleanUser;
-  res.cookie('snssl', 'y', { httpOnly: false }); // Does the user have a session.
+  res.cookie(COOKIE_NAME_INDICATE_SESSION, 'y', { httpOnly: false }); // Does the user have a session.
 };
 
 
@@ -40,7 +41,7 @@ const createUserSession = function createUserSession(req, res, user) {
 const destroyUserSession = function destroyUserSession(req, res, user) {
   if (req.session) {
     req.session.destroy();
-    res.clearCookie('snssl');
+    res.clearCookie(COOKIE_NAME_INDICATE_SESSION);
   }
 };
 /* eslint-enable no-unused-vars */

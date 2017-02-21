@@ -6,6 +6,7 @@ import session from 'express-session';
 import morgan from 'morgan';
 import chalk from 'chalk';
 import { validateUserSession } from './modules/Authentication/warrant';
+import { COOKIE_NAME_SESSION } from '../globalConstants';
 
 /* Routes */
 import { userRoutes, recipientRoutes, sessionsRoutes, postRoutes, mediaRoutes } from './modules';
@@ -32,7 +33,7 @@ app.use((err, req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-  name: 'snss',
+  name: COOKIE_NAME_SESSION,
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: false,

@@ -1,7 +1,7 @@
 import {
-  REQUEST_ACCOUNT_INFO,
-  RECEIVE_ACCOUNT_ERROR,
-  RECEIVE_ACCOUNT_INFO,
+  REQUESTING_ACCOUNT_INFO,
+  RECEIVED_ACCOUNT_ERROR,
+  RECEIVED_ACCOUNT_INFO,
   REQUEST_LOGIN,
   LOGIN_ERROR,
   LOGIN_ERROR_ACK,
@@ -40,7 +40,7 @@ const DEFAULT_ACCOUNT_STATE = () => (
 const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE(), action) {
   let newstate = state;
   switch (action.type) {
-    case RECEIVE_ACCOUNT_INFO: {
+    case RECEIVED_ACCOUNT_INFO: {
       newstate = {
         ...state,
         displayName: action.displayName,
@@ -55,14 +55,14 @@ const accountReducer = function accountReducer(state = DEFAULT_ACCOUNT_STATE(), 
       };
       break;
     }
-    case REQUEST_ACCOUNT_INFO: {
+    case REQUESTING_ACCOUNT_INFO: {
       newstate = {
         ...state,
         fetching: true,
       };
       break;
     }
-    case RECEIVE_ACCOUNT_ERROR: {
+    case RECEIVED_ACCOUNT_ERROR: {
       newstate = {
         ...state,
         fetching: false,

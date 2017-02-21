@@ -1,10 +1,11 @@
 import cookie from 'react-cookie';
 import { fetchAccountAPI, addAccountAPI, loginAccountAPI, logoutAccountAPI } from './accountAPI';
+import { COOKIE_NAME_SESSION } from '../../globalConstants';
 
-const RECEIVE_ACCOUNT_INFO = 'RECEIVE_ACCOUNT_INFO';
-function receiveAccountInfo(account) {
+const RECEIVED_ACCOUNT_INFO = 'RECEIVED_ACCOUNT_INFO';
+function receivedAccountInfo(account) {
   return {
-    type: RECEIVE_ACCOUNT_INFO,
+    type: RECEIVED_ACCOUNT_INFO,
     displayName: account.displayName,
     email: account.email,
     accountType: account.type,
@@ -15,22 +16,22 @@ function receiveAccountInfo(account) {
   };
 }
 
-const REQUEST_ACCOUNT_INFO = 'REQUEST_ACCOUNT_INFO';
-function requestAccountInfo() {
-  return { type: REQUEST_ACCOUNT_INFO };
+const REQUESTING_ACCOUNT_INFO = 'REQUESTING_ACCOUNT_INFO';
+function requestingAccountInfo() {
+  return { type: REQUESTING_ACCOUNT_INFO };
 }
 
-const RECEIVE_ACCOUNT_ERROR = 'RECEIVE_ACCOUNT_ERROR';
-function receiveAccountError(errorMessage) {
+const RECEIVED_ACCOUNT_ERROR = 'RECEIVED_ACCOUNT_ERROR';
+function receivedAccountError(errorMessage) {
   return {
-    type: RECEIVE_ACCOUNT_ERROR,
+    type: RECEIVED_ACCOUNT_ERROR,
     errorMessage: errorMessage,
   };
 }
 
 function fetchAccount() {
   return (dispatch) => {
-    dispatch(requestAccountInfo());
+    dispatch(requestingAccountInfo());
     dispatch(fetchAccountAPI());
   };
 }
@@ -42,7 +43,7 @@ function clearAccountInfo() {
 
 function logoutAccount() {
   return (dispatch) => {
-    cookie.remove('snss');
+    cookie.remove(COOKIE_NAME_SESSION);
     dispatch(logoutAccountAPI());
   };
 }
@@ -104,12 +105,12 @@ function submitAccountErrorAck() {
 }
 
 export {
-  REQUEST_ACCOUNT_INFO,
-  requestAccountInfo,
-  RECEIVE_ACCOUNT_INFO,
-  receiveAccountInfo,
-  RECEIVE_ACCOUNT_ERROR,
-  receiveAccountError,
+  REQUESTING_ACCOUNT_INFO,
+  requestingAccountInfo,
+  RECEIVED_ACCOUNT_INFO,
+  receivedAccountInfo,
+  RECEIVED_ACCOUNT_ERROR,
+  receivedAccountError,
   fetchAccount,
   REQUEST_LOGIN,
   requestLogin,

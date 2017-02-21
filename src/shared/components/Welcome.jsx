@@ -2,6 +2,7 @@ import React from 'react';
 import cookie from 'react-cookie';
 import RegisterForm from '../containers/RegisterForm';
 import LoginForm from '../containers/LoginForm';
+import { COOKIE_NAME_HAS_LOGGED_IN } from '../../globalConstants';
 
 const FORM_REGISTER = 1;
 const FORM_LOGIN = 2;
@@ -72,7 +73,7 @@ class Welcome extends React.Component {
   constructor(props) {
     super(props);
     let formId = FORM_REGISTER;
-    if (cookie.load('snsslih') === 'y') {
+    if (cookie.load(COOKIE_NAME_HAS_LOGGED_IN) === 'y') {
       formId = FORM_LOGIN;
     }
     this.state = {

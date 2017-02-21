@@ -8,6 +8,7 @@ import App from '../containers/App';
 import Welcome from '../components/Welcome';
 import CheckLogin from '../containers/CheckLogin';
 import Recipients from '../containers/Recipients';
+import { COOKIE_NAME_INDICATE_SESSION } from '../../globalConstants';
 
 /* Checks for the specific snssl cookie that indicates if someone is logged in.
  * The session may still be dead, but we'll skip the check if this cookie isn't there.
@@ -15,7 +16,7 @@ import Recipients from '../containers/Recipients';
  *    snss session cookie, but that one is only http.
  */
 function checkForSessionCookie() {
-  const sessionCookieContent = cookie.load('snssl');
+  const sessionCookieContent = cookie.load(COOKIE_NAME_INDICATE_SESSION);
   if (sessionCookieContent && sessionCookieContent.length > 0) {
     return true;
   }

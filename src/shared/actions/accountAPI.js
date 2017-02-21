@@ -3,14 +3,15 @@ import { push } from 'react-router-redux';
 import cookie from 'react-cookie';
 import {
   submittingAccountInfo,
-  receiveAccountInfo,
-  receiveAccountError,
+  receivedAccountInfo,
+  receivedAccountError,
   submitAccountError,
   requestLogin,
   loginError,
   clearAccountInfo,
 } from './account';
 import { formClear, REG_FORM_NAME, LOGIN_FORM_NAME } from './forms';
+import { COOKIE_NAME_HAS_LOGGED_IN, COOKIE_NAME_INDICATE_SESSION } from '../../globalConstants';
 
 
 /* If we have valid new account data, dispatch it to the store.
@@ -30,7 +31,7 @@ function dispatchAccountData(dispatch, data) {
     throw new Error('Invalid account information returned.');
   }
   return dispatch(
-    receiveAccountInfo(user),
+    receivedAccountInfo(user),
   );
 }
 
@@ -69,8 +70,13 @@ const fetchAccountAPI = function fetchAccountAPI() {
       );
     })
     .catch(function receiveError(error) {
+      // TODO: I don't think this is the right place for this destruction.
+      cookie.remove(COOKIE_NAME_INDICATE_SESSION);
+      dispatch(
+        receivedAccountError(error),
+      );
       return dispatch(
-        receiveAccountError(error),
+        push('/'),
       );
     });
   };
@@ -124,7 +130,7 @@ const loginAccountAPI = function loginAccountAPI(email, password) {
         .then(function goHome() {
           const tenYearsHence = new Date();
           tenYearsHence.setYear(tenYearsHence.getFullYear() + 10);
-          cookie.save('snsslih', 'y', {
+          cookie.save(COOKIE_NAME_HAS_LOGGED_IN, 'y', {
             expires: tenYearsHence,
             httpOnly: false,
             secure: false,
