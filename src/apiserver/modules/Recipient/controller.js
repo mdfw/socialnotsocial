@@ -74,8 +74,8 @@ const addRecipientEndpoint = (req, res) => {
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
  *  @param (number) recipientId - Will be pulled from req.params or req.body (body takes priority)
- *  @param {number} accountId - Will be pulled from req.user.
- *  Uses activeAccountId() to get the accountId to search for.
+ *  @param {number} userId - Will be pulled from req.user.
+ *  Uses proxyUserId() to get the userId to search for.
  */
 const updateRecipientEndpoint = (req, res) => {
   const userId = proxyUserId(req);
@@ -109,7 +109,7 @@ const updateRecipientEndpoint = (req, res) => {
         res.status(404).end();
         return;
       }
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: 'Successfully updated recipient',
         recipient: updatedRecipient.toJSON(),
@@ -128,12 +128,13 @@ const updateRecipientEndpoint = (req, res) => {
 };
 
 
-/* Removes a post (marks the status to 'removed')
+/* Removes a recipient (marks the status to 'removed')
  * Params needed in req.body:
  *   @param (number=} onBehalfOfId - (optional) The accountId to act on behalf of if current account
  *      can act on behalf of it.
- *  @param (number) postId - Will be pulled from req.params or req.body (body takes priority)
+ *  @param (number) recipientId - Will be pulled from req.params or req.body (body takes priority)
  *  Uses proxyUserId() to get the userId to search for.
+ *  @returns status 204 on success and 422 on error or 404 if Recipient to update is not found.
  */
 const removeRecipientEndpoint = (req, res) => {
   const userId = proxyUserId(req);
@@ -150,8 +151,8 @@ const removeRecipientEndpoint = (req, res) => {
     res.status(422).end();
   }
   Recipient.deleteRecipient(itemId, userId)
-    .then((updatedItem) => {
-      if (!updatedItem) {
+    .then((removedItem) => {
+      if (!removedItem) {
         res.statusMessage = 'Recipient was not found.'; // eslint-disable-line no-param-reassign
         res.status(404).end();
         return;
