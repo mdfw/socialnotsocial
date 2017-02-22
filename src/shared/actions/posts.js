@@ -1,4 +1,7 @@
-import { fetchPostsAPI, addPostAPI } from './postsAPI';
+// import { fetchPostsAPI, addPostAPI } from './postsAPI';
+// import { addPostAPI } from './postsAPI';
+import { fetchDataAPI, addDataAPI } from './dataAPI';
+import { CREATE_POST_FORM_NAME } from './forms';
 
 
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
@@ -25,14 +28,29 @@ function receivePostsError(errorMessage) {
 function fetchPosts() {
   return (dispatch) => {
     dispatch(requestPosts());
-    dispatch(fetchPostsAPI());
+    dispatch(
+      fetchDataAPI(
+        'posts',
+        receivePosts,
+        'posts',
+        receivePostsError,
+        ),
+    );
   };
 }
 
 
 function submitNewPost(message) {
   return (dispatch) => {
-    dispatch(addPostAPI(message));
+    dispatch(
+      addDataAPI(
+        'posts',
+        { message: message },
+        fetchPosts,
+        'post',
+        CREATE_POST_FORM_NAME,
+      ),
+    );
   };
 }
 
