@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { submitNewPost, submitPostErrorAck } from '../actions/posts';
+import { newPost } from '../actions/posts';
 import { CREATE_POST_FORM_NAME, formUpdate } from '../actions/forms';
 import CreatePostForm from '../components/CreatePostForm';
 import { appraisePostMessage } from '../helpers/appraise';
@@ -24,7 +24,7 @@ function determineErrors(message, touched, exited) {
 class CreatPostContainer extends React.Component {
   handleSubmit() {
     this.props.dispatch(
-      submitNewPost(this.props.message),
+      newPost(this.props.message),
     );
   }
   handleChange(fields) {
@@ -42,9 +42,6 @@ class CreatPostContainer extends React.Component {
       this.props.dispatch(formUpdate(CREATE_POST_FORM_NAME, { fieldsExited: newExited }));
     }
   }
-  handleErrorAck() {
-    this.props.dispatch(submitPostErrorAck());
-  }
   render() {
     const errors = determineErrors(
       this.props.message,
@@ -60,7 +57,6 @@ class CreatPostContainer extends React.Component {
         handleChange={fields => this.handleChange(fields)}
         handleBlur={fieldName => this.handleBlur(fieldName)}
         handleFocus={fieldName => this.handleFocus(fieldName)}
-        handleErrorAck={() => this.handleErrorAck()}
         submitting={this.props.submitting}
         messageValue={this.props.message}
         errors={errors}
