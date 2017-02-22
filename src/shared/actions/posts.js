@@ -1,6 +1,4 @@
-// import { fetchPostsAPI, addPostAPI } from './postsAPI';
-// import { addPostAPI } from './postsAPI';
-import { fetchDataAPI, addDataAPI } from './dataAPI';
+import { fetchDataAPI, addDataAPI, updateDataAPI, deleteDataAPI } from './dataAPI';
 import { CREATE_POST_FORM_NAME } from './forms';
 
 
@@ -12,9 +10,9 @@ function receivePosts(posts) {
   };
 }
 
-const REQUEST_POSTS = 'REQUEST_POSTS';
-function requestPosts() {
-  return { type: REQUEST_POSTS };
+const REQUESTING_POSTS = 'REQUESTING_POSTS';
+function requestingPosts() {
+  return { type: REQUESTING_POSTS };
 }
 
 const RECEIVE_POSTS_ERROR = 'RECEIVE_POSTS_ERROR';
@@ -27,7 +25,7 @@ function receivePostsError(errorMessage) {
 
 function fetchPosts() {
   return (dispatch) => {
-    dispatch(requestPosts());
+    dispatch(requestingPosts());
     dispatch(
       fetchDataAPI(
         'posts',
@@ -39,8 +37,7 @@ function fetchPosts() {
   };
 }
 
-
-function submitNewPost(message) {
+function newPost(message) {
   return (dispatch) => {
     dispatch(
       addDataAPI(
@@ -54,13 +51,44 @@ function submitNewPost(message) {
   };
 }
 
+function updatePost(postId, message, formId) {
+  return (dispatch) => {
+    dispatch(
+      updateDataAPI(
+        'posts',
+        postId,
+        { message: message },
+        fetchPosts,
+        'post',
+        formId,
+      ),
+    );
+  };
+}
+
+function deletePost(postId, formId) {
+  return (dispatch) => {
+    dispatch(
+      deleteDataAPI(
+        'posts',
+        postId,
+        fetchPosts,
+        formId,
+      ),
+    );
+  };
+}
+
+
 export {
   RECEIVE_POSTS,
   receivePosts,
-  REQUEST_POSTS,
-  requestPosts,
+  REQUESTING_POSTS,
+  requestingPosts,
   RECEIVE_POSTS_ERROR,
   receivePostsError,
   fetchPosts,
-  submitNewPost,
+  newPost,
+  updatePost,
+  deletePost,
 };
