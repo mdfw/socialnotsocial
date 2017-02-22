@@ -27,7 +27,7 @@ function checkAPIReturn(response) {
 // -------- //
 // FETCHING //
 // -------- //
-/* The main fetching api for recipients - this is exported */
+/* The main fetching api for recipients */
 const fetchRecipientsAPI = function fetchRecipientsAPI() {
   return function fetchRecipientsDispatch(dispatch) {
     const url = '/api/v1/recipients';
@@ -58,18 +58,11 @@ const fetchRecipientsAPI = function fetchRecipientsAPI() {
 // ADDING //
 // ------ //
 
-
-/* Clears the new account data from the store
-  */
-function dispatchNewRecipientFormClear(dispatch, formId) {
-  return dispatch(
-    formClear(formId),
-  );
-}
-/* The heavy lifting work of adding an account.
- * @param {string} displayName
- * @param {string} email
- * Calls to the api endpoint to create an recipient, parses it,
+/* Add a recipient through the api.
+ * @param {string} displayName - the name of the recipient
+ * @param {string} email - the email of the recipient
+ * @param {string} formId - the formId to clear on success.
+ * Calls to the api endpoint to create a recipient, parses it,
  *   clears the form.
  */
 const addRecipientAPI = function addRecipientAPI(displayName, email, formId) {
@@ -89,11 +82,22 @@ const addRecipientAPI = function addRecipientAPI(displayName, email, formId) {
         email: email,
       }),
     })
-    .then(checkAPIReturn)
+    .then(function checkAPIResponse(response){
+      if (response.status === 201) {
+        return response;
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    })
     .then(function processJsonResponse(response) {
       return response.json();
     })
-    .then(dispatchNewRecipientFormClear(dispatch, formId))
+    .then(dispathFormClear(dispatch, formId){
+       return dispatch(
+        formClear(formId),
+      );
+    })
     .then(function getUpdatedRecipients() {
       return dispatch(
         fetchRecipients(),
@@ -109,4 +113,64 @@ const addRecipientAPI = function addRecipientAPI(displayName, email, formId) {
   };
 };
 
-export { fetchRecipientsAPI, addRecipientAPI };
+// -------- //
+// UPDATING //
+// -------- //
+
+/* Update a recipient.
+ * @param {number} id - the recipientID to update
+ * @param {string} displayName
+ * @param {string} email
+ * @param {string} formId - the formId to clear on success.
+ * Calls to the api endpoint to update a recipient, parses it,
+ *   clears the form.
+ */
+const updateRecipientAPI = function updateRecipientAPI(id, displayName, email, formId) {
+  return function fetchUpdatePostDispatch(dispatch) {
+    // Set the submitting flag
+    dispatch(formUpdate(formId, {
+      submitting: true,
+    }));
+    fetch(`/api/v1/recipients/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        displayName: displayName,
+        email: email,
+      }),
+    })
+    .then(function checkAPIreturn(response) {
+      if (response.status === 204) {
+        return response;
+      }
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+
+    })
+    .then(function processJsonResponse(response) {
+      return response.json();
+    })
+    .then(dispathFormClear(dispatch, formId){
+      return dispatch(
+        formClear(formId),
+      );
+    })
+    .then(function getUpdatedRecipients() {
+      return dispatch(
+        fetchRecipients(),
+      );
+    })
+    .catch(function submitError(error) {
+      const errMsg = error.message;
+      return dispatch(formUpdate(formId, {
+        submitting: false,
+        submitError: errMsg,
+      }));
+    });
+  };
+};
+export { fetchRecipientsAPI, addRecipientAPI, updateRecipientAPI };

@@ -1,4 +1,4 @@
-import { fetchRecipientsAPI, addRecipientAPI } from './recipientsAPI';
+import { fetchDataAPI, addDataAPI, updateDataAPI, deleteDataAPI } from './dataAPI';
 
 
 const RECEIVE_RECIPIENTS = 'RECEIVE_RECIPIENTS';
@@ -9,9 +9,9 @@ function receiveRecipients(recipients) {
   };
 }
 
-const REQUEST_RECIPIENTS = 'REQUEST_RECIPIENTS';
-function requestRecipients() {
-  return { type: REQUEST_RECIPIENTS };
+const REQUESTING_RECIPIENTS = 'REQUESTING_RECIPIENTS';
+function requestingRecipients() {
+  return { type: REQUESTING_RECIPIENTS };
 }
 
 const RECEIVE_RECIPIENTS_ERROR = 'RECEIVE_RECIPIENTS_ERROR';
@@ -24,23 +24,39 @@ function receiveRecipientsError(errorMessage) {
 
 function fetchRecipients() {
   return (dispatch) => {
-    dispatch(requestRecipients());
-    dispatch(fetchRecipientsAPI());
+    dispatch(
+      requestingRecipients(),
+    );
+    dispatch(
+      fetchDataAPI(
+        'recipients',
+        receiveRecipients,
+        'recipients',
+        receiveRecipientsError,
+      ),
+    );
   };
 }
 
-
 function submitNewRecipient(displayName, email, formId) {
   return (dispatch) => {
-    dispatch(addRecipientAPI(displayName, email, formId));
+    dispatch(
+      addDataAPI(
+        'recipients',
+        { displayName: displayName, email: email },
+        fetchRecipients,
+        'recipient', 
+        formId,
+      ),
+    );
   };
 }
 
 export {
   RECEIVE_RECIPIENTS,
   receiveRecipients,
-  REQUEST_RECIPIENTS,
-  requestRecipients,
+  REQUESTING_RECIPIENTS,
+  requestingRecipients,
   RECEIVE_RECIPIENTS_ERROR,
   receiveRecipientsError,
   fetchRecipients,
