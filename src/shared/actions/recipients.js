@@ -38,14 +38,42 @@ function fetchRecipients() {
   };
 }
 
-function submitNewRecipient(displayName, email, formId) {
+function newRecipient(displayName, email, formId) {
   return (dispatch) => {
     dispatch(
       addDataAPI(
         'recipients',
         { displayName: displayName, email: email },
         fetchRecipients,
-        'recipient', 
+        'recipient',
+        formId,
+      ),
+    );
+  };
+}
+
+function updateRecipient(recipientId, displayName, email, formId) {
+  return (dispatch) => {
+    dispatch(
+      updateDataAPI(
+        'recipients',
+        recipientId,
+        { displayName: displayName, email: email },
+        fetchRecipients,
+        'recipient',
+        formId,
+      ),
+    );
+  };
+}
+
+function deleteRecipient(recipientId, formId) {
+  return (dispatch) => {
+    dispatch(
+      deleteDataAPI(
+        'recipients',
+        recipientId,
+        fetchRecipients,
         formId,
       ),
     );
@@ -60,5 +88,7 @@ export {
   RECEIVE_RECIPIENTS_ERROR,
   receiveRecipientsError,
   fetchRecipients,
-  submitNewRecipient,
+  newRecipient,
+  updateRecipient,
+  deleteRecipient,
 };
