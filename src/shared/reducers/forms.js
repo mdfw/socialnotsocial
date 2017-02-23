@@ -69,7 +69,10 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE(), action
   switch (action.type) {
     case FORM_UPDATE: {
       const formId = action.formId;
-      const oldFields = state[formId];
+      let oldFields = state[formId];
+      if (!oldFields) {
+        oldFields = {};
+      }
       const regKeys = Object.keys(action.fields);
       regKeys.forEach((key) => {
         oldFields[key] = action.fields[key];
@@ -89,6 +92,9 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE(), action
     }
     default:
       break;
+  }
+  if (newstate.newRecipient) {
+  console.log(`newstate: ${newstate.newRecipient.displayName}`);
   }
   return newstate;
 };
