@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import Recipient from '../components/Recipient';
 import NotImplmented from '../components/NotImplemented';
+import EditRecipient from './EditRecipient';
 
 /* Renders if there are no posts */
 const noPostsStyle = {
@@ -12,14 +13,24 @@ const noPostsStyle = {
 };
 
 const NoRecipients = () => (
-  <div id="noRecipient" style={noPostsStyle}>
-    There are no recipients to show. Yet.
+  <div>
+    <EditRecipient
+      formId="newRecipient"
+      editType="new"
+    />
+    <div id="noRecipient" style={noPostsStyle}>
+      There are no recipients to show. Yet.
+    </div>
   </div>
 );
 
 /* Renders a list of recipients */
 const AllRecipients = ({ recipients }) => (
   <div>
+    <EditRecipient
+      formId="newRecipient"
+      editType="new"
+    />
     {recipients.map(recipient => (
       <Recipient
         key={recipient.id}
@@ -56,7 +67,8 @@ class RecipientsContainer extends React.Component {
           <NotImplmented />
         </div>
       );
-    } else if (this.props.recipients.length === 0) {
+    }
+    if (this.props.recipients.length === 0) {
       return <NoRecipients />;
     }
     return (
