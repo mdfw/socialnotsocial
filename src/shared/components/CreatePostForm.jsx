@@ -1,22 +1,8 @@
 import React from 'react';
-import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextareaAutosize from 'react-autosize-textarea';
 import Settings from '../settings';
-
-/* SubmitProgress shows a spinner while we wait for account creation.
-  */
-class SubmitProgress extends React.Component { // eslint-disable-line react/no-multi-comp
-  render() {
-    if (this.props.submitting) {
-      return <CircularProgress mode="indeterminate" />;
-    }
-    return null;
-  }
-}
-SubmitProgress.propTypes = {
-  submitting: React.PropTypes.bool,
-};
+import CircleProgress from './ui/CircleProgress';
 
 /* button style for the submit button below */
 const submitButtonStyle = {
@@ -134,7 +120,7 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
             />
           </div>
         </form>
-        <SubmitProgress submitting={submitting} />
+        <CircleProgress running={submitting} />
       </div>
     );
   }
