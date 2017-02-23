@@ -1,21 +1,7 @@
 import React from 'react';
-import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from './ui/TextField';
-
-/* SubmitProgress shows a spinner while we wait for account creation.
-  */
-class LoginProgress extends React.Component { // eslint-disable-line react/no-multi-comp
-  render() {
-    if (this.props.submitting) {
-      return <CircularProgress mode="indeterminate" />;
-    }
-    return null;
-  }
-}
-LoginProgress.propTypes = {
-  submitting: React.PropTypes.bool,
-};
+import CircleProgress from './ui/CircleProgress';
 
 const errorStyle = {
   color: '#c94f49',
@@ -127,7 +113,7 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
             />
           </div>
         </form>
-        <LoginProgress loggingIn={loggingIn} />
+        <CircleProgress running={loggingIn} />
       </div>
     );
   }
