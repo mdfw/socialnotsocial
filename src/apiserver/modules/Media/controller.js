@@ -108,7 +108,7 @@ const updateMediumEndpoint = (req, res) => {
         res.status(404).end();
         return;
       }
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: 'Successfully updated media',
         media: updatedItem.toJSON(),
