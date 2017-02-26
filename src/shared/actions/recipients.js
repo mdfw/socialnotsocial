@@ -38,12 +38,12 @@ function fetchRecipients() {
   };
 }
 
-function newRecipient(displayName, email, formId) {
+function newRecipient(body, formId) {
   return (dispatch) => {
     dispatch(
       addDataAPI(
         'recipients',
-        { displayName: displayName, email: email },
+        body,
         fetchRecipients,
         'recipient',
         formId,
@@ -52,13 +52,13 @@ function newRecipient(displayName, email, formId) {
   };
 }
 
-function updateRecipient(recipientId, displayName, email, formId) {
+function updateRecipient(recipientId, body, formId) {
   return (dispatch) => {
     dispatch(
       updateDataAPI(
         'recipients',
         recipientId,
-        { displayName: displayName, email: email },
+        body,
         fetchRecipients,
         'recipient',
         formId,
