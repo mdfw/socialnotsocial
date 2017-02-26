@@ -161,6 +161,8 @@ const updateDataAPI = function updateDataAPI(
     if (!endpoint || !id || !body || !formId || !successDispatch || !endpointObject) {
       throw new Error('Parameters incorrect');
     }
+    console.log('Update running: body');
+    console.dir(body);
     dispatch(formUpdate(formId, {
       submitting: true,
     }));
@@ -173,9 +175,13 @@ const updateDataAPI = function updateDataAPI(
       body: JSON.stringify(body),
     })
     .then(function checkAPIreturn(response) {
-      if (response.status === 204) {
+      console.log('UpdateData response: ');
+      console.dir(response);
+      if (response.status === 200) {
+        console.log('UpdateData got a 200 response. That is good.');
         return response;
       }
+      console.log('UpdateData got a some other response. Throwing ERROR.');
       const error = new Error(response.statusText);
       error.response = response;
       throw error;
@@ -239,15 +245,14 @@ const deleteDataAPI = function deleteDataAPI(
       credentials: 'same-origin',
     })
     .then(function checkAPIreturn(response) {
+      console.log('Delete response');
+      console.dir(response);
       if (response.status === 204) {
         return response;
       }
       const error = new Error(response.statusText);
       error.response = response;
       throw error;
-    })
-    .then(function processJsonResponse(response) {
-      return response.json();
     })
     .then(function dispatchOnSuccess() {
       return dispatch(
