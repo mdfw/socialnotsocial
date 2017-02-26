@@ -5,10 +5,10 @@ import owasp from 'owasp-password-strength-test';
  */
 const appraiseEmail = function appraiseEmail(emailAddress) {
   const messages = [];
-  if (isEmpty(emailAddress)) {
+  if (!emailAddress || isEmpty(emailAddress)) {
     messages.push('Email address is required.');
   }
-  if (!isEmpty(emailAddress) && !isEmail(emailAddress)) {
+  if (emailAddress && !isEmpty(emailAddress) && !isEmail(emailAddress)) {
     messages.push('Email address does not appear to be valid.');
   }
   return messages;
@@ -19,7 +19,7 @@ const appraiseEmail = function appraiseEmail(emailAddress) {
  */
 const appraiseDisplayName = function appraiseDisplayName(displayName) {
   const messages = [];
-  if (isEmpty(displayName)) {
+  if (!displayName || isEmpty(displayName)) {
     messages.push('Display name is required.');
   }
   return messages;
