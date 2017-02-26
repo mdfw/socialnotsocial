@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import EditRecipientForm from '../components/EditRecipientForm';
+import RecipientEditForm from '../components/RecipientEditForm';
 import { newRecipient, updateRecipient } from '../actions/recipients';
-import { formUpdate } from '../actions/forms';
+import { formUpdate, formClear } from '../actions/forms';
+import { appraiseEmail, appraiseDisplayName } from '../helpers/appraise';
 
 /*
   id:
@@ -16,14 +17,35 @@ import { formUpdate } from '../actions/forms';
   unsubscribedAt:
   unsubscribedReason:
   */
+function determineErrors(dname, email, touched, exited) {
+  const errors = {
+    displayName: '',
+    email: '',
+    formReady: true,
+  };
+  const displayNameErrors = appraiseDisplayName(dname);
+  if (displayNameErrors.length > 0 && (exited && exited.indexOf('displayName') > -1)) {
+    errors.displayName = displayNameErrors.join(' ');
+  }
+  const emailErrors = appraiseEmail(email);
+  if (emailErrors.length > 0 && (exited && exited.indexOf('email') > -1)) {
+    errors.email = emailErrors.join(' ');
+  }
+  if (emailErrors.length > 0 || displayNameErrors.length > 0) {
+    errors.formReady = false;
+  }
+  return errors;
+}
 
-class EditRecipient extends React.Component { // eslint-disable-line react/no-multi-comp
+
+class RecipientEdit extends React.Component { // eslint-disable-line react/no-multi-comp
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
   componentWillMount() {
     console.log(`Setting up: ${this.props.formId} editType: ${this.props.editType}`);
@@ -45,7 +67,7 @@ class EditRecipient extends React.Component { // eslint-disable-line react/no-mu
         formUpdate(
           this.props.formId,
           {
-            displayName: this.props.recipientEditing.name,
+            displayName: this.props.recipientEditing.displayName,
             email: this.props.recipientEditing.email,
             canRespond: this.props.recipientEditing.canRespond,
             fieldsTouched: [],
@@ -56,20 +78,35 @@ class EditRecipient extends React.Component { // eslint-disable-line react/no-mu
     }
   }
   handleSubmit() {
-    if (this.props.editType === 'new') {
+    if (this.props.editType === 'new') { // body, formId
       this.props.dispatch(
         newRecipient(
-          this.props.displayName,
-          this.props.email,
+          {
+            displayName: this.props.displayName,
+            email: this.props.email,
+            canRespond: this.props.canRespond,
+          },
           this.props.formId,
         ),
       );
-    } else if (this.props.editType === 'edit') {
+    } else if (this.props.editType === 'edit') { // recipientId, body, formId
       this.props.dispatch(
         updateRecipient(
           this.props.recipientEditing.id,
-          this.props.displayName,
-          this.props.email,
+          {
+            displayName: this.props.displayName,
+            email: this.props.email,
+            canRespond: this.props.canRespond,
+          },
+          this.props.formId,
+        ),
+      );
+    }
+  }
+  handleCancel() {
+    if (this.props.editType === 'edit') {
+      this.props.dispatch(
+        formClear(
           this.props.formId,
         ),
       );
@@ -91,7 +128,12 @@ class EditRecipient extends React.Component { // eslint-disable-line react/no-mu
     }
   }
   render() {
-    let errors = {};
+    const errors = determineErrors(
+      this.props.displayName,
+      this.props.email,
+      this.props.fieldsTouched,
+      this.props.fieldsExited,
+    );
     let submitting = false;
     if (this.props.submitting) {
       submitting = this.props.submitting;
@@ -108,12 +150,17 @@ class EditRecipient extends React.Component { // eslint-disable-line react/no-mu
     if (this.props.canRespond) {
       canRespondValue = this.props.canRespond;
     }
+    let canHandleCancel = null;
+    if (this.props.editType === 'edit') {
+      canHandleCancel = this.handleCancel;
+    }
     return (
-      <EditRecipientForm
+      <RecipientEditForm
         handleSubmit={this.handleSubmit}
         handleBlur={this.handleBlur}
         handleFocus={this.handleFocus}
         handleChange={this.handleChange}
+        handleCancel={canHandleCancel}
         submitting={submitting}
         displayNameValue={displayNameValue}
         emailValue={emailValue}
@@ -124,11 +171,10 @@ class EditRecipient extends React.Component { // eslint-disable-line react/no-mu
   }
 }
 
-EditRecipient.propTypes = {
+RecipientEdit.propTypes = {
   formId: React.PropTypes.string.isRequired,
   editType: React.PropTypes.oneOf(['new', 'edit']).isRequired,
   displayName: React.PropTypes.string,
-  recipientType: React.PropTypes.string,
   email: React.PropTypes.string,
   canRespond: React.PropTypes.bool,
   submitting: React.PropTypes.bool,
@@ -138,13 +184,13 @@ EditRecipient.propTypes = {
     id: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired,
     status: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string,
+    displayName: React.PropTypes.string,
     email: React.PropTypes.string,
     canRespond: React.PropTypes.bool.isRequired,
     validated: React.PropTypes.bool,
     validatedAt: React.PropTypes.string,
-    createdAt: React.PropTypes.string.isRequired,
-    updatedAt: React.PropTypes.string.isRequired,
+    created_at: React.PropTypes.string.isRequired,
+    updated_at: React.PropTypes.string.isRequired,
     unsubscribedAt: React.PropTypes.string,
     unsubscribedReason: React.PropTypes.string,
   }),
@@ -157,7 +203,7 @@ const mapStateToProps = function mapStateToProps(state, ownProps) {
   const ourFormId = ownProps.formId;
   const curForm = state.forms[ourFormId];
   if (!curForm) {
-    return {}
+    return {};
   }
   return {
     displayName: state.forms[ourFormId].displayName,
@@ -170,6 +216,6 @@ const mapStateToProps = function mapStateToProps(state, ownProps) {
   };
 };
 
-const Container = connect(mapStateToProps)(EditRecipient);
+const Container = connect(mapStateToProps)(RecipientEdit);
 
 export default Container;
