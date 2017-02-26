@@ -40,11 +40,13 @@ const getRecipientsEndpoint = (req, res) => { // eslint-disable-line consistent-
  *  Uses proxyUserId() to get the userId to search for.
  */
 const addRecipientEndpoint = (req, res) => {
-  const { email, displayName } = req.body;
+  const { email, displayName, canRespond, type } = req.body;
   const userId = proxyUserId(req);
   const newRecipient = Recipient.build({
     email: email,
     displayName: displayName,
+    canRespond: canRespond,
+    type: type,
     user_id: userId,
   });
   newRecipient.save()
@@ -87,16 +89,19 @@ const updateRecipientEndpoint = (req, res) => {
   if (req.body.recipientId) {
     recipientId = req.body.recipientId;
   }
-  const { email, displayName, status } = req.body;
   if (!recipientId) {
     res.statusMessage = 'No recipientId provided'; // eslint-disable-line no-param-reassign
     res.status(422).end();
   }
-
+  const { email, displayName, status, canRespond, type } = req.body;
   const updates = {};
   if (email && email.length > 0) updates.email = email;
   if (displayName && displayName.length > 0) updates.displayName = displayName;
   if (status && status.length > 0) updates.status = status;
+  if (type && type.length > 0) updates.type = type;
+  if (typeof canRespond !== 'undefined') {
+    updates.canRespond = canRespond
+  }
 
   if (Object.keys(updates).length === 0) {
     res.statusMessage = 'Nothing to update'; // eslint-disable-line no-param-reassign
