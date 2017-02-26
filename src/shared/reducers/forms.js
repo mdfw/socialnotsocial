@@ -60,7 +60,7 @@ function emptyStateForForm(formId) {
     case CREATE_POST_FORM_NAME:
       return DEFAULT_CREATE_POST_FORM();
     default:
-      return {};
+      return null;
   }
 }
 
@@ -83,7 +83,11 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE(), action
     case FORM_CLEAR: {
       const formId = action.formId;
       const emptyState = emptyStateForForm(formId);
-      newstate[formId] = emptyState;
+      if (emptyState) {
+        newstate[formId] = emptyState;
+      } else {
+        delete newstate[formId];
+      }
       break;
     }
     case CLEAR_ACCOUNT_INFO: {
@@ -94,7 +98,7 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE(), action
       break;
   }
   if (newstate.newRecipient) {
-  console.log(`newstate: ${newstate.newRecipient.displayName}`);
+    console.log(`newstate: ${newstate.newRecipient.displayName}`);
   }
   return newstate;
 };
