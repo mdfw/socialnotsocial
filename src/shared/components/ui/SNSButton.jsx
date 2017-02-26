@@ -1,39 +1,55 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+
+const ButtonSize = {
+  LARGE: 1,
+  SMALL: 2,
+  INLINE: 3,
+  selector: ['sbtn-lg', 'sbtn-sm', 'sbtn-in', ];
+};
+
+const ButtonStyle = {
+  PRIMARY: 1,
+  PRIMARY_OUTLINE: 2,
+  SECONDARY: 3,
+  SECONDARY_OUTLINE: 4,
+  WARNING: 5,
+  WARNING_OUTLINE: 6,
+  DANGER: 7,
+  DANGER_OUTLINE: 8,
+  LINK: 9,
+  LINK_OUTLINE: 10,
+  selector: ['sbtn-p', 'sbtn-po', 'sbtn-s', 'sbtn-so', 'sbtn-w', 'sbtn-wo', 'sbtn-d', 'sbtn-do', 'sbtn-l', 'sbtn-lo'];
+};
+
+function getStyleClass(style, size) {
+  return ['sbtn', ButtonStyle.selector[style], ButtonSize.selector[size]].join(' ');
+  
+}
 
 /*
-  buttonStyle: [primary, secondary, warning, danger, link] -- primary
-  size: [large, small, inline] -- large
+  buttonStyle: [ButtonStyle ENUM] -- ButtonStyle.PRIMARY
+  buttonSize: [ButtonSize ENUM] -- ButtonSize.large
   label: {string} -- submit
   onClick: func
   disabled: {bool} -- false
-  className: {object} -- null
-  color: {string} -- color from type
-  backgroundColor: {string} -- color from type
-  hoverColor: {string} -- color from type
   type: {string} -- 'submit'
-  style: {object} -- style from buttonStyle
-  
   */
+
+
 const SNSButton = (props) => {
-  const handleClick = function handleButtonClick(e) {
-    console.log('SNSButton: Handling click in button');
-    console.dir(props);
-    e.preventDefault();
-    if (props.onClick) {
-     console.log('SNSButton: Sending on to onClick');
-     props.onClick();
-    }
-  };
-  let primary = true;
+  let buttonStyle = ButtonStyle.PRIMARY;
+  let buttonSize = ButtonSize.LARGE;
+  if (typeof props.buttonStyle !== 'undefined') {
+    buttonStyle = props.buttonStyle;
+  }
+  if (typeof props.buttonSize !== 'undefined') {
+    buttonSize = props.buttonSize;
+  }
+  const theClass = getStyleClass(buttonStyle, buttonSize);
+
   let disabled = false;
   let type = 'submit';
   let label = 'Submit';
-  let inLine = false;
-  if (typeof props.primary !== 'undefined') {
-    primary = props.primary;
-  }
   if (typeof props.disabled !== 'undefined') {
     disabled = props.disabled;
   }
@@ -43,37 +59,39 @@ const SNSButton = (props) => {
   if (typeof props.label !== 'undefined') {
     label = props.label;
   }
-  if (typeof props.inLine !== 'undefined') {
-    inLine = props.inLine;
-  }
-  if (inLine) {
-    return (
-      <FlatButton
-        label={label}
-        primary={primary}
-        disabled={disabled}
-        type={type}
-        onClick={props.onClick}
-      />
-    );
-  }
   return (
-    <RaisedButton
-      label={label}
-      primary={primary}
+    <button
+      className={theClass}
       disabled={disabled}
       type={type}
       onClick={props.onClick}
-    />
+    >
+      {label}
+    </button>
   );
 };
 SNSButton.propTypes = {
-  primary: React.PropTypes.bool, // Defaults to true
+  buttonStyle: React.PropTypes.oneOf([ // Defaults to ButtonStyle.PRIMARY
+    ButtonStyle.PRIMARY,
+    ButtonStyle.PRIMARY_OUTLINE,
+    ButtonStyle.SECONDARY,
+    ButtonStyle.SECONDARY_OUTLINE,
+    ButtonStyle.WARNING,
+    ButtonStyle.WARNING_OUTLINE,
+    ButtonStyle.DANGER,
+    ButtonStyle.DANGER_OUTLINE,
+    ButtonStyle.LINK,
+    ButtonStyle.LINK_OUTLINE,
+  ]),
+  buttonSize: React.PropTypes.oneOf([ // Defaults to ButtonSize.LARGE
+    ButtonSize.LARGE,
+    ButtonSize.SMALL,
+    ButtonSize.INLINE,
+  ]),
   disabled: React.PropTypes.bool, // Defaults to false
   type: React.PropTypes.string, // Defaults to 'submit'
   label: React.PropTypes.string,  // Defaults to 'Submit'
-  onClick: React.PropTypes.func,
-  inLine: React.PropTypes.bool, // Defaults to false
+  onClick: React.PropTypes.func.isRequired,
 };
 
-export default SNSButton;
+export { SNSButton, ButtonStyle, ButtonSize };
