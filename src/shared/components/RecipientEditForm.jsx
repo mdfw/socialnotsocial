@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from './ui/TextField';
-import ToggleSwitch from './ui/ToggleSwitch';
-import CircleProgress from './ui/CircleProgress';
-import SNSButton from './ui/SNSButton';
+import { TextField, TextSize } from './ui/TextField';
+import { SNSButton, ButtonSize, ButtonStyle } from './ui/SNSButton';
 
 class RecipientEditForm extends Component {
   constructor() {
@@ -36,14 +33,13 @@ class RecipientEditForm extends Component {
     this.setState({ fieldActive: true });
     this.props.handleFocus(name);
   }
-  onCanRespondChange(e, isInputChecked) {
+  onCanRespondChange() {
+    const newCanRespond = !this.props.canRespondValue;
     this.props.handleChange({
-      canRespond: isInputChecked,
+      canRespond: newCanRespond,
     });
   }
   render() {
-    console.log('Edit recipient form props');
-    console.dir(this.props);
     const {
       submitting,
       errors,
@@ -62,9 +58,10 @@ class RecipientEditForm extends Component {
     let cancelButton = null;
     if (this.props.handleCancel) {
       cancelButton = (
-        <div>
+        <div className="edit-recipient-cancel-button">
           <SNSButton
-            primary={false}
+            buttonStyle={ButtonStyle.SECONDARY}
+            buttonSize={ButtonSize.SMALL}
             label="Cancel"
             onClick={this.props.handleCancel}
           />
@@ -72,10 +69,13 @@ class RecipientEditForm extends Component {
       );
     }
     return (
-      <div>
+      <div className="edit-recipient-form">
+        <div className="edit-recipient-form-title">
+          {this.props.formTitle}
+        </div>
         {errorDialog}
         <form onSubmit={this.onSubmit}>
-          <div>
+          <div className="edit-recipient-form-displayName-field">
             <TextField
               name="displayName"
               hintText="Recipient's full name"
@@ -84,12 +84,14 @@ class RecipientEditForm extends Component {
               value={displayNameValue}
               type="text"
               disabled={submitting}
+              required={true}
+              textSize={TextSize.MEDIUM}
               onChange={this.onChange}
               onBlur={this.onBlur}
               onFocus={this.onFocus}
             />
           </div>
-          <div>
+          <div className="edit-recipient-form-email-field">
             <TextField
               name="email"
               hintText="Recipient's Email"
@@ -98,46 +100,59 @@ class RecipientEditForm extends Component {
               errorText={errors.email}
               type="text"
               disabled={submitting}
+              required={true}
+              textSize={TextSize.MEDIUM}
               onChange={this.onChange}
               onBlur={this.onBlur}
               onFocus={this.onFocus}
             />
           </div>
-          <div>
-            <ToggleSwitch
-              label="Allow recipient to respond."
-              on={canRespondValue}
-              onToggle={this.onCanRespondChange}
-              onChange={this.onChange}
-            />
+          <div className="edit-recipient-form-canRespond-field">
+            <label htmlFor={`canRespond${this.props.formId}`}>
+              <input
+                id={`canRespond${this.props.formId}`}
+                type="checkbox"
+                name="canRespond"
+                checked={canRespondValue}
+                onChange={this.onCanRespondChange}
+                style={{ marginRight: '5px' }}
+              />
+              Allow recipient to respond.
+            </label>
           </div>
-          <div>
-            <RaisedButton
-              label="Submit"
-              primary={true} // eslint-disable-line react/jsx-boolean-value
-              disabled={this.props.submitting || !errors.formReady}
-              type="submit"
-            />
+          <div className="edit-recipient-controls">
+            <div className="edit-recipient-submit-button">
+              <SNSButton
+                label="Submit"
+                buttonStyle={ButtonStyle.PRIMARY}
+                buttonSize={ButtonSize.SMALL}
+                disabled={this.props.submitting || !errors.formReady}
+                showSpinner={this.props.submitting}
+                type="submit"
+                onClick={this.onSubmit}
+              />
+            </div>
+            {cancelButton}
           </div>
-          {cancelButton}
         </form>
-        <CircleProgress running={submitting} />
       </div>
     );
   }
 }
 
 RecipientEditForm.propTypes = {
+  formTitle: React.PropTypes.string.isRequired,
+  formId: React.PropTypes.string.isRequired,
+  displayNameValue: React.PropTypes.string,
+  emailValue: React.PropTypes.string,
+  submitting: React.PropTypes.bool,
+  errors: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  canRespondValue: React.PropTypes.bool.isRequired,
   handleSubmit: React.PropTypes.func.isRequired,
   handleBlur: React.PropTypes.func.isRequired,
   handleFocus: React.PropTypes.func.isRequired,
   handleChange: React.PropTypes.func.isRequired,
   handleCancel: React.PropTypes.func,
-  submitting: React.PropTypes.bool,
-  errors: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  displayNameValue: React.PropTypes.string,
-  emailValue: React.PropTypes.string,
-  canRespondValue: React.PropTypes.bool.isRequired,
 };
 
 export default RecipientEditForm;

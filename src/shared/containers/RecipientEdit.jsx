@@ -147,15 +147,23 @@ class RecipientEdit extends React.Component { // eslint-disable-line react/no-mu
       emailValue = this.props.email;
     }
     let canRespondValue = true;
-    if (this.props.canRespond) {
+    if (typeof this.props.canRespond !== 'undefined') {
       canRespondValue = this.props.canRespond;
     }
     let canHandleCancel = null;
+    let formTitle = 'New recipient';
     if (this.props.editType === 'edit') {
       canHandleCancel = this.handleCancel;
+      if (this.props.recipientEditing.displayName.length > 0) {
+        formTitle = `Edit ${this.props.recipientEditing.displayName}`;
+      } else {
+        formTitle = 'Edit recipient';
+      }
     }
     return (
       <RecipientEditForm
+        formTitle={formTitle}
+        formId={this.props.formId}
         handleSubmit={this.handleSubmit}
         handleBlur={this.handleBlur}
         handleFocus={this.handleFocus}

@@ -3,7 +3,7 @@ import React from 'react';
 import { deleteRecipient } from '../actions/recipients';
 import { formClear } from '../actions/forms';
 import Recipient from '../components/Recipient';
-import SNSButton from '../components/ui/SNSButton';
+import { SNSButton, ButtonStyle, ButtonSize } from '../components/ui/SNSButton';
 
 /*
   id:
@@ -43,33 +43,38 @@ class RecipientDelete extends React.Component { // eslint-disable-line react/no-
     if (this.props.submitting) {
       submitting = this.props.submitting;
     }
-    const deleteButtonLabel = `Delete ${this.props.recipientDeleting.name}`;
+    const deleteButtonLabel = `Delete ${this.props.recipientDeleting.displayName}`;
 
     return (
       <div className="recipient-delete-form">
         <form onSubmit={this.handleCancel}>
           <div className="recipient-delete-name">
-            Delete {this.props.recipientDeleting.name} ?
+            Delete {this.props.recipientDeleting.displayName} ?
           </div>
 
           <Recipient recipient={this.props.recipientDeleting} />
-
-          <div className="recipient-delete-delete-button">
-            <SNSButton
-              label={deleteButtonLabel}
-              primary={false}
-              type="button"
-              onClick={this.handleDelete}
-              disabled={submitting}
-            />
-          </div>
-          <div className="recipient-delete-cancel-button">
-            <SNSButton
-              label="Cancel"
-              primary={true}
-              type="submit"
-              disabled={submitting}
-            />
+          <div className="recipient-delete-controls">
+            <div className="recipient-delete-delete-button">
+              <SNSButton
+                label={deleteButtonLabel}
+                type="button"
+                onClick={this.handleDelete}
+                disabled={submitting}
+                buttonSize={ButtonSize.SMALL}
+                buttonStyle={ButtonStyle.DANGER}
+              />
+            </div>
+            <div className="recipient-delete-cancel-button">
+              <SNSButton
+                label="Cancel"
+                type="submit"
+                disabled={submitting}
+                showSpinnger={submitting}
+                buttonSize={ButtonSize.SMALL}
+                buttonStyle={ButtonStyle.SECONDARY}
+                onClick={this.handleCancel}
+              />
+            </div>
           </div>
         </form>
       </div>
@@ -84,7 +89,7 @@ RecipientDelete.propTypes = {
     id: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired,
     status: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string,
+    displayName: React.PropTypes.string,
     email: React.PropTypes.string,
     canRespond: React.PropTypes.bool.isRequired,
     validated: React.PropTypes.bool,

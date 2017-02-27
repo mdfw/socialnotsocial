@@ -2,7 +2,9 @@ import { connect } from 'react-redux';
 import React from 'react';
 import Recipient from '../components/Recipient';
 import NotImplmented from '../components/NotImplemented';
-import EditRecipient from './EditRecipient';
+import RecipientEdit from './RecipientEdit';
+import RecipientDelete from './RecipientDelete';
+import { formUpdate } from '../actions/forms';
 
 /* Renders if there are no posts */
 const noPostsStyle = {
@@ -14,7 +16,7 @@ const noPostsStyle = {
 
 const NoRecipients = () => (
   <div>
-    <EditRecipient
+    <RecipientEdit
       formId="newRecipient"
       editType="new"
     />
@@ -25,42 +27,80 @@ const NoRecipients = () => (
 );
 
 /* Renders a list of recipients */
-const AllRecipients = ({ recipients }) => (
-  <div>
-    <EditRecipient
-      formId="newRecipient"
-      editType="new"
-    />
-    {recipients.map(recipient => (
-      <Recipient
-        key={recipient.id}
-        id={recipient.id}
-        type={recipient.type}
-        status={recipient.status}
-        name={recipient.displayName}
-        email={recipient.email}
-        canRespond={recipient.canRespond}
-        validated={recipient.validated}
-        validatedAt={recipient.validated_at}
-        createdAt={recipient.created_at}
-        updatedAt={recipient.updated_at}
-        unsubscribedAt={recipient.unsubscribed_at}
-        unsubscribedReason={recipient.unsubscribed_reason}
+const AllRecipients = (props) => {
+  const recipientList = [];
+  props.recipients.map((recipient) => { // eslint-disable-line array-callback-return
+    if (recipient.id) {
+      const editRecipientFormName = `editRecipient${recipient.id}`;
+      const editForm = props.forms[editRecipientFormName];
+      if (editForm && editForm.editType === 'edit') {
+        recipientList.push(
+          <RecipientEdit
+            key={recipient.id}
+            formId={editRecipientFormName}
+            editType="edit"
+            recipientEditing={recipient}
+          />,
+        );
+      } else if (editForm && editForm.editType === 'delete') {
+        recipientList.push(
+          <RecipientDelete
+            key={recipient.id}
+            formId={editRecipientFormName}
+            recipientDeleting={recipient}
+          />,
+        );
+      } else {
+        recipientList.push(
+          <Recipient
+            key={recipient.id}
+            recipient={recipient}
+            handleEditRequest={props.handleEditRequest}
+            handleDeleteRequest={props.handleDeleteRequest}
+          />,
+        );
+      }
+    }
+  });
+  return (
+    <div className="board">
+      <RecipientEdit
+        key="newRecipient"
+        formId="newRecipient"
+        editType="new"
       />
-    ))}
-  </div>
-);
+      {recipientList}
+    </div>
+  );
+};
 AllRecipients.propTypes = {
+  forms: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
   recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  handleEditRequest: React.PropTypes.func.isRequired,
+  handleDeleteRequest: React.PropTypes.func.isRequired,
 };
 
 /* Main container that manages showing of posts */
 class RecipientsContainer extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.handleEditRequest = this.handleEditRequest.bind(this);
+    this.handleDeleteRequest = this.handleDeleteRequest.bind(this);
   }
+  handleEditRequest(recipientId) {
+    const editRecipientFormName = `editRecipient${recipientId}`;
+    this.props.dispatch(
+      formUpdate(editRecipientFormName, { editType: 'edit' }),
+    );
+  }
+  handleDeleteRequest(recipientId) {
+    const editRecipientFormName = `editRecipient${recipientId}`;
+    this.props.dispatch(
+      formUpdate(editRecipientFormName, { editType: 'delete' }),
+    );
+  }
+
   render() {
-    console.log('Here is recipients');
-    console.dir(this.props.recipients);
     if (PRODUCTION) { // eslint-disable-line no-undef
       return (
         <div style={{ backgroundColor: 'white', padding: '30px', margin: '30px' }}>
@@ -72,19 +112,28 @@ class RecipientsContainer extends React.Component {
       return <NoRecipients />;
     }
     return (
-      <AllRecipients recipients={this.props.recipients} />
+      <AllRecipients
+        key="allTheRecipients"
+        recipients={this.props.recipients}
+        handleEditRequest={this.handleEditRequest}
+        handleDeleteRequest={this.handleDeleteRequest}
+        forms={this.props.forms}
+      />
     );
   }
 }
 
 RecipientsContainer.propTypes = {
   recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  dispatch: React.PropTypes.func.isRequired,
+  forms: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 /** redux store map **/
 const mapStateToProps = function mapStateToProps(state) {
   return {
     recipients: state.recipients.recipients,
+    forms: state.forms,
   };
 };
 
