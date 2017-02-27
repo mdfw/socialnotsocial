@@ -100,7 +100,7 @@ const updateRecipientEndpoint = (req, res) => {
   if (status && status.length > 0) updates.status = status;
   if (type && type.length > 0) updates.type = type;
   if (typeof canRespond !== 'undefined') {
-    updates.canRespond = canRespond
+    updates.canRespond = canRespond;
   }
 
   if (Object.keys(updates).length === 0) {
