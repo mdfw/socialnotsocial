@@ -9,7 +9,14 @@ import { validateUserSession } from './modules/Authentication/warrant';
 import { COOKIE_NAME_SESSION } from '../globalConstants';
 
 /* Routes */
-import { userRoutes, recipientRoutes, sessionsRoutes, postRoutes, mediaRoutes } from './modules';
+import {
+  userRoutes,
+  recipientRoutes,
+  sessionsRoutes,
+  postRoutes,
+  mediaRoutes,
+  apprisalRoutes,
+} from './modules';
 
 /* Configurations */
 import '../config/environment';
@@ -44,7 +51,14 @@ app.use(morgan('combined'));
 
 /* Routes */
 // app.use('/api/v1', [userRoutes, recipientRoutes, authenticationRoutes, postRoutes]);
-app.use('/api/v1', [userRoutes, recipientRoutes, sessionsRoutes, postRoutes, mediaRoutes]);
+app.use('/api/v1', [
+  userRoutes,
+  recipientRoutes,
+  sessionsRoutes,
+  postRoutes,
+  mediaRoutes,
+  apprisalRoutes,
+]);
 
 app.get('/', function baseReturn(req, res) {
   res.send('Hello - this is the api server. You probably want a more interesting endpoint.');

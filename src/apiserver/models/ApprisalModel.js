@@ -1,4 +1,5 @@
 import { idier } from '../../shared/helpers/idier'; // eslint-disable-line no-unused-vars
+import { MAX_POST_SEARCH_RETURN_LIMIT } from './constants';
 
 /* An apprisal is an actual notification sent to a user or system of a new post.
  * Has an association with the Post object and the recipient that it will be sent to.
@@ -57,10 +58,100 @@ module.exports = (sequelize, DataTypes) => {
             },
             onDelete: 'cascade',
           });
+          Apprisal.belongsTo(models.User, {
+            foreignKey: {
+              field: 'user_id',
+              allowNull: false,
+            },
+            onDelete: 'cascade',
+          });
         },
       },
     },
   );
+
+    /* Find all apprisals for a userId
+   * @param {string} userId - the userId to search for
+   * @param {number} limit - the number to find.
+   * @param {number} offset - The number to skip.
+   * @param {number} beforeId - the identifier to sort before. If this is passed, limit is used.
+   */
+  Apprisal.findAllForUser = function findAllForUser(userId, limit = 20, offset = 0, beforeId) {
+    if (!userId) {
+      throw new Error('No userId provided');
+    }
+
+    const userWhere = `"user_id": "${userId}"`;
+
+    let beforeIdWhere = '';
+    if (beforeId && beforeId > 0) {
+      beforeIdWhere = `, id : {$lt: ${beforeId}}`;
+    }
+
+    let limiter = limit;
+    if (limiter > MAX_POST_SEARCH_RETURN_LIMIT) {
+      limiter = MAX_POST_SEARCH_RETURN_LIMIT;
+    }
+    const limitClause = `, "limit": "${limiter}", `;
+    let offsetClause = '';
+    if (offset > 0) {
+      offsetClause = `, "offset": "${offset}", `;
+    }
+    const orderClause = '"order": "id DESC"';
+    const queryJSON = `{ "where": { ${userWhere}${beforeIdWhere} }${limitClause}${offsetClause} ${orderClause}}`;
+    const query = JSON.parse(queryJSON);
+    return this.findAll(query);
+  };
+
+  /* Determine total number of apprisals for user
+   * @param {number} - userId
+   */
+  Apprisal.totalForUser = function countAll(userId) {
+    return Apprisal.findAndCountAll({
+      where: { user_id: userId },
+    });
+  };
+
+  /* Update an Apprisal
+   * @param {number} - id: The id of the item
+   * @param {number} - userId: The id of the user
+   * @param {object} - updates: The fields and values to update
+   * Returns: Either an updated apprisal or null if it couldn't be found
+   */
+  Apprisal.updateApprisal = function updateApprisal(id, userId, updates) {
+    return Apprisal.findOne({ where: { id: id, user_id: userId } })
+    .then((foundItem) => {
+      if (!foundItem) {
+        return null;
+      }
+      const foundApprisal = foundItem;
+      const fieldsToUpdateKeys = Object.keys(updates);
+      fieldsToUpdateKeys.forEach(function modifyItem(key) {
+        foundApprisal[key] = updates[key];
+      });
+      return foundApprisal.save();
+    });
+  };
+
+  /* Delete an Apprisal
+   * @param {number} - id: The id of the item
+   * @param {number} - userId: The id of the user
+   * Returns: Either an deleted apprisal or null if it couldn't be found
+   */
+  Apprisal.deleteApprisal = function deleteApprisal(id, userId) {
+    return Apprisal.findOne({ where: { id: id, user_id: userId } })
+    .then((foundItem) => { // eslint-disable-line consistent-return
+      if (!foundItem) {
+        return null;
+      }
+      const foundApprisal = foundItem;
+      return foundApprisal.save();
+    })
+    .then((thisApprisal) => { // eslint-disable-line arrow-body-style
+      return thisApprisal.destroy();
+    });
+  };
+
   return Apprisal;
 };
 

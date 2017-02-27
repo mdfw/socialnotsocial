@@ -137,6 +137,7 @@ module.exports = (sequelize, DataTypes) => {
           User.hasMany(models.Post);
           User.hasMany(models.Recipient);
           User.hasMany(models.Media);
+          User.hasMany(models.Apprisal);
           User.hasMany(models.UserValidation);
         },
       },

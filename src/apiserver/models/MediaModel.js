@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
    * @param {object} - updates: The fields and values to update
    * Returns: Either an updated post or null if it couldn't be found
    */
-  Media.updateRecipient = function updateMedia(id, userId, updates) {
+  Media.updateMedia = function updateMedia(id, userId, updates) {
     return Media.findOne({ where: { id: id, user_id: userId } })
     .then((foundItem) => {
       if (!foundItem) {
