@@ -1,40 +1,28 @@
 import React from 'react';
 
 const ButtonSize = {
-  LARGE: 1,
-  SMALL: 2,
-  INLINE: 3,
-  selector: ['sbtn-lg', 'sbtn-sm', 'sbtn-in', ];
+  LARGE: 0,
+  SMALL: 1,
+  INLINE: 2,
+  selector: ['sbtn-lg', 'sbtn-sm', 'sbtn-in'],
 };
 
 const ButtonStyle = {
-  PRIMARY: 1,
-  PRIMARY_OUTLINE: 2,
-  SECONDARY: 3,
-  SECONDARY_OUTLINE: 4,
-  WARNING: 5,
-  WARNING_OUTLINE: 6,
-  DANGER: 7,
-  DANGER_OUTLINE: 8,
-  LINK: 9,
-  LINK_OUTLINE: 10,
-  selector: ['sbtn-p', 'sbtn-po', 'sbtn-s', 'sbtn-so', 'sbtn-w', 'sbtn-wo', 'sbtn-d', 'sbtn-do', 'sbtn-l', 'sbtn-lo'];
+  PRIMARY: 0,
+  PRIMARY_OUTLINE: 1,
+  SECONDARY: 2,
+  SECONDARY_OUTLINE: 3,
+  WARNING: 4,
+  WARNING_OUTLINE: 5,
+  DANGER: 6,
+  DANGER_OUTLINE: 7,
+  LINK: 8,
+  selector: ['sbtn-p', 'sbtn-po', 'sbtn-s', 'sbtn-so', 'sbtn-w', 'sbtn-wo', 'sbtn-d', 'sbtn-do', 'sbtn-l'],
 };
 
 function getStyleClass(style, size) {
   return ['sbtn', ButtonStyle.selector[style], ButtonSize.selector[size]].join(' ');
-  
 }
-
-/*
-  buttonStyle: [ButtonStyle ENUM] -- ButtonStyle.PRIMARY
-  buttonSize: [ButtonSize ENUM] -- ButtonSize.large
-  label: {string} -- submit
-  onClick: func
-  disabled: {bool} -- false
-  type: {string} -- 'submit'
-  */
-
 
 const SNSButton = (props) => {
   let buttonStyle = ButtonStyle.PRIMARY;
@@ -50,6 +38,7 @@ const SNSButton = (props) => {
   let disabled = false;
   let type = 'submit';
   let label = 'Submit';
+  let showSpinner = false;
   if (typeof props.disabled !== 'undefined') {
     disabled = props.disabled;
   }
@@ -58,6 +47,18 @@ const SNSButton = (props) => {
   }
   if (typeof props.label !== 'undefined') {
     label = props.label;
+  }
+  if (typeof props.showSpinner !== 'undefined') {
+    showSpinner = props.showSpinner;
+  }
+  if (showSpinner && buttonStyle !== ButtonStyle.LINK) {
+    label = (
+      <div className="spinner">
+        <div className="bounce1" />
+        <div className="bounce2" />
+        <div className="bounce3" />
+      </div>
+    );
   }
   return (
     <button
@@ -81,7 +82,6 @@ SNSButton.propTypes = {
     ButtonStyle.DANGER,
     ButtonStyle.DANGER_OUTLINE,
     ButtonStyle.LINK,
-    ButtonStyle.LINK_OUTLINE,
   ]),
   buttonSize: React.PropTypes.oneOf([ // Defaults to ButtonSize.LARGE
     ButtonSize.LARGE,
@@ -92,6 +92,7 @@ SNSButton.propTypes = {
   type: React.PropTypes.string, // Defaults to 'submit'
   label: React.PropTypes.string,  // Defaults to 'Submit'
   onClick: React.PropTypes.func.isRequired,
+  showSpinner: React.PropTypes.bool, // Defaults to false
 };
 
 export { SNSButton, ButtonStyle, ButtonSize };
