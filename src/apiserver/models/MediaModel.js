@@ -48,8 +48,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       classMethods: {
         associate: function associateModels(models) {
-          Media.belongsTo(models.User);
-          Media.belongsToMany(models.Post, { through: 'PostMedia' });
+          Media.belongsTo(models.User, {
+            foreignKey: {
+              field: 'user_id',
+              allowNull: false,
+            },
+            onDelete: 'cascade',
+          });
+          Media.belongsToMany(models.Album, { through: 'AlbumMedia' });
         },
       },
     },

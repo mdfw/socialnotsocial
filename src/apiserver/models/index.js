@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import chalk from 'chalk';
+import Album from './AlbumModel';
 import Apprisal from './ApprisalModel';
 import Media from './MediaModel';
 import Post from './PostModel';
@@ -63,6 +64,9 @@ sequelize
 /* Create the models
  * TODO: This is a manual update nightmare.
  */
+const albumModel = Album(sequelize, Sequelize);
+db[albumModel.name] = albumModel;
+
 const apprisalModel = Apprisal(sequelize, Sequelize);
 db[apprisalModel.name] = apprisalModel;
 
@@ -90,7 +94,7 @@ Object.keys(db).forEach(function associateThem(modelName) {
 
 /* Push the models to the database */
 sequelize
-  .sync() //   .sync({ force: true }) <= removed as this drops the table
+  .sync({ force: true }) //   .sync({ force: true }) <= removed as this drops the table
   .then(() => {
     console.log('Success: Synced models to database.');
   }, function trapSyncError(err) {
