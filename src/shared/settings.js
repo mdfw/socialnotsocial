@@ -5,6 +5,7 @@ const settings = {
   greenerColor: '#43a366',
   blueColor: '#4376a3',
   lightBlueColor: '#d9ecfc',
+  yellowColor: '#e2cb60',
   siteName: 'Social, Not Social',
   postMaxCharacters: '5000',
 };
