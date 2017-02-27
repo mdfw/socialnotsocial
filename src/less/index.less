@@ -1,9 +1,17 @@
+@baseColor: #459691; // Deep green blue
+@alertColor: #c94f49; // Reddish orange
+@highlightColor: #d9ecfc; // whiteish blue
+@greenerColor: #43a366; // More green
+@blueColor: #4376a3; // a nice blue
+@yellowColor: #e2cb60; // Yellow
+@orangeColor: #D67443; // An orange that hopefully matches 
+
 html { box-sizing: border-box; }
 *, *:before, *:after { box-sizing: inherit; }
 
 body
 {
-	background-color: rgb(239, 239, 239);
+	background-color: white;
 	/* For testing only*/
 	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
@@ -106,6 +114,7 @@ div
 .top-navigation-left {
   float: left;
   width: 100%;
+  margin-left: 10px;
 }
 
 .top-title {
@@ -231,10 +240,75 @@ img {
   text-size: 14px;
   text-weight: bold;
 }
-
-.sns-text-field {
+.edit-recipient-form {
+  .post();
+  margin-bottom: 10px;
+}
+.edit-recipient-form-title {
+  font-weight: bold;
+}
+.edit-recipient-form-canRespond-field {
+  margin: 10px;
+}
+.edit-recipient-controls {
+  overflow: hidden;
   margin: 10px;
   margin-top: 20px;
+}
+.edit-recipient-submit-button {
+  float: left;
+  margin-right: 10px;
+}
+.recipient-card {
+  .post();
+  margin-top: 10px;
+}
+.recipient-display-name {
+  font-size: 18px;
+}
+.recipient-display-method {
+}
+.recipient-display-canRespond {
+  font-size: 12px;
+}
+.recipient-cannot-respond {
+  color: @alertColor;
+}
+.recipient-display-createdTime {
+  color: grey;
+  font-size: 12px;
+}
+.recipient-display-createdTime {
+  width: 100%;
+  overflow: hidden;
+}
+.recipient-display-controls {
+  margin-top: 10px;
+}
+.recipient-display-controls-edit-button {
+  float: left;
+  margin-right: 10px;
+}
+.recipient-display-controls-delete-button {
+}
+.recipient-delete-form {
+  .post();
+  padding: 10px;
+}
+.recipient-delete-name {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.recipient-delete-controls {
+  overflow: hidden;
+}
+.recipient-delete-delete-button {
+  float: left;
+  margin-right: 10px;
+}
+.sns-text-field {
+  margin: 10px;
   text-align: left;
 }
 .sns-text-field-title-holder {
@@ -246,7 +320,6 @@ img {
 }
 
 .sns-text-field-input {
-  font-size: 18px;
   padding: 5px 10px;
   width: 100%;
   border-radius: 5px;
@@ -254,11 +327,61 @@ img {
   border-width: 1px;
   border-style: solid;
 }
- 
+.sns-text-field-exlg {
+  font-size: 18px;
+}
+.sns-text-field-lg {
+  font-size: 16px;
+}
+.sns-text-field-md {
+  font-size: 14px;
+}
+.sns-text-field-sm {
+  font-size: 12px;
+}
 .sns-text-field-error-text {
-  color: red;
+  color: @alertColor;
   font-size: 14px;
   margin-left: 10px;
+}
+
+.spinner {
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #333;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
 }
 
 .sbtn {
@@ -272,63 +395,109 @@ img {
   -ms-user-select: none;
   user-select: none;
   border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: .2rem;
   -webkit-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
 }
-
-.sbtn-p {
-  color: #fff;
-  background-color: #0275d8;
-  border-color: #0275d8;
+.sbtn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
-
-.sbtn-p:hover, .sbtn-po:hover{
-  color: #fff;
-  background-color: #025aa5;
-  border-color: #01549b;
+// Primary button - base
+.sbtn-p {
+  color: white;
+  background-color: @baseColor;
+  border-color: @baseColor;
+}
+.sbtn-p > .spinner > div {
+  background-color: white;
 }
 
 .sbtn-po {
-  color: #fff;
-  background-color: #0275d8;
-  border-color: #0275d8;
+  color: @baseColor;
+  background-color: white;
+  border-color: @baseColor;
+}
+.sbtn-po > .spinner > div {
+  background-color: @baseColor;
 }
 
+.sbtn-p:hover, .sbtn-po:hover {
+  color: white;
+  background-color: darken(@baseColor, 10%);
+  border-color: darken(@baseColor, 10%);
+}
+
+// Secondary button. Grey
 .sbtn-s {
   color: #292b2c;
   background-color: #fff;
   border-color: #ccc;
 }
-
-.sbtn-s:hover {
+.sbtn-s > .spinner > div {
+  background-color: #292b2c;
+}
+.sbtn-so {
+  color: #292b2c;
+  background-color: #fff;
+  border-color: #ccc;
+}
+.sbtn-so > .spinner > div {
+  background-color: #292b2c;
+}
+.sbtn-s:hover, .sbtn-so:hover {
   color: #292b2c;
   background-color: #e6e6e6;
   border-color: #adadad;
 }
 
+// Warning buttons - orange
 .sbtn-w {
-  color: #fff;
-  background-color: #f0ad4e;
-  border-color: #f0ad4e;
+  color: white;
+  background-color: @orangeColor;
+  border-color: @orangeColor;
+}
+.sbtn-w > .spinner > div {
+  background-color: white;
 }
 
-.sbtn-w:hover {
-  color: #fff;
-  background-color: #ec971f;
-  border-color: #eb9316;
+.sbtn-wo {
+  color: @orangeColor;
+  background-color: white;
+  border-color: @orangeColor;
+}
+.sbtn-wo > .spinner > div {
+  background-color: @orangeColor;
 }
 
+.sbtn-w:hover, .sbtn-wo:hover {
+  color: white;
+  background-color: darken(@orangeColor, 10%);
+  border-color: darken(@orangeColor, 10%);
+}
+
+// Danger button - red
 .sbtn-d {
-  color: #fff;
-  background-color: #d9534f;
-  border-color: #d9534f;
+  color: white;
+  background-color: @alertColor;
+  border-color: @alertColor;
 }
-
-.sbtn-d:hover {
-  color: #fff;
-  background-color: #c9302c;
-  border-color: #c12e2a;
+.sbtn-d > .spinner > div {
+  background-color: white;
+}
+.sbtn-do {
+  color: @alertColor;
+  background-color: white;
+  border-color: @alertColor;
+}
+.sbtn-do > .spinner > div {
+  background-color: white;
+}
+.sbtn-d:hover, .sbtn-do:hover {
+  color: white;
+  background-color: darken(@alertColor, 10%);
+  border-color: darken(@alertColor, 10%);
 }
 
 .sbtn-l {
@@ -339,18 +508,33 @@ img {
 }
 
 .sbtn-lg {
-  padding: 5px;
-  font-size: 16px;  
+  line-height: 1.25;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+}
+.sbtn-lg > .spinner > div {
+  width: 8px;
+  height: 8px;
 }
 
 .sbtn-sm {
-  padding: 3px;
-  font-size: 14px;
+  line-height: 1;
+  padding: .4rem .9rem;
+  font-size: .8rem;
+}
+.sbtn-sm > .spinner > div {
+  width: 8px;
+  height: 8px;
 }
 
 .sbtn-in {
-  padding: 1px;
-  font-size: 12px;    
+  line-height: .8;
+  padding: .4rem .9rem;
+  font-size: .7rem;    
+}
+.sbtn-in > .spinner > div {
+  width: 8px;
+  height: 8px;
 }
 
 .image-acknowledgement {
