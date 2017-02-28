@@ -1,7 +1,6 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from './ui/TextField';
-import CircleProgress from './ui/CircleProgress';
+import { SNSButton } from './ui/SNSButton';
+import { TextField } from './ui/TextField';
 
 const errorStyle = {
   color: '#c94f49',
@@ -19,11 +18,6 @@ const LoginError = ({ errorMessage }) => {
 
 LoginError.propTypes = {
   errorMessage: React.PropTypes.string,
-};
-
-/* button style for the submit button below */
-const submitButtonStyle = {
-  margin: 12,
 };
 
 /* Main login form component */
@@ -78,7 +72,6 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
           <div>
             <TextField
               name="email"
-              hintText="Email"
               labelText="Email"
               value={emailValue}
               errorText={errors.email}
@@ -92,7 +85,6 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
           <div>
             <TextField
               name="password"
-              hintText=""
               value={passwordValue}
               labelText="Password"
               disabled={loggingIn}
@@ -104,16 +96,15 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
             />
           </div>
           <div>
-            <RaisedButton
+            <SNSButton
               label="Login"
-              primary={true} // eslint-disable-line react/jsx-boolean-value
-              style={submitButtonStyle}
               disabled={loggingIn || !errors.formReady}
+              showSpinner={loggingIn}
               type="submit"
+              onClick={this.onSubmit}
             />
           </div>
         </form>
-        <CircleProgress running={loggingIn} />
       </div>
     );
   }
