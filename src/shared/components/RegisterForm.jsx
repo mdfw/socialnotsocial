@@ -1,7 +1,6 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from './ui/TextField';
-import CircleProgress from './ui/CircleProgress';
+import { SNSButton } from './ui/SNSButton';
+import { TextField } from './ui/TextField';
 
 const errorStyle = {
   color: '#c94f49',
@@ -19,12 +18,6 @@ const RegistrationError = ({ errorMessage }) => {
 
 RegistrationError.propTypes = {
   errorMessage: React.PropTypes.string,
-};
-
-
-/* button style for the submit button below */
-const submitButtonStyle = {
-  margin: 12,
 };
 
 /* Main registration form component */
@@ -80,7 +73,6 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
           <div>
             <TextField
               name="displayName"
-              hintText="Your full name"
               labelText="Your Name"
               errorText={errors.displayName}
               value={displayNameValue}
@@ -94,7 +86,6 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
           <div>
             <TextField
               name="email"
-              hintText="Email"
               labelText="Email"
               value={emailValue}
               errorText={errors.email}
@@ -108,7 +99,6 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
           <div>
             <TextField
               name="password"
-              hintText=""
               value={passswordValue}
               labelText="Password"
               type={passwordFieldType}
@@ -119,14 +109,13 @@ class RegisterForm extends React.Component { // eslint-disable-line react/no-mul
             />
           </div>
           <div>
-            <RaisedButton
+            <SNSButton
               label="Create account"
-              primary={true} // eslint-disable-line react/jsx-boolean-value
-              style={submitButtonStyle}
               disabled={submitting || !errors.formReady}
+              showSpinner={submitting}
               type="submit"
+              onClick={this.onSubmit}
             />
-            <CircleProgress running={submitting} />
           </div>
         </form>
       </div>
