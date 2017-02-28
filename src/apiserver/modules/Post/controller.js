@@ -2,13 +2,12 @@ import { models } from '../../models';
 import { proxyUserId } from '../Authentication';
 
 const Post = models.Post;
-const Media = models.Media;
 const Apprisal = models.Apprisal;
 
 
-/* Get all of the posts for the accountId.
+/* Get all of the posts for the userId.
  * Params needed in req.body:
- *   @param (number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
+ *   @param {number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
  *      can act on behalf of it.
  *  Uses proxyUserId() to get the userId to search user.
  */
@@ -23,13 +22,6 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
     {
       includeTables:
       [{
-        model: Media,
-        attributes: ['url'],
-        through: {
-          attributes: [],
-        },
-      },
-      {
         model: Apprisal,
       }],
     })
@@ -40,6 +32,45 @@ const getPostsEndpoint = (req, res) => { // eslint-disable-line consistent-retur
       res.status(200).json({
         success: true,
         posts: cleanedItems,
+      });
+    })
+    .catch((err) => {
+      res.statusMessage = err.message; // eslint-disable-line no-param-reassign
+      res.status(404).end();
+    });
+};
+
+/* Get a specific post for userId.
+ * Params needed in req.body:
+ *   @param {number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
+ *      can act on behalf of it.
+ *  Uses proxyUserId() to get the userId to search user.
+ *  @param {string} postId - the post to search for can be in body or params
+ */
+const getAPostEndpoint = (req, res) => { // eslint-disable-line consistent-return
+  const userId = proxyUserId(req);
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
+  let postId = req.params.postId;
+  if (req.body.postId) {
+    postId = req.body.postId;
+  }
+  if (!postId) {
+    res.statusMessage = 'No post id provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
+  Post.findOne({ where: { id: postId, user_id: userId } })
+    .then((item) => {
+      if (!item) {
+        res.statusMessage = 'Post was not found.'; // eslint-disable-line no-param-reassign
+        res.status(404).end();
+        return;
+      }
+      res.status(200).json({
+        success: true,
+        post: item.toJSON(),
       });
     })
     .catch((err) => {
@@ -85,7 +116,6 @@ const addPostEndpoint = (req, res) => {
       console.log('We set media, now for find and associate');
       return Post.find({
         where: { id: createdId },
-        include: [Media],
       });
     })
     .then((createdItem) => {
@@ -211,6 +241,7 @@ const removePostEndpoint = (req, res) => {
 
 export {
   getPostsEndpoint,
+  getAPostEndpoint,
   addPostEndpoint,
   updatePostEndpoint,
   removePostEndpoint,
