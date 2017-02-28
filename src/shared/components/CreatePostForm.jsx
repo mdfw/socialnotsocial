@@ -1,8 +1,7 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextareaAutosize from 'react-autosize-textarea';
 import Settings from '../settings';
-import CircleProgress from './ui/CircleProgress';
+import { SNSButton } from './ui/SNSButton';
 
 /* button style for the submit button below */
 const submitButtonStyle = {
@@ -110,17 +109,16 @@ class CreatePostForm extends React.Component { // eslint-disable-line react/no-m
             </label>
           </div>
           <div>
-            <RaisedButton
+            <SNSButton
               label="Post"
-              primary={true} // eslint-disable-line react/jsx-boolean-value
               style={submitButtonStyle}
-              labelColor="white"
+              showSpinner={submitting}
               disabled={submitting || !errors.formReady}
               type="submit"
+              onClick={this.onSubmit}
             />
           </div>
         </form>
-        <CircleProgress running={submitting} />
       </div>
     );
   }
