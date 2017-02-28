@@ -37,6 +37,20 @@ function fetchPosts() {
   };
 }
 
+function fetchAPost(postId) {
+  return (dispatch) => {
+    dispatch(requestingPosts());
+    dispatch(
+      fetchDataAPI(
+        `posts/${postId}`,
+        receivePosts,
+        'posts',
+        receivePostsError,
+        ),
+    );
+  };
+}
+
 function newPost(message) {
   return (dispatch) => {
     dispatch(
@@ -88,6 +102,7 @@ export {
   RECEIVE_POSTS_ERROR,
   receivePostsError,
   fetchPosts,
+  fetchAPost,
   newPost,
   updatePost,
   deletePost,
