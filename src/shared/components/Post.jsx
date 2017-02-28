@@ -42,7 +42,7 @@ class Post extends React.Component { // eslint-disable-line react/no-multi-comp
 
     let share = null;
     if (this.state.showMore) {
-      share = <AppriseMenu apprisals={this.props.apprisals} />;
+      share = <AppriseMenu apprisals={this.props.apprisals} postId={this.props.postId} />;
     }
     return (
       <div className="post">
@@ -63,6 +63,7 @@ Post.propTypes = {
   message: React.PropTypes.string,
   createdAt: React.PropTypes.string,
   apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  postId: React.PropTypes.string.isRequired
 };
 
 

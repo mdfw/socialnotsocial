@@ -28,6 +28,10 @@ const Recipient = (props) => { // eslint-disable-line react/no-multi-comp
   };
   const recipient = props.recipient;
   const createdTime = moment(recipient.created_at).fromNow();
+  let updatedTime = '';
+  if (recipient.updated_at && (recipient.updated_at !== recipient.created_at)) {
+    updatedTime = `Updated: ${moment(recipient.updated_at).fromNow()}`;
+  }
   let canRespond = 'Can respond';
   if (!recipient.canRespond) {
     canRespond = (<span className="recipient-cannot-respond">Cannot respond</span>);
@@ -89,7 +93,7 @@ const Recipient = (props) => { // eslint-disable-line react/no-multi-comp
         {canRespond}
       </div>
       <div className="recipient-display-createdTime">
-        Created: {createdTime}
+        Created: {createdTime}{updatedTime}
       </div>
       {status}
       {editControls}

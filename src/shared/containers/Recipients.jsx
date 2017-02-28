@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import Recipient from '../components/Recipient';
-import NotImplmented from '../components/NotImplemented';
 import RecipientEdit from './RecipientEdit';
 import RecipientDelete from './RecipientDelete';
 import { formUpdate } from '../actions/forms';
@@ -101,13 +100,6 @@ class RecipientsContainer extends React.Component {
   }
 
   render() {
-    if (PRODUCTION) { // eslint-disable-line no-undef
-      return (
-        <div style={{ backgroundColor: 'white', padding: '30px', margin: '30px' }}>
-          <NotImplmented />
-        </div>
-      );
-    }
     if (this.props.recipients.length === 0) {
       return <NoRecipients />;
     }

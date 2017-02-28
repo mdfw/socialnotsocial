@@ -28,6 +28,7 @@ const AllPosts = ({ posts }) => (
         createdAt={post.created_at}
         apprisals={post.Apprisals}
         key={post.id}
+        postId={post.id}
       />
     ))}
   </div>
