@@ -31,9 +31,24 @@ const getApprisalsEndpoint = (req, res) => { // eslint-disable-line consistent-r
     });
 };
 
-/* Adds an apprisal to the Apprisals database based on the fields passed in.
+/* -------------------------------------------------------
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * WARNING
+ * TODO: This is pretty insecure.
+ * 1. There is no test to make sure the apprised items (recipient, post) are owned by
+ *     the userId adding the apprisal. There's probably a DB test/constraint that could be added.
+ * 2. There's no abuse, speed prevention here. Probably should be. While we should allow someone to
+ *    send multiple apprisals to recipients, there should be "some" time differential between them.
+ *    Also, prevent DDOS through this. Since this triggers the email, this is the place to look.
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * -------------------------------------------------------
+*/
+
+/* Adds a set of apprisals to the Apprisals database based on the fields passed in.
  * Params needed in req.body:
  *   @param {string} postId - the post to apprise
+ *   @param {array} recipients - array of objects {recipientId, canRespond}
  *   @param {string} recipientId - the identifier for the recipient.
  *   @param {bool} canRespond - Overrides the default for the recipient
  *   @param (number=} onBehalfOfId - (optional) The userId to act on behalf of if current user
@@ -41,20 +56,44 @@ const getApprisalsEndpoint = (req, res) => { // eslint-disable-line consistent-r
  *  Uses proxyUserId() to get the userId to search for.
  */
 const addApprisalEndpoint = (req, res) => {
-  const { postId, recipientId, canRespond } = req.body;
   const userId = proxyUserId(req);
-  const newApprisal = Apprisal.build({
-    post_id: postId,
-    recipient_id: recipientId,
-    canRespond: canRespond,
-    user_id: userId,
+  if (!userId) {
+    res.statusMessage = 'No user provided'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
+  const { postId, recipients } = req.body;
+  if (!(recipients && Array.isArray(recipients) && recipients.length > 0)) {
+    res.statusMessage = 'Could not process body.'; // eslint-disable-line no-param-reassign
+    res.status(422).end();
+  }
+  const apprisals = [];
+  recipients.forEach(function newApprisal(recipientInfo) {
+    let canRespond = true;
+    if (typeof recipientInfo.canRespond !== 'undefined') {
+      canRespond = recipientInfo.canRespond;
+    }
+    apprisals.push(
+      new Promise((resolve) => {
+        Apprisal.create({
+          post_id: postId,
+          recipient_id: recipientInfo.recipientId,
+          canRespond: canRespond,
+          user_id: userId,
+        }).then(apprisal => resolve(apprisal));
+      }),
+    );
   });
-  newApprisal.save()
-    .then((createdApprisal) => {
+  Promise.all(apprisals)
+    .then((createdApprisals) => {
+      const cleanApprisals = createdApprisals.map(function jsonify(apprisal) {
+        return apprisal.toJSON();
+      });
+      console.log(`What we created. Length: ${createdApprisals.length}`);
+      console.dir(createdApprisals);
       res.status(201).json({
         success: true,
         message: 'Successfully created apprisal',
-        apprisal: createdApprisal.toJSON(),
+        apprisal: cleanApprisals,
       });
     })
     .catch((err) => {
