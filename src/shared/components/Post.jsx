@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Apprisals from './Apprisals';
-import AppriseMenu from './AppriseMenu';
+import AppriseMenu from '../containers/AppriseMenu';
 
 const shareButtonStyle = {
   border: '0.5px solid rgba(204, 204, 204, 0.54)',
@@ -63,7 +63,7 @@ Post.propTypes = {
   message: React.PropTypes.string,
   createdAt: React.PropTypes.string,
   apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
-  postId: React.PropTypes.string.isRequired
+  postId: React.PropTypes.string.isRequired,
 };
 
 
