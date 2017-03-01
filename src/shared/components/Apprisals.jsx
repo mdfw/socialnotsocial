@@ -66,7 +66,7 @@ function ApprisalListWithRecipients({ apprisals, recipients }) {
       sentOn = `Sent ${apprisal.deliveredAt}`;
     }
     apprisalList.push(
-      <div>
+      <div key={apprisal.recipient_id}>
         <div className="post-apprisal-list-name">
           {recipientName(apprisal.recipient_id, recipients)}
         </div>
