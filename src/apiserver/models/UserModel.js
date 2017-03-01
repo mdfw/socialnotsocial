@@ -15,7 +15,13 @@ module.exports = (sequelize, DataTypes) => {
       userType: {
         field: 'user_type',
         type: DataTypes.ENUM,
-        values: [UserType.NORMAL, UserType.ADMIN, UserType.CUSTSERVICE, UserType.BANNED],
+        values: [
+          UserType.NORMAL,
+          UserType.ADMIN,
+          UserType.CUSTSERVICE,
+          UserType.BANNED,
+          UserType.DEMO,
+        ],
         defaultValue: UserType.NORMAL,
         allowNull: false,
       },
