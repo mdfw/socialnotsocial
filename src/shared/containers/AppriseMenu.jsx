@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { SNSButton, ButtonStyle, ButtonSize } from '../components/ui/SNSButton';
-import { newApprisal } from '../actions/apprisals';
-import { Apprisals } from '../components/Apprisals';
 import Apprise from '../components/Apprise';
-
+import { formUpdate } from '../actions/forms';
+import { newApprisal } from '../actions/apprisals';
 
 class AppriseMenu extends React.Component { // eslint-disable-line react/no-multi-comp
   constructor() {
@@ -12,26 +10,72 @@ class AppriseMenu extends React.Component { // eslint-disable-line react/no-mult
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-  onSubmit(e) {
-    e.preventDefault();
-    this.props.handleSubmit();
+  onSubmit() {
+    const recipientIds = [];
+    this.props.selectedRecipientIds.forEach((recipientId) => {
+      recipientIds.push({
+        recipientId: recipientId,
+        canRespond: true,
+      });
+    });
+    this.props.dispatch(
+      newApprisal(
+        {
+          postId: this.props.postId,
+          recipients: recipientIds,
+        },
+        this.props.postId,
+        this.props.formId,
+      ),
+    );
   }
   onChange(recipientId) {
-    this.props.onChange(recipientId);
+    console.log(`AppriseMenu: received: ${recipientId}`);
+    let newRecipientIds = this.props.selectedRecipientIds;
+    const foundIndex = this.props.selectedRecipientIds.findIndex(selRecipientId =>
+      (
+        selRecipientId === recipientId
+      ),
+    );
+    console.log(`AppriseMenu: foundIndex: ${foundIndex}`);
+    if (foundIndex > -1) {
+      newRecipientIds.splice(foundIndex, 1);
+    } else {
+      newRecipientIds = this.props.selectedRecipientIds.concat(recipientId);
+    }
+    console.log(`AppriseMenu: sending newRecipientIds: ${newRecipientIds}`);
+    console.dir(newRecipientIds);
+    this.props.dispatch(
+      formUpdate(
+        this.props.formId,
+        {
+          selectedRecipientIds: newRecipientIds,
+        },
+      ),
+    );
   }
   render() {
     return (
       <div className="apprisal-menu--holder">
-        <AppriseMore recipients={this.props.recipients} postId={this.props.postId} dispatch={this.props.dispatch} />
-        <Apprisals summarize={false} apprisals={this.props.apprisals} />
+        <Apprise
+          selectedRecipientIds={this.props.selectedRecipientIds}
+          recipients={this.props.recipients}
+          apprisals={this.props.apprisals}
+          formId={this.props.formId}
+          onChange={this.onChange}
+          onSubmit={this.onSubmit}
+          submitting={this.props.submitting}
+        />
       </div>
     );
   }
 }
 AppriseMenu.propTypes = {
+  selectedRecipientIds: React.PropTypes.arrayOf(React.PropTypes.string),
   recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   dispatch: React.PropTypes.func.isRequired,
+  submitting: React.PropTypes.bool.isRequired,
   postId: React.PropTypes.string.isRequired,
   formId: React.PropTypes.string.isRequired,
 };
@@ -39,11 +83,21 @@ AppriseMenu.propTypes = {
 
 /** redux store map **/
 const mapStateToProps = function mapStateToProps(state, ownProps) {
-  const formId = `shareForm${ownProps.formId}`;
+  const formId = `appriseForm${ownProps.postId}`;
+  let selectedRecipientIds = [];
+  let submitting = false;
+  const ourForm = state.forms[formId];
+  if (ourForm && ourForm.selectedRecipientIds && ourForm.selectedRecipientIds.length > 0) {
+    selectedRecipientIds = ourForm.selectedRecipientIds;
+  }
+  if (ourForm && typeof ourForm.submitting !== 'undefined') {
+    submitting = ourForm.submitting;
+  }
   return {
     recipients: state.recipients.recipients,
-    forms: state.forms[formId],
+    selectedRecipientIds: selectedRecipientIds,
     formId: formId,
+    submitting: submitting,
   };
 };
 

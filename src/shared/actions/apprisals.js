@@ -1,5 +1,5 @@
 import { fetchDataAPI, addDataAPI, updateDataAPI, deleteDataAPI } from './dataAPI';
-import { fetchAPost } from './posts';
+import { receivePosts, receivePostsError } from './posts';
 
 const RECEIVE_APPRISALS = 'RECEIVE_APPRISALS';
 function receiveApprisals(apprisals) {
@@ -44,7 +44,12 @@ function newApprisal(body, postId, formId) {
       addDataAPI(
         'apprisals',
         body,
-        fetchAPost(postId),
+        fetchDataAPI(
+          `posts/${postId}`,
+          receivePosts,
+          'posts',
+          receivePostsError,
+        ),
         'apprisal',
         formId,
       ),

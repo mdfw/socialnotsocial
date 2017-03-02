@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { SNSButton, ButtonStyle, ButtonSize } from './ui/SNSButton';
+import { SNSButton, ButtonSize } from './ui/SNSButton';
 
 function recipientInfo(recipientId, recipients) {
   if (!recipientId || !recipients) {
@@ -28,12 +28,12 @@ function recipientApprised(recipient, apprisals) {
         lastApprisedDate = apprisal.created_at;
       }
     }
-  }
+  });
   if (apprisalsForRecipient.length > 0) {
     return ({
       apprisals: apprisalsForRecipient,
       lastApprised: lastApprisedDate,
-    })
+    });
   }
   return null;
 }
@@ -47,13 +47,17 @@ class RecipientCheckbox extends React.Component {
     this.props.onChange(this.props.recipientId);
   }
   render() {
-    const checked = this.props.checked,
+    const checked = this.props.checked;
     const name = this.props.recipientName;
     const id = this.props.recipientId;
     const formId = this.props.formId;
     let via = null;
     if (this.props.recipientVia && this.props.recipientVia.length > 0) {
-      via = `(${recipientVia})`;
+      via = (
+        <span className="apprisal-menu-more-recipient-via">
+        ({this.props.recipientVia})
+        </span>
+      );
     }
     const identifier = `${formId}-${id}`;
     return (
@@ -66,15 +70,15 @@ class RecipientCheckbox extends React.Component {
           onChange={this.onChange}
           style={{ marginRight: '5px' }}
         />
-        {name}{via}
+        {name} {via}
       </label>
     )
-  }
+  };
 }
 RecipientCheckbox.propTypes = {
-  checked: React.PropTypes.string.bool.isRequired,
+  checked: React.PropTypes.bool.isRequired,
   recipientName: React.PropTypes.string.isRequired,
-  recipientVia: React.PropTyeps.string,
+  recipientVia: React.PropTypes.string,
   recipientId: React.PropTypes.string.isRequired,
   formId: React.PropTypes.string.isRequired,
   onChange: React.PropTypes.func.isRequired,
@@ -88,18 +92,22 @@ class Apprise extends React.Component {
   }
   onSubmit(e) {
     e.preventDefault();
-    this.props.handleSubmit();
+    this.props.onSubmit();
   }
   onChange(recipientId) {
+    console.log(`Apprise - sending ${recipientId}`);
     this.props.onChange(recipientId);
   }
   render() {
+    console.log('Apprise:: Our selectedRecipients');
+    console.dir(this.props.selectedRecipientIds);
     const more = [];
-    const sr = this.props.selectedRecipients;
-    props.recipients.forEach(function eachRecipient(recipient) {
+    const sr = this.props.selectedRecipientIds;
+    const self = this;
+    this.props.recipients.forEach(function eachRecipient(recipient) {
       const recipientsIndex = sr.findIndex(function findSelected(selectedRecipientId) {
         return selectedRecipientId === recipient.id;
-      })
+      });
       const checked = recipientsIndex > -1;
       more.push(
         <div key={recipient.id} className="apprisal-menu-more-recipient">
@@ -108,25 +116,44 @@ class Apprise extends React.Component {
             recipientName={recipient.displayName}
             recipientVia={recipient.email}
             recipientId={recipient.id}
-            onChange={this.onChange}
-            formId={this.props.formId}
+            onChange={self.onChange}
+            formId={self.props.formId}
           />
         </div>,
       );
     });
     return (
       <div className="apprisal-menu-more">
+
         <div className="apprisal-menu-more-title">Share with...</div>
-        {more}
+        <div className="apprisal-menu-more-options">
+          {more}
+        </div>
+        <div className="apprisal-menu-more-disabled">
+          Note: Sharing is currently disabled until email is set up.
+        </div>
+        <div className="apprisal-menu-more-button">
+          <SNSButton
+            label="Send"
+            onClick={this.onSubmit}
+            buttonSize={ButtonSize.INLINE}
+            disabled={
+              this.props.submitting ||
+              this.props.selectedRecipientIds.length === 0 ||
+              1 === 1
+            }
+            showSpinner={this.props.submitting}
+          />
+        </div>
       </div>
     );
   }
-};
+}
 Apprise.propTypes = {
-  selectedRecipients: React.PropTypes.arrayOf(React.PropTypes.string),
+  selectedRecipientIds: React.PropTypes.arrayOf(React.PropTypes.string),
   recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
-  formId: React.PropTypes.string.isRequired,
+  submitting: React.PropTypes.bool.isRequired,
   onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
 };

@@ -37,6 +37,17 @@ function ApprisalSummaryWithoutRecipients({ sharedCount }) {
   return sharedWith;
 }
 
+function ApprisalSummary2({ apprisals }) {
+  if (apprisals && apprisals.length > 0) {
+    return (<span className="post-apprisal-summary">Shared {apprisals.length} times.</span>);
+  }
+  return (<span className="post-apprisal-summary">Not shared.</span>);
+}
+ApprisalSummary2.propTypes = {
+  apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
+};
+
+
 function ApprisalSummary({ apprisals, recipients }) {
   let sharedWith = 'Not shared.';
   let sharedCount = 0;
@@ -112,7 +123,7 @@ function Apprisals(props) { // eslint-disable-line react/no-multi-comp
   }
   if (summarize) {
     return (
-      <ApprisalSummary apprisals={props.apprisals} recipients={props.recipients} />
+      <ApprisalSummary2 apprisals={props.apprisals} recipients={props.recipients} />
     );
   }
   return (
