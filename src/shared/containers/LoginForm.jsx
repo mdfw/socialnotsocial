@@ -53,7 +53,6 @@ class LoginFormContainer extends React.Component {
     this.props.dispatch(loginErrorAck());
   }
   render() {
-    console.log('Loading login form');
     const errors = determineErrors(
       this.props.email,
       this.props.password,
