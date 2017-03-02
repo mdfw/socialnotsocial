@@ -8,6 +8,7 @@ import App from '../containers/App';
 import Welcome from '../components/Welcome';
 import CheckLogin from '../containers/CheckLogin';
 import Recipients from '../containers/Recipients';
+import About from '../components/About';
 import { COOKIE_NAME_INDICATE_SESSION } from '../../globalConstants';
 
 /* Checks for the specific snssl cookie that indicates if someone is logged in.
@@ -71,6 +72,7 @@ export default function buildRoutes(store = {}) {
       <Redirect from="/login" to="/welcome" />
       <Redirect from="/signup" to="/welcome" />
       <Route path="/checklogin" component={CheckLogin} />
+      <Route path="/about" component={About} />
       <Route path="/welcome" component={Welcome} onEnter={checkForAuth} />
       <Route path="/" component={App} onEnter={needsAuth}>
         <IndexRoute component={Home} />

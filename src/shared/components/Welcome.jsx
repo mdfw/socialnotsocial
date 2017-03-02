@@ -1,5 +1,6 @@
 import React from 'react';
 import cookie from 'react-cookie';
+import { Link } from 'react-router';
 import RegisterForm from '../containers/RegisterForm';
 import LoginForm from '../containers/LoginForm';
 import { COOKIE_NAME_HAS_LOGGED_IN } from '../../globalConstants';
@@ -81,6 +82,12 @@ class Welcome extends React.Component {
     };
     this.onClick = this.onClick.bind(this);
   }
+  componentDidMount() {
+    document.body.classList.add('welcome-page-background-color');
+  }
+  componentWillUnmount() {
+    document.body.classList.remove('welcome-page-background-color');
+  }
   onClick() {
     let formId = FORM_REGISTER;
     if (this.state.form === FORM_REGISTER) {
@@ -106,12 +113,9 @@ class Welcome extends React.Component {
             {whichForm}
             <MarketingBits />
           </div>
-        </div>
-        <div className="welcome-page-more-info">
-          Create a post. 
-          <img src="/assets/anewpost.png" />
-          Then, share it with your friends.
-          <img src="/assets/sharescreen.png" />
+          <div className="welcome-page-more-info">
+            <Link to="/about">Want to learn more?</Link>
+          </div>
         </div>
         <div className="image-acknowledgement">
           Image: <i>Bubble reflection</i> by Isabelle Acatauass&uacute; Alves Almeida

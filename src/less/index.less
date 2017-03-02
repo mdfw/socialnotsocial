@@ -30,30 +30,62 @@ div
 	max-width: 970px;
 	margin: 0 auto;
 }
+/* Doorknob is the form holder for login/registration flip form */
+.doorknob {
+  color: black;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+}
 
+.doorknob-form-holder {
+  background-color: white;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: lightblue;
+  border-style: solid;
+  min-width: 250px;
+  width: 320px;
+  margin: auto;
+  padding: 10px;
+}
+
+.doorknob-switch-prompt {
+  font-size: 12px;
+}
+
+.doorknob .sns-text-field {
+  margin-top: 15px;
+}
+.doorknob button {
+  margin-top: 15px;
+}
+
+/* Welcome page is the main page when people load the site */
 .welcome {
   float: right;
   line-height: 50px;
 }
-
+.welcome-page-background-color {
+  background-color: #3f6143;
+}
 .welcome-page-hero {
   background-image: url('../assets/bubble_hero.jpg');
-  position: fixed;
+  position: absolute;
   background-repeat: no-repeat;
   background-size: cover;
   height: 100%;
   width: 100%;
-  background-color: #2e9f98;
   text-align: center;
 }
 
 .welcome-page-box {
   background: rgba(255,255,255,0.95);
   border-radius: 10px;
-  width: 700px;
+  max-width: 700px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 50px;
+  margin-bottom: 50px;
   padding: 30px;
 }
 
@@ -72,25 +104,45 @@ div
 }
 
 .welcome-page-lower {
-  display: flex;
   margin-top: 10px;
-}
-
-.welcome-page-marketing {
-  padding: 20px;
-  width: 600px;
+  overflow: hidden;
 }
 
 .welcome-page-signup {
-  background-color:  rgb(255, 255, 255);
-  box-shadow: lightgrey;
+  background-color: white;
   border-radius: 5px;
   border-width: 1px;
   border-color: lightblue;
   border-style: solid;
-  width: 500px;
-  margin: 10px;
+  min-width: 250px;
+  width: 320px;
+  margin: auto;
   padding: 10px;
+  float: left;
+}
+
+.welcome-page-marketing {
+  padding: 20px;
+  max-width: 320px;
+  float: left;
+}
+
+.welcome-page-more-info {
+  background-color: @blueColor;
+  margin-left: -28px;
+  margin-right: -28px;
+  margin-bottom: -28px;
+  margin-top: 15px;
+  font-size: 18px;
+  padding: 10px;
+  color: white;
+  border-radius: 0 0 10px 10px;
+  text-decoration: none;
+}
+
+.welcome-page-more-info > a {
+  color: white;
+  text-decoration: none;
 }
 
 .welcome-page-example {
@@ -100,8 +152,66 @@ div
   margin-top: 100px;
 }
 
-.top-navigation
-{
+.about-page-img > img {
+  background-color: white;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 2px;
+}
+
+.about-page-title {
+  background-color: #459691;
+  color: white;
+  font-size: 50px;
+  font-family: 'Comfortaa', serif;
+  text-align: center;
+  min-height: 160px;
+}
+
+.about-page-lower-1 {
+  text-align: center;
+  background-color: #4376a3;
+  padding: 20px;
+  color: white;
+  font-size: 30px;
+  line-height: 50px;
+}
+.about-page-lower-2 {
+  background-color: #D67443;
+  padding: 5px;
+  text-align: center;
+  color: white;
+  font-size: 50px;
+  font-family: 'Comfortaa', serif;
+}
+.about-page-lower-3 {
+  text-align: center;
+  background-color: #4376a3;
+  padding: 20px;
+  color: white;
+  font-size: 30px;
+  line-height: 50px;
+}
+.about-page-lower-4 {
+  text-align: center;
+  background-color: #459691;
+  padding: 20px;
+  color: white;
+  font-size: 30px;
+}
+.about-page-signup {
+  background-color: #c94f49;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  font-size: 30px;
+  font-family: 'Comfortaa', serif;
+}
+.about-page-doorknob-holder {
+  margin-top: 30px;
+}
+.top-navigation {
 	background-color: #459691;
 	position: fixed;
 	top: 0;
@@ -137,8 +247,9 @@ div
 }
 
 img {
-    vertical-align: middle;
+  vertical-align: middle;
 }
+
 .topSpacer {
   height: 70px;
   position: relative;
