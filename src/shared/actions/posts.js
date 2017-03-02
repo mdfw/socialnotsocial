@@ -32,7 +32,7 @@ function fetchPosts() {
         receivePosts,
         'posts',
         receivePostsError,
-        ),
+      ),
     );
   };
 }
@@ -46,7 +46,7 @@ function fetchAPost(postId) {
         receivePosts,
         'posts',
         receivePostsError,
-        ),
+      ),
     );
   };
 }
