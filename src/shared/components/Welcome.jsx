@@ -107,6 +107,12 @@ class Welcome extends React.Component {
             <MarketingBits />
           </div>
         </div>
+        <div className="welcome-page-more-info">
+          Create a post. 
+          <img src="/assets/anewpost.png" />
+          Then, share it with your friends.
+          <img src="/assets/sharescreen.png" />
+        </div>
         <div className="image-acknowledgement">
           Image: <i>Bubble reflection</i> by Isabelle Acatauass&uacute; Alves Almeida
         </div>
