@@ -31,7 +31,8 @@ const AllRecipients = (props) => {
   props.recipients.map((recipient) => { // eslint-disable-line array-callback-return
     if (recipient.id) {
       const editRecipientFormName = `editRecipient${recipient.id}`;
-      const editForm = props.forms[editRecipientFormName];
+      const allForms = props.allForms;
+      const editForm = allForms[editRecipientFormName];
       if (editForm && editForm.editType === 'edit') {
         recipientList.push(
           <RecipientEdit
@@ -72,12 +73,16 @@ const AllRecipients = (props) => {
     </div>
   );
 };
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/no-unused-prop-types */
 AllRecipients.propTypes = {
-  forms: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  allForms: React.PropTypes.object,
+  recipients: React.PropTypes.array,
   handleEditRequest: React.PropTypes.func.isRequired,
   handleDeleteRequest: React.PropTypes.func.isRequired,
 };
+/* eslint-enable react/no-unused-prop-types */
+/* eslint-enable react/forbid-prop-types */
 
 /* Main container that manages showing of posts */
 class RecipientsContainer extends React.Component {
@@ -109,7 +114,7 @@ class RecipientsContainer extends React.Component {
         recipients={this.props.recipients}
         handleEditRequest={this.handleEditRequest}
         handleDeleteRequest={this.handleDeleteRequest}
-        forms={this.props.forms}
+        allForms={this.props.allForms}
       />
     );
   }
@@ -118,14 +123,14 @@ class RecipientsContainer extends React.Component {
 RecipientsContainer.propTypes = {
   recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   dispatch: React.PropTypes.func.isRequired,
-  forms: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  allForms: React.PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 /** redux store map **/
 const mapStateToProps = function mapStateToProps(state) {
   return {
     recipients: state.recipients.recipients,
-    forms: state.forms,
+    allForms: state.forms,
   };
 };
 
