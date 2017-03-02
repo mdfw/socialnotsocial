@@ -56,7 +56,7 @@
     "_watch:assets": "chokidar src/assets/**/* -c \"npm run build:assets\"",
     "watch:git": "chokidar * -c \"git diff --shortstat\"",
     "deploy": "run-s deploy:build",
-    "deploy:build": "run-s build:html build:css build:assets deploy:build:js",
+    "deploy:build": "run-s build:html build:less build:assets deploy:build:js",
     "deploy:build:js": "run-s clean:js mkdir:js deploy:_build:js",
     "deploy:_build:js": "run-s deploy:_build:js:server deploy:_build:js:apiserver deploy:_build:js:client",
     "deploy:_build:js:server": "webpack --config webpack/webpack.server.prod.config.js",
