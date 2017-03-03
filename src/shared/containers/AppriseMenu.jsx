@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Apprise from '../components/Apprise';
 import { formUpdate } from '../actions/forms';
 import { newApprisal } from '../actions/apprisals';
+import { UserType } from '../../apiserver/models/constants';
 
 class AppriseMenu extends React.Component { // eslint-disable-line react/no-multi-comp
   constructor() {
@@ -30,21 +31,19 @@ class AppriseMenu extends React.Component { // eslint-disable-line react/no-mult
     );
   }
   onChange(recipientId) {
-    console.log(`AppriseMenu: received: ${recipientId}`);
     let newRecipientIds = this.props.selectedRecipientIds;
     const foundIndex = this.props.selectedRecipientIds.findIndex(selRecipientId =>
       (
         selRecipientId === recipientId
       ),
     );
-    console.log(`AppriseMenu: foundIndex: ${foundIndex}`);
     if (foundIndex > -1) {
-      newRecipientIds.splice(foundIndex, 1);
+      const frontPart = this.props.selectedRecipientIds.slice(0, foundIndex);
+      const endPart = this.props.selectedRecipientIds.slice(foundIndex + 1);
+      newRecipientIds = frontPart.concat(endPart);
     } else {
       newRecipientIds = this.props.selectedRecipientIds.concat(recipientId);
     }
-    console.log(`AppriseMenu: sending newRecipientIds: ${newRecipientIds}`);
-    console.dir(newRecipientIds);
     this.props.dispatch(
       formUpdate(
         this.props.formId,
@@ -55,6 +54,15 @@ class AppriseMenu extends React.Component { // eslint-disable-line react/no-mult
     );
   }
   render() {
+    let canNotSubmitMsg = null;
+    let canSubmit = true;
+    if (this.props.accountType === UserType.DEMO) {
+      canNotSubmitMsg = 'Can not share - demo account.';
+      canSubmit = false;
+    } else if (!this.props.accountValidated) {
+      canNotSubmitMsg = 'Can not share - account has not been validated.';
+      canSubmit = false;
+    }
     return (
       <div className="apprisal-menu--holder">
         <Apprise
@@ -65,6 +73,8 @@ class AppriseMenu extends React.Component { // eslint-disable-line react/no-mult
           onChange={this.onChange}
           onSubmit={this.onSubmit}
           submitting={this.props.submitting}
+          userCanSubmit={canSubmit}
+          userCannotSubmitMessage={canNotSubmitMsg}
         />
       </div>
     );
@@ -76,6 +86,8 @@ AppriseMenu.propTypes = {
   apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   dispatch: React.PropTypes.func.isRequired,
   submitting: React.PropTypes.bool.isRequired,
+  accountType: React.PropTypes.string.isRequired,
+  accountValidated: React.PropTypes.bool.isRequired,
   postId: React.PropTypes.string.isRequired,
   formId: React.PropTypes.string.isRequired,
 };
@@ -98,6 +110,8 @@ const mapStateToProps = function mapStateToProps(state, ownProps) {
     selectedRecipientIds: selectedRecipientIds,
     formId: formId,
     submitting: submitting,
+    accountType: state.account.accountType,
+    accountValidated: state.account.validated,
   };
 };
 

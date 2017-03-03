@@ -72,8 +72,8 @@ class RecipientCheckbox extends React.Component {
         />
         {name} {via}
       </label>
-    )
-  };
+    );
+  }
 }
 RecipientCheckbox.propTypes = {
   checked: React.PropTypes.bool.isRequired,
@@ -84,7 +84,7 @@ RecipientCheckbox.propTypes = {
   onChange: React.PropTypes.func.isRequired,
 };
 
-class Apprise extends React.Component {
+class Apprise extends React.Component { // eslint-disable-line react/no-multi-comp
   constructor() {
     super();
     this.onChange = this.onChange.bind(this);
@@ -95,12 +95,9 @@ class Apprise extends React.Component {
     this.props.onSubmit();
   }
   onChange(recipientId) {
-    console.log(`Apprise - sending ${recipientId}`);
     this.props.onChange(recipientId);
   }
   render() {
-    console.log('Apprise:: Our selectedRecipients');
-    console.dir(this.props.selectedRecipientIds);
     const more = [];
     const sr = this.props.selectedRecipientIds;
     const self = this;
@@ -122,6 +119,14 @@ class Apprise extends React.Component {
         </div>,
       );
     });
+    let canSubmitMsg = null;
+    if (!this.props.userCanSubmit && this.props.userCannotSubmitMessage) {
+      canSubmitMsg = (
+        <div className="apprisal-menu-more-disabled">
+          {this.props.userCannotSubmitMessage}
+        </div>
+      );
+    }
     return (
       <div className="apprisal-menu-more">
 
@@ -129,9 +134,7 @@ class Apprise extends React.Component {
         <div className="apprisal-menu-more-options">
           {more}
         </div>
-        <div className="apprisal-menu-more-disabled">
-          Note: Sharing is currently disabled until email is set up.
-        </div>
+        {canSubmitMsg}
         <div className="apprisal-menu-more-button">
           <SNSButton
             label="Send"
@@ -140,7 +143,7 @@ class Apprise extends React.Component {
             disabled={
               this.props.submitting ||
               this.props.selectedRecipientIds.length === 0 ||
-              1 === 1
+              !this.props.userCanSubmit
             }
             showSpinner={this.props.submitting}
           />
@@ -154,6 +157,8 @@ Apprise.propTypes = {
   recipients: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   apprisals: React.PropTypes.array, // eslint-disable-line react/forbid-prop-types
   submitting: React.PropTypes.bool.isRequired,
+  userCanSubmit: React.PropTypes.bool.isRequired,
+  userCannotSubmitMessage: React.PropTypes.string,
   onChange: React.PropTypes.func.isRequired,
   onSubmit: React.PropTypes.func.isRequired,
 };
