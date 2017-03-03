@@ -97,9 +97,6 @@ const formReducer = function regFormReducer(state = DEFAULT_FORM_STATE(), action
     default:
       break;
   }
-  if (newstate.newRecipient) {
-    console.log(`newstate: ${newstate.newRecipient.displayName}`);
-  }
   return newstate;
 };
 
