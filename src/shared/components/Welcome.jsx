@@ -45,11 +45,13 @@ class Welcome extends React.Component {
             Social, not Social <span className="welcome-page-title-beta">(Beta)</span>
           </div>
           <div className="welcome-page-lower">
-            <Doorknob />
+            <div className="welcome-doorknob">
+              <Doorknob />
+            </div>
             <MarketingBits />
           </div>
           <div className="welcome-page-more-info">
-            <Link to="/about">Want to learn more?</Link>
+            <Link to="/about">Learn more.</Link>
           </div>
         </div>
         <div className="image-acknowledgement">
