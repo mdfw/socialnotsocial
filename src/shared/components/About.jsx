@@ -51,7 +51,14 @@ const About = () => (
     <Sticky enter="80" className="about-nav">
       <div id="about-nav-row">
         <div className="about-nav-left">
-          <img className="logo" src="../assets/dandy-white.svg" alt="Social, Not Social logo" width="40" height="40" />
+          <img
+            className="logo"
+            src="../assets/dandy-white.svg"
+            alt="Social, Not Social logo"
+            width="40"
+            height="40"
+            style={{ marginTop: '-10px', marginRight: '5px' }}
+          />
           <span className="about-nav-sitename">Social, not Social</span>
         </div>
         <div className="about-nav-right">
@@ -78,7 +85,12 @@ const About = () => (
         A cute picture of your kid playing in snow?
       </p>
       <div className="about-page-img about-page-kid1">
-        <img src="assets/kiddo.jpg" alt="kids" height="140px" style={{ transform: 'rotate(2deg)', WebkitTransform: 'rotate(-4deg)' }} />
+        <img
+          src="assets/kiddo.jpg"
+          alt="Child in snow"
+          height="140px"
+          style={{ transform: 'rotate(2deg)', WebkitTransform: 'rotate(-4deg)' }}
+        />
       </div>
       <p>
         Big news about that new job! (Congrats, BTW)
@@ -98,11 +110,12 @@ const About = () => (
         </p>
         <p>
           Crazy uncle Joe will never be (&quot;Tool of the FBI
-          <img src="assets/about_icons/illuminati_white.svg" height="30" alt="Illuminati" />
+          <img src="assets/about_icons/illuminati_white.svg" height="30" alt="Illuminati symbol" />
           !&quot; and all).
         </p>
         <p>
-          Sending pictures via email gets you the dreaded &quot;too long to be sent as an email.&quot;
+          Sending pictures via email gets you the dreaded
+          &quot;too long to be sent as an email.&quot;
         </p>
       </div>
     </div>
