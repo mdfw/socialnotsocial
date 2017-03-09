@@ -35,7 +35,7 @@ function requireAuth(state, nextState, replace) {
       return;
     }
     replace({
-      pathname: '/welcome',
+      pathname: '/about',
       state: { nextPathname: nextState.location.pathname },
     });
   }
@@ -69,11 +69,11 @@ export default function buildRoutes(store = {}) {
 
   return (
     <Router history={history}>
-      <Redirect from="/login" to="/welcome" />
-      <Redirect from="/signup" to="/welcome" />
+      <Redirect from="/login" to="/about" />
+      <Redirect from="/signup" to="/about" />
       <Route path="/checklogin" component={CheckLogin} />
-      <Route path="/about" component={About} />
-      <Route path="/welcome" component={Welcome} onEnter={checkForAuth} />
+      <Route path="/about" component={About} onEnter={checkForAuth} />
+      <Route path="/welcome" component={Welcome} />
       <Route path="/" component={App} onEnter={needsAuth}>
         <IndexRoute component={Home} />
         <Route path="/recipients" component={Recipients} onEnter={needsAuth} />
