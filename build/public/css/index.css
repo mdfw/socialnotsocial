@@ -1,3 +1,25 @@
+/*@baseColor: #459691; // Deep green blue
+@alertColor: #c94f49; // Reddish orange
+@highlightColor: #d9ecfc; // whiteish blue
+@greenerColor: #43a366; // More green
+@blueColor: #4376a3; // a nice blue
+@yellowColor: #e2cb60; // Yellow
+@orangeColor: #D67443; // An orange that hopefully matches 
+*/
+/* From: http://stackoverflow.com/questions/15837808/fancy-media-queries-with-some-less-magic */
+footerExample {
+  width: 100%;
+}
+@media only screen and (min-width: 720px) and (max-width: 959px) {
+  footerExample {
+    width: 768px;
+  }
+}
+@media only screen and (min-width: 960px) and (max-width: 1199px) {
+  footerExample {
+    width: 940px;
+  }
+}
 html {
   box-sizing: border-box;
 }
@@ -54,7 +76,7 @@ div {
   line-height: 50px;
 }
 .welcome-page-background-color {
-  background-color: #3f6143;
+  background-color: #3c591c;
 }
 .welcome-page-hero {
   background-image: url('../assets/bubble_hero.jpg');
@@ -64,6 +86,10 @@ div {
   height: 100%;
   width: 100%;
   text-align: center;
+}
+.welcome-page-lower-doorknob {
+  float: left;
+  padding-top: 20px;
 }
 .welcome-page-box {
   background: rgba(255, 255, 255, 0.95);
@@ -107,9 +133,10 @@ div {
   padding: 20px;
   max-width: 320px;
   float: left;
+  font-family: 'Open Sans', sans-serif;
 }
 .welcome-page-more-info {
-  background-color: #4376a3;
+  background-color: #414476;
   margin-left: -28px;
   margin-right: -28px;
   margin-bottom: -28px;
@@ -130,62 +157,179 @@ div {
   margin: 0 auto;
   margin-top: 100px;
 }
+/* -- About page -- */
+.about-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-image: linear-gradient(rgba(60, 89, 28, 0.1), rgba(60, 89, 28, 0.1));
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all 0.5s ease-in-out;
+}
+.about-nav.sticky {
+  background-color: #3c591c;
+  color: black;
+}
+@media only screen and (max-width: 720px) {
+  .about-nav-sitename {
+    display: none;
+  }
+}
+#about-nav-row {
+  font-size: 20px;
+  line-height: 40px;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.about-nav-left {
+  margin-left: 10px;
+  float: left;
+  font-family: 'Comfortaa', serif;
+}
+.about-nav-right {
+  margin-right: 10px;
+  position: relative;
+  float: right;
+  margin-top: -3px;
+}
+.about-nav-right a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  border-style: solid;
+  padding: 5px;
+  border-radius: 5px;
+  border-width: .5px;
+}
 .about-page-img > img {
   background-color: white;
   border-width: 5px;
   border-style: solid;
   border-radius: 5px;
   padding: 2px;
+  margin-bottom: 30px;
+}
+.about-page-header {
+  background-color: #223210;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.about-page-header-button {
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 970px;
 }
 .about-page-title {
-  background-color: #459691;
-  color: white;
-  font-size: 50px;
-  font-family: 'Comfortaa', serif;
+  background-color: #3c591c;
   text-align: center;
-  min-height: 160px;
+  padding: 5px;
+  min-height: 500px;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('../assets/jump.jpg');
+}
+/*https://www.flickr.com/photos/jongrainger/14869969397/in/photolist-oE1tQH-91YUFH-98aWYm-3meyM-5Xodfg-7yX18Y-5XodsK-dZChH8-dZHXWQ-dZHY9J-hh3E-4Win59-ewcYth-6TT6GG-tiFcm-a5Mz3e-oQ2a-mK1zH-5tjCC6-5WAa5i-5JhpMy-6TSNEW-aBZfNL-22tNXn-6TThYQ-ijSip-3LqgCY-9smXw-8MNsLo-4woRr3-9GVLXo-67D8Yp-mK1zP-cJUK3-mK1zN-61ncSJ-32xvR-mK1zL-mK1cQ-61ncRw-61i1tK-aHPQVk-mbNZA3-6xM9zY-PmTMv4-5QUvDq-5My6B5-p3GMbp-ccjToW-7h5xrp */
+.about-page-title-text {
+  color: white;
+  font-size: 70px;
+  font-family: 'Comfortaa', serif;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+}
+.about-page-title-text-sub {
+  color: white;
+  font-size: 35px;
+  font-family: 'Comfortaa', serif;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
 }
 .about-page-lower-1 {
   text-align: center;
-  background-color: #4376a3;
+  background-color: #414476;
   padding: 20px;
   color: white;
   font-size: 30px;
   line-height: 50px;
 }
 .about-page-lower-2 {
-  background-color: #D67443;
+  background-color: #414476;
   padding: 5px;
   text-align: center;
-  color: white;
-  font-size: 50px;
+  color: #ea3c1b;
+  font-size: 70px;
   font-family: 'Comfortaa', serif;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url('../assets/frustrated-child.jpg');
 }
+/* https://www.flickr.com/photos/bolonski/6899771379/in/photolist-9zYUbN-5Y57G-bvH8Dv-Ko2H4-odwkqS-7WepXX-7HQ5oB-7ezpD8-odEKjh-8yjQqB-4Ckoht-dxWwmz-5x3DF6-4t5u9P-bU8GfR-9BhUgv-7gUcM9-auobRn-4Jpgje-9GnXDE-fdbvm5-7xsAZk-7kD9oV-6L3Y8s-3Bs5bg */
 .about-page-lower-3 {
   text-align: center;
-  background-color: #4376a3;
-  padding: 20px;
   color: white;
-  font-size: 30px;
+  font-size: 35px;
   line-height: 50px;
+  text-shadow: 1px 1px 1px black;
+  font-family: 'Open Sans', sans-serif;
+}
+.about-page-lower-3 p {
+  margin-bottom: 70px;
 }
 .about-page-lower-4 {
   text-align: center;
-  background-color: #459691;
+  background-color: #414476;
   padding: 20px;
   color: white;
   font-size: 30px;
 }
+.about-page-lower-5 {
+  height: 400px;
+  padding: 5px;
+  padding-top: 100px;
+  text-align: center;
+  color: black;
+  font-size: 70px;
+  font-family: 'Comfortaa', serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: url('../assets/sled.jpg');
+}
 .about-page-signup {
-  background-color: #c94f49;
+  background-color: #414476;
   padding: 20px;
   color: white;
+  min-height: 1500px;
+  padding-top: 200px;
   text-align: center;
   font-size: 30px;
   font-family: 'Comfortaa', serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: url('../assets/balls.jpg');
 }
 .about-page-doorknob-holder {
   margin-top: 30px;
+}
+#about-welcome {
+  color: black;
+  font-size: 14px;
 }
 .top-navigation {
   background-color: #459691;
@@ -300,7 +444,7 @@ img {
   font-size: 12px;
 }
 .apprisal-menu-more-disabled {
-  color: #c94f49;
+  color: #a31d2e;
   margin-bottom: 10px;
   margin-left: 5px;
 }
@@ -372,7 +516,7 @@ img {
   font-size: 12px;
 }
 .recipient-cannot-respond {
-  color: #c94f49;
+  color: #a31d2e;
 }
 .recipient-display-createdTime {
   color: grey;
@@ -441,7 +585,7 @@ img {
   font-size: 12px;
 }
 .sns-text-field-error-text {
-  color: #c94f49;
+  color: #a31d2e;
   font-size: 14px;
   margin-left: 10px;
 }
@@ -509,25 +653,25 @@ img {
 }
 .sbtn-p {
   color: white;
-  background-color: #459691;
-  border-color: #459691;
+  background-color: #3c591c;
+  border-color: #3c591c;
 }
 .sbtn-p > .spinner > div {
   background-color: white;
 }
 .sbtn-po {
-  color: #459691;
+  color: #3c591c;
   background-color: white;
-  border-color: #459691;
+  border-color: #3c591c;
 }
 .sbtn-po > .spinner > div {
-  background-color: #459691;
+  background-color: #3c591c;
 }
 .sbtn-p:hover,
 .sbtn-po:hover {
   color: white;
-  background-color: #35736f;
-  border-color: #35736f;
+  background-color: #223210;
+  border-color: #223210;
 }
 .sbtn-s {
   color: #292b2c;
@@ -553,38 +697,38 @@ img {
 }
 .sbtn-w {
   color: white;
-  background-color: #D67443;
-  border-color: #D67443;
+  background-color: #ea3c1b;
+  border-color: #ea3c1b;
 }
 .sbtn-w > .spinner > div {
   background-color: white;
 }
 .sbtn-wo {
-  color: #D67443;
+  color: #ea3c1b;
   background-color: white;
-  border-color: #D67443;
+  border-color: #ea3c1b;
 }
 .sbtn-wo > .spinner > div {
-  background-color: #D67443;
+  background-color: #ea3c1b;
 }
 .sbtn-w:hover,
 .sbtn-wo:hover {
   color: white;
-  background-color: #bd5a29;
-  border-color: #bd5a29;
+  background-color: #c02e12;
+  border-color: #c02e12;
 }
 .sbtn-d {
   color: white;
-  background-color: #c94f49;
-  border-color: #c94f49;
+  background-color: #a31d2e;
+  border-color: #a31d2e;
 }
 .sbtn-d > .spinner > div {
   background-color: white;
 }
 .sbtn-do {
-  color: #c94f49;
+  color: #a31d2e;
   background-color: white;
-  border-color: #c94f49;
+  border-color: #a31d2e;
 }
 .sbtn-do > .spinner > div {
   background-color: white;
@@ -592,8 +736,8 @@ img {
 .sbtn-d:hover,
 .sbtn-do:hover {
   color: white;
-  background-color: #ac3933;
-  border-color: #ac3933;
+  background-color: #781522;
+  border-color: #781522;
 }
 .sbtn-l {
   font-weight: 400;

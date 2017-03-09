@@ -1,5 +1,6 @@
-import { fetchDataAPI, addDataAPI, updateDataAPI, deleteDataAPI } from './dataAPI';
-import { receivePosts, receivePostsError } from './posts';
+import { fetchDataAPI, addDataAPI, addDataAPI2, updateDataAPI, deleteDataAPI } from './dataAPI';
+import { fetchAPost } from './posts';
+import { formUpdate, formClear } from './forms';
 
 const RECEIVE_APPRISALS = 'RECEIVE_APPRISALS';
 function receiveApprisals(apprisals) {
@@ -41,18 +42,32 @@ function fetchApprisals() {
 function newApprisal(body, postId, formId) {
   return (dispatch) => {
     dispatch(
-      addDataAPI(
+      addDataAPI2(
         'apprisals',
         body,
-        fetchDataAPI(
-          `posts/${postId}`,
-          receivePosts,
-          'posts',
-          receivePostsError,
-        ),
-        'apprisal',
-        formId,
-      ),
+      )
+      .then(() => {
+        console.log(`clear formId ${formId}`);
+        dispatch(
+          formClear(formId),
+        );
+      })
+      .then(() => {
+        console.log(`fetching a post ${formId}`);
+        dispatch(
+          fetchAPost(postId),
+        );
+      })
+      .catch(function submitError(error) {
+        const errMsg = error.message;
+        console.log(`Error caught ${errMsg}`);
+        return dispatch(
+          formUpdate(formId, {
+            submitting: false,
+            submitError: errMsg,
+          }),
+        );
+      }),
     );
   };
 }

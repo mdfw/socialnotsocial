@@ -1,19 +1,71 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Doorknob from '../components/Doorknob';
+import Sticky from './ui/Sticky';
+
+const MarketingBits = () => (
+  <div className="welcome-page-marketing">
+    <div className="marketingTextMedium">
+      Moments. Shared. Everywhere.
+    </div>
+    <div className="marketingSpacing">
+      Post your thoughts and pictures and share them on Facebook or send them in an email.
+      <br /><br />
+      Your family will <i>love</i> you for it.
+      <br /><br />
+      Try it yourself:<br />
+      User: <span>eliza@newhaven.com</span><br />
+      Password: <span>efw23dsesE*HE</span><br />
+    </div>
+    <div style={{ margin: '30px' }}>
+      <img
+        className="logo"
+        src="assets/dandy.svg"
+        alt="Social, Not Social logo"
+        width="70"
+        height="70"
+      />
+    </div>
+  </div>
+);
+
+const AboutWelcome = () => (
+  <div id="about-welcome">
+    <div className="welcome-page-box">
+      <div className="welcome-page-title">
+        Social, not Social <span className="welcome-page-title-beta">(Beta)</span>
+      </div>
+      <div className="welcome-page-lower">
+        <div className="welcome-page-lower-doorknob">
+          <Doorknob />
+        </div>
+        <MarketingBits />
+      </div>
+    </div>
+  </div>
+);
+
 
 const About = () => (
   <div id="about-page">
+    <Sticky enter="80" className="about-nav">
+      <div id="about-nav-row">
+        <div className="about-nav-left">
+          <img className="logo" src="../assets/dandy-white.svg" alt="Social, Not Social logo" width="40" height="40" />
+          <span className="about-nav-sitename">Social, not Social</span>
+        </div>
+        <div className="about-nav-right">
+          <Link to="/welcome">Sign up / in (free Demo)</Link>
+        </div>
+      </div>
+    </Sticky>
     <div className="about-page-title">
-      <span className="about-page-icon">
-        <img
-          className="logo"
-          src="assets/dandelion_white.svg"
-          alt="Social, Not Social logo"
-          width="150"
-          height="150"
-        />
-      </span>
-      Social, not Social <span className="about-page-title-beta">(Beta)</span>
+      <div className="about-page-title-text">
+          Social, not Social
+      </div>
+      <div className="about-page-title-text-sub">
+          Share your joy
+      </div>
     </div>
     <div className="about-page-lower-1">
       <p>
@@ -36,48 +88,51 @@ const About = () => (
       <p>
         But.
       </p>
-    </div>
-    <div className="about-page-lower-3">
-      <p>
-        Your friends are on Facebook.
-      </p>
-      <p>
-        Your mom is too, but cannot remember how to login.
-      </p>
-      <p>
-        Crazy uncle Joe will never be (&quot;Tool of the FBI!&quot; and all).
-      </p>
+      <div className="about-page-lower-3">
+        <p>
+          Your friends are on Facebook.
+          <img src="assets/about_icons/fb_white.svg" height="30" alt="Facebook logo" />
+        </p>
+        <p>
+          Your mom is too, but cannot remember how to login.
+        </p>
+        <p>
+          Crazy uncle Joe will never be (&quot;Tool of the FBI
+          <img src="assets/about_icons/illuminati_white.svg" height="30" alt="Illuminati" />
+          !&quot; and all).
+        </p>
+        <p>
+          Sending pictures via email gets you the dreaded &quot;too long to be sent as an email.&quot;
+        </p>
+      </div>
     </div>
     <div className="about-page-lower-4">
       <p>
         Social, not Social is here for you.
       </p>
       <p>
-        Create a post:
+        1. Create a post:
       </p>
       <div className="about-page-img about-page-callout">
         <img src="/assets/anewpost.png" alt="A new post" />
       </div>
       <p>
-        Then share it with friends via email or Facebook.
+        2. Share it with friends via email or Facebook.
       </p>
       <div className="about-page-img about-page-callout">
         <img src="/assets/sharescreen.png" alt="Share screen" />
       </div>
       <p>
-        Stop worrying about image file sizes when mailing to mom.<br />
-        We take care of that for you.<br />
-        Go, share that joy.
+        3. Relax.
       </p>
-      <div className="about-page-img about-page-kid2">
-        <img src="assets/sled.jpg" alt="kids" height="140px" style={{ transform: 'rotate(2deg)', WebkitTransform: 'rotate(2deg)' }} />
-      </div>
+    </div>
+    <div className="about-page-lower-5">
+      <p>
+        Sign up today.
+      </p>
     </div>
     <div className="about-page-signup">
-      Sign up now!
-      <div className="about-page-doorknob-holder">
-        <Doorknob />
-      </div>
+      <AboutWelcome />
     </div>
   </div>
 );

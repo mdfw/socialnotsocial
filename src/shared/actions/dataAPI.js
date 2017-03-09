@@ -77,7 +77,7 @@ const addDataAPI = function addDataAPI(
   formId,
   ) {
   return function fetchAddPostDispatch(dispatch) {
-    if (!endpoint || !body || !formId || !successDispatch || !endpointObject) {
+    if (!endpoint || !body || !formId) {
       throw new Error('Parameters incorrect.');
     }
     console.log(`Adding data to ${endpoint}`);
@@ -86,7 +86,7 @@ const addDataAPI = function addDataAPI(
         submitting: true,
       }),
     );
-    fetch(`/api/v1/${endpoint}`, {
+    return fetch(`/api/v1/${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -106,19 +106,15 @@ const addDataAPI = function addDataAPI(
       return response.json();
     })
     .then(function dispatchOnSuccess(response) {
-      return dispatch(
-        successDispatch(response[endpointObject]),
-      );
-    })
-    .then(function dispathFormClear() { // dispatch, formId
-      return dispatch(
+      dispatch(
         formClear(formId),
       );
-    })
-    .then(function addSuccess() {
-      return dispatch(
-        successDispatch(),
-      );
+      if (successDispatch && endpointObject) {
+        return dispatch(
+          successDispatch(response[endpointObject]),
+        );
+      }
+      return response;
     })
     .catch(function submitError(error) {
       const errMsg = error.message;
@@ -130,6 +126,32 @@ const addDataAPI = function addDataAPI(
       );
     });
   };
+};
+
+
+const addDataAPI2 = function addDataAPI2(endpoint, body) {
+  if (!endpoint || !body) {
+    return Promise.reject('Parameters incorrect.');
+  }
+
+  console.log(`Adding data to ${endpoint}`);
+
+  return fetch(`/api/v1/${endpoint}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'same-origin',
+    body: JSON.stringify(body),
+  }).then(function checkAPIResponse(response) {
+    if (response.status === 201) {
+      return response;
+    }
+
+    return Promise.reject(response.statusText);
+  }).then(function processJsonResponse(response) {
+    return response.json();
+  });
 };
 
 // -------- //
@@ -274,4 +296,4 @@ const deleteDataAPI = function deleteDataAPI(
   };
 };
 
-export { fetchDataAPI, addDataAPI, updateDataAPI, deleteDataAPI };
+export { fetchDataAPI, addDataAPI, addDataAPI2, updateDataAPI, deleteDataAPI };

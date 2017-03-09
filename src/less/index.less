@@ -1,10 +1,40 @@
-@baseColor: #459691; // Deep green blue
+/*@baseColor: #459691; // Deep green blue
 @alertColor: #c94f49; // Reddish orange
 @highlightColor: #d9ecfc; // whiteish blue
 @greenerColor: #43a366; // More green
 @blueColor: #4376a3; // a nice blue
 @yellowColor: #e2cb60; // Yellow
 @orangeColor: #D67443; // An orange that hopefully matches 
+*/
+
+/* From: http://stackoverflow.com/questions/15837808/fancy-media-queries-with-some-less-magic */
+@desktop:   ~"only screen and (min-width: 960px) and (max-width: 1199px)";
+@tablet:    ~"only screen and (min-width: 720px) and (max-width: 959px)";
+@phone:    ~"only screen and (max-width: 720px)";
+
+footerExample{
+  width: 100%;
+  @media @tablet {
+    width: 768px;
+  }
+  @media @desktop {
+    width: 940px;
+  }
+}
+
+//@baseColor: #73a534; // Deep green blue
+@baseColor: #3c591c; // Deep green blue
+@alertColor: #a31d2e; // Reddish orange
+@highlightColor: white; // whiteish blue
+//@greenerColor: #375a22; // More green
+@greenerColor: #7aa325; // More green
+@blueColor: #414476; // a nice blue
+@yellowColor: #cfb117; // Yellow
+@orangeColor: #ea3c1b; // An orange that hopefully matches 
+@darkgrey: #36353c;
+
+@titleFont: 'Comfortaa', serif;
+@baseFont: 'Open Sans', sans-serif;
 
 html { box-sizing: border-box; }
 *, *:before, *:after { box-sizing: inherit; }
@@ -13,7 +43,7 @@ body
 {
 	background-color: white;
 	/* For testing only*/
-	font-family: 'Open Sans', sans-serif;
+	font-family: @baseFont;
 	font-size: 14px;
 	margin: 0;
 	/*letter-spacing: 0.03em;*/
@@ -30,6 +60,7 @@ div
 	max-width: 970px;
 	margin: 0 auto;
 }
+
 /* Doorknob is the form holder for login/registration flip form */
 .doorknob {
   color: black;
@@ -66,7 +97,7 @@ div
   line-height: 50px;
 }
 .welcome-page-background-color {
-  background-color: #3f6143;
+  background-color: @baseColor;
 }
 .welcome-page-hero {
   background-image: url('../assets/bubble_hero.jpg');
@@ -76,6 +107,11 @@ div
   height: 100%;
   width: 100%;
   text-align: center;
+}
+
+.welcome-page-lower-doorknob {
+  float: left;
+  padding-top: 20px;
 }
 
 .welcome-page-box {
@@ -125,6 +161,7 @@ div
   padding: 20px;
   max-width: 320px;
   float: left;
+  font-family: @baseFont;
 }
 
 .welcome-page-more-info {
@@ -152,64 +189,205 @@ div
   margin-top: 100px;
 }
 
+/* -- About page -- */
+.about-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background-image: linear-gradient(
+    rgba(60, 89, 28, 0.1),
+    rgba(60, 89, 28, 0.1)
+  );
+  //background-color: #3c591c;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all .5s ease-in-out;
+}
+
+.about-nav.sticky {
+  background-color: #3c591c;
+  color: black;
+}
+
+.about-nav-sitename {
+  @media @phone {
+    display: none;
+  }
+}
+
+#about-nav-row {
+  font-size: 20px;
+  line-height: 40px;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto; 
+}
+
+
+.about-nav-left {
+  margin-left: 10px;
+  float: left;
+  font-family: 'Comfortaa', serif;
+}
+
+.about-nav-right {
+  margin-right: 10px;
+  position: relative;
+  float: right;
+  margin-top: -3px;
+}
+
+.about-nav-right a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  border-style: solid;
+  padding: 5px;
+  border-radius: 5px;
+  border-width: .5px;
+}
+
 .about-page-img > img {
   background-color: white;
   border-width: 5px;
   border-style: solid;
   border-radius: 5px;
   padding: 2px;
+  margin-bottom: 30px;
 }
-
+.about-page-header {
+  background-color: #223210;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.about-page-header-button {
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 970px;
+}
 .about-page-title {
-  background-color: #459691;
-  color: white;
-  font-size: 50px;
-  font-family: 'Comfortaa', serif;
+  background-color: #3c591c;
   text-align: center;
-  min-height: 160px;
+  padding: 5px;
+  min-height: 500px;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.3), 
+      rgba(0, 0, 0, 0.1)
+    )
+  , url('../assets/jump.jpg');
+}
+/*https://www.flickr.com/photos/jongrainger/14869969397/in/photolist-oE1tQH-91YUFH-98aWYm-3meyM-5Xodfg-7yX18Y-5XodsK-dZChH8-dZHXWQ-dZHY9J-hh3E-4Win59-ewcYth-6TT6GG-tiFcm-a5Mz3e-oQ2a-mK1zH-5tjCC6-5WAa5i-5JhpMy-6TSNEW-aBZfNL-22tNXn-6TThYQ-ijSip-3LqgCY-9smXw-8MNsLo-4woRr3-9GVLXo-67D8Yp-mK1zP-cJUK3-mK1zN-61ncSJ-32xvR-mK1zL-mK1cQ-61ncRw-61i1tK-aHPQVk-mbNZA3-6xM9zY-PmTMv4-5QUvDq-5My6B5-p3GMbp-ccjToW-7h5xrp */
+.about-page-title-text {
+  color: white;
+  font-size: 70px;
+  font-family: 'Comfortaa', serif;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
 }
 
+.about-page-title-text-sub {
+  color: white;
+  font-size: 35px;
+  font-family: 'Comfortaa', serif;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+}
 .about-page-lower-1 {
   text-align: center;
-  background-color: #4376a3;
+  background-color: #414476;
   padding: 20px;
   color: white;
   font-size: 30px;
   line-height: 50px;
 }
 .about-page-lower-2 {
-  background-color: #D67443;
+  background-color: #414476;
   padding: 5px;
   text-align: center;
-  color: white;
-  font-size: 50px;
+  color: #ea3c1b;
+  font-size: 70px;
   font-family: 'Comfortaa', serif;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.2), 
+      rgba(0, 0, 0, 0.4)
+    )
+  , url('../assets/frustrated-child.jpg');
 }
+
+/* https://www.flickr.com/photos/bolonski/6899771379/in/photolist-9zYUbN-5Y57G-bvH8Dv-Ko2H4-odwkqS-7WepXX-7HQ5oB-7ezpD8-odEKjh-8yjQqB-4Ckoht-dxWwmz-5x3DF6-4t5u9P-bU8GfR-9BhUgv-7gUcM9-auobRn-4Jpgje-9GnXDE-fdbvm5-7xsAZk-7kD9oV-6L3Y8s-3Bs5bg */
+
 .about-page-lower-3 {
   text-align: center;
-  background-color: #4376a3;
-  padding: 20px;
   color: white;
-  font-size: 30px;
+  font-size: 35px;
   line-height: 50px;
+  text-shadow:1px 1px 1px black;
+  font-family: 'Open Sans', sans-serif;
+}
+.about-page-lower-3 p {
+  margin-bottom: 70px;
 }
 .about-page-lower-4 {
   text-align: center;
-  background-color: #459691;
+  background-color: #414476;
   padding: 20px;
   color: white;
   font-size: 30px;
 }
+.about-page-lower-5 {
+   height: 400px;
+   padding: 5px;
+   padding-top: 100px;
+  text-align: center;
+  color:  black;
+  
+  font-size: 70px;
+  font-family: 'Comfortaa', serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: url('../assets/sled.jpg');
+
+}
 .about-page-signup {
-  background-color: #c94f49;
+  background-color: #414476;
   padding: 20px;
   color: white;
+  min-height: 1500px;
+  padding-top: 200px;
   text-align: center;
   font-size: 30px;
   font-family: 'Comfortaa', serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50%;
+  background-image: url('../assets/balls.jpg');
 }
+
 .about-page-doorknob-holder {
   margin-top: 30px;
+}
+#about-welcome {
+  color: black;
+  font-size: 14px;
 }
 .top-navigation {
 	background-color: #459691;
