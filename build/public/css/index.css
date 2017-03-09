@@ -70,7 +70,7 @@ div {
 .doorknob button {
   margin-top: 15px;
 }
-/* Welcome page is the main page when people load the site */
+/* Welcome page */
 .welcome {
   float: right;
   line-height: 50px;
@@ -157,6 +157,9 @@ div {
   margin: 0 auto;
   margin-top: 100px;
 }
+.welcome-doorknob {
+  float: left;
+}
 /* -- About page -- */
 .about-nav {
   position: fixed;
@@ -171,7 +174,6 @@ div {
 }
 .about-nav.sticky {
   background-color: #3c591c;
-  color: black;
 }
 @media only screen and (max-width: 720px) {
   .about-nav-sitename {
@@ -313,7 +315,7 @@ div {
   background-color: #414476;
   padding: 20px;
   color: white;
-  min-height: 1500px;
+  min-height: 1200px;
   padding-top: 200px;
   text-align: center;
   font-size: 30px;
@@ -332,7 +334,7 @@ div {
   font-size: 14px;
 }
 .top-navigation {
-  background-color: #459691;
+  background-color: #3c591c;
   position: fixed;
   top: 0;
   right: 0;
