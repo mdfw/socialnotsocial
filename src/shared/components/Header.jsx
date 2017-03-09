@@ -9,6 +9,14 @@ const Header = props => (
     <nav className="top-navigation">
       <div className="content">
         <div className="top-navigation-left">
+          <img
+            className="logo"
+            src="../assets/dandy-white.svg"
+            alt="Social, Not Social logo"
+            width="40"
+            height="40"
+            style={{ marginTop: '-10px', marginRight: '5px' }}
+          />
           <span className="top-title">
             <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Social, Not Social</Link> <span className="title-beta">(Beta)</span>
           </span>

@@ -64,7 +64,7 @@ div
 /* Doorknob is the form holder for login/registration flip form */
 .doorknob {
   color: black;
-  font-family: 'Open Sans', sans-serif;
+  font-family: @baseFont;
   font-size: 15px;
 }
 
@@ -91,7 +91,7 @@ div
   margin-top: 15px;
 }
 
-/* Welcome page is the main page when people load the site */
+/* Welcome page */
 .welcome {
   float: right;
   line-height: 50px;
@@ -126,7 +126,7 @@ div
 }
 
 .welcome-page-title {
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   font-size: 40px;
   font-weight: 700;
   text-align: center;
@@ -134,7 +134,7 @@ div
 }
 
 .welcome-page-title-beta {
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   font-size: 30px;
   font-weight: 700;
 }
@@ -207,8 +207,7 @@ div
 }
 
 .about-nav.sticky {
-  background-color: #3c591c;
-  color: black;
+  background-color: @baseColor;
 }
 
 .about-nav-sitename {
@@ -225,11 +224,10 @@ div
   margin: 0 auto; 
 }
 
-
 .about-nav-left {
   margin-left: 10px;
   float: left;
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
 }
 
 .about-nav-right {
@@ -257,11 +255,13 @@ div
   padding: 2px;
   margin-bottom: 30px;
 }
+
 .about-page-header {
   background-color: #223210;
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
 .about-page-header-button {
   margin-left: auto;
   margin-right: 0;
@@ -287,7 +287,7 @@ div
 .about-page-title-text {
   color: white;
   font-size: 70px;
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   padding: 20px;
   margin-left: auto;
   margin-right: auto;
@@ -297,7 +297,7 @@ div
 .about-page-title-text-sub {
   color: white;
   font-size: 35px;
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   padding: 20px;
   margin-left: auto;
   margin-right: auto;
@@ -305,19 +305,19 @@ div
 }
 .about-page-lower-1 {
   text-align: center;
-  background-color: #414476;
+  background-color: @blueColor;
   padding: 20px;
   color: white;
   font-size: 30px;
   line-height: 50px;
 }
 .about-page-lower-2 {
-  background-color: #414476;
+  background-color: @blueColor;
   padding: 5px;
   text-align: center;
-  color: #ea3c1b;
+  color: @orangeColor;
   font-size: 70px;
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -337,44 +337,43 @@ div
   color: white;
   font-size: 35px;
   line-height: 50px;
-  text-shadow:1px 1px 1px black;
-  font-family: 'Open Sans', sans-serif;
+  text-shadow: 1px 1px 1px black;
+  font-family: @baseFont;
 }
 .about-page-lower-3 p {
   margin-bottom: 70px;
 }
 .about-page-lower-4 {
   text-align: center;
-  background-color: #414476;
+  background-color: @blueColor;
   padding: 20px;
   color: white;
   font-size: 30px;
 }
 .about-page-lower-5 {
-   height: 400px;
-   padding: 5px;
-   padding-top: 100px;
+  height: 400px;
+  padding: 5px;
+  padding-top: 100px;
   text-align: center;
   color:  black;
-  
   font-size: 70px;
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50%;
   background-image: url('../assets/sled.jpg');
-
 }
+
 .about-page-signup {
-  background-color: #414476;
+  background-color: @blueColor;
   padding: 20px;
   color: white;
-  min-height: 1500px;
+  min-height: 1200px;
   padding-top: 200px;
   text-align: center;
   font-size: 30px;
-  font-family: 'Comfortaa', serif;
+  font-family: @titleFont;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -385,12 +384,14 @@ div
 .about-page-doorknob-holder {
   margin-top: 30px;
 }
+
 #about-welcome {
   color: black;
   font-size: 14px;
 }
+
 .top-navigation {
-	background-color: #459691;
+	background-color: @baseColor;
 	position: fixed;
 	top: 0;
 	right: 0;
