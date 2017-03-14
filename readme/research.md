@@ -46,20 +46,3 @@
 
 ## Tabled
 * https://github.com/mattt/Chroma-Hash
-
----
-# App: Social not social
-## Description
-Allows a user to post a status message to facebook and send to multiple email addresses at the same time.
-
-## User Stories
-* As a user, I should be able to create an account.
-* As a user, I should be able to add multiple email addresses to my 'send to' bucket
-* As a user, I should be able to configure Facebook.
-* As a user, I should be able to post a status update with one picture.
-* As a user, I should be able to post that status update to Facebook and email addresses.
-
-
-### Future
-* As a user, I should be able to add phone numbers to receive text messages
-* As a user, I should be abel to send a status update to text message folks.

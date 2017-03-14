@@ -1,6 +1,6 @@
-# App: Social not social
+Social, not Social
 ## Description
-Private blogging site where users can post a status message and then send it to Facebook and or to multiple email addresses at the same time.
+Private blogging site where users can post a status message and then send it to Facebook and or to multiple email addresses.
 
 ## Features
 * React(ES6) & Redux based SPA application
@@ -13,6 +13,7 @@ Private blogging site where users can post a status message and then send it to 
 * Material-UI use for some UI, custom fields for others
 * Production configuration for webpack to reduce build sizes
 * chai & mocha based tests
+* less -> css
 
 ### Previous features
 * PassportJS (before 245623b0232d62e601508103040d811d112a7fb2) - why I switched from Passport
