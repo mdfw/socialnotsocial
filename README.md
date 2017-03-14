@@ -18,8 +18,8 @@ Private blogging site where users can post a status message and then send it to 
 * less -> css
 
 ### Previous features
-* PassportJS (before 245623b0232d62e601508103040d811d112a7fb2) - [why I switched from Passport] (why_not_passport.md)
-* MongoDB and Mongooes (before dabaad5748b607d3e04b90acb8b2e4d23d8317ff) - [why I switched from Mongo](why_not_mongodb_and_mongoose.md)
+* PassportJS (before 245623b0232d62e601508103040d811d112a7fb2) - [why I switched from Passport] (readme/why_not_passport.md)
+* MongoDB and Mongooes (before dabaad5748b607d3e04b90acb8b2e4d23d8317ff) - [why I switched from Mongo](readme/why_not_mongodb_and_mongoose.md)
 
 ## Screen shots
 *Welcome Page*
