@@ -65,3 +65,13 @@ Private blogging site where users can post a status message and then send it to 
 *Share page with posts*
 
 ![ShareSketch](https://github.com/mdfw/socialnotsocial/blob/master/readme/designSketchPost.png "Share")
+
+
+## Acknowledgments
+* Children Jumping by Jon Grainger (https://flic.kr/p/oE1tQH) under CC BY 2.0
+* Frustration by Jason Bolonski (https://flic.kr/p/bvH8Dv) under CC BY 2.0
+* FUN by yeskefo (https://flic.kr/p/enqCB9) under CC BY-SA 2.0
+* Bubble reflection by Isabelle Acatauassú Alves Almeida (https://flic.kr/p/oeDX8v) under CC BY 2.0
+* Dandelion by Alice Noir from the Noun Project (https://thenounproject.com/term/dandelion/641025/)  under CC BY 3.0 US
+* Eye Of Providence by Kev from the Noun Project (https://thenounproject.com/term/eye-of-providence/673596/) under CC BY 3.0 US
+* Thumbs Up by John T. Garcia from the Noun Project (https://thenounproject.com/term/thumbs-up/158118/) under CC BY 3.0 US
