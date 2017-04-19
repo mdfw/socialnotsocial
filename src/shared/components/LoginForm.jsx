@@ -28,6 +28,7 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
     this.onSubmit = this.onSubmit.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.setDemo = this.setDemo.bind(this);
   }
   onChange(e) {
     const target = e.target;
@@ -49,6 +50,13 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
     const name = e.target.name;
     this.props.handleFocus(name);
   }
+  setDemo(account, pass) {
+    this.props.handleChange({
+      email: account,
+      password: pass,
+    });
+  }
+
   render() {
     const {
       loggingIn,
@@ -62,6 +70,10 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
     if (this.props.errors.loginError) {
       errorInfo = <LoginError errorMessage={this.props.errors.loginError} />;
     }
+    const setDemo = this.setDemo;
+    const useDemo1 = function useDemo1() {
+      setDemo('hire@mdfw.me', 'Call-408-598-1325');
+    };
     return (
       <div>
         <form onSubmit={this.onSubmit}>
@@ -69,6 +81,11 @@ class LoginForm extends React.Component { // eslint-disable-line react/no-multi-
             Log in
           </div>
           {errorInfo}
+          <div className="login-form-demos">
+            <button onClick={useDemo1}>
+              Demo account: <br />Email: hire@mdfw.me<br />Password: <i>Call-408-598-1325</i>
+            </button>
+          </div>
           <div>
             <TextField
               name="email"

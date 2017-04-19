@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import Doorknob from '../components/Doorknob';
 import Sticky from './ui/Sticky';
 
@@ -12,10 +11,6 @@ const MarketingBits = () => (
       Post your thoughts and pictures and share them on Facebook or send them in an email.
       <br /><br />
       Your family will <i>love</i> you for it.
-      <br /><br />
-      Try it yourself:<br />
-      User: <span>eliza@newhaven.com</span><br />
-      Password: <span>efw23dsesE*HE</span><br />
     </div>
     <div style={{ margin: '30px' }}>
       <img
@@ -62,7 +57,7 @@ const About = () => (
           <span className="about-nav-sitename">Social, not Social</span>
         </div>
         <div className="about-nav-right">
-          <Link to="/welcome">Sign up / in (free Demo)</Link>
+          <a href="#about-signup">Sign up or Log in</a>
         </div>
       </div>
     </Sticky>
@@ -139,12 +134,10 @@ const About = () => (
         3. Relax.
       </p>
     </div>
-    <div className="about-page-lower-5">
+    <div id="about-signup" className="about-page-signup">
       <p>
-        Sign up today.
+        <span className="about-page-signup-call">Sign up today</span>
       </p>
-    </div>
-    <div className="about-page-signup">
       <AboutWelcome />
     </div>
   </div>
