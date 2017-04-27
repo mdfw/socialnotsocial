@@ -10,7 +10,7 @@ module.exports = {
   },
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
-    extensions:         ['', '.js', '.jsx']
+    extensions:         ['.js', '.jsx']
   },    
   devtool: 'cheap-module-source-map',
   plugins: [

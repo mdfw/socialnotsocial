@@ -8,8 +8,8 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
-    modulesDirectories: ['node_modules', 'shared'],
-    extensions:         ['', '.js', '.jsx']
+    modules: ['node_modules', 'shared'],
+    extensions: ['.js', '.jsx']
   },    
   devtool: 'inline-source-map',
   plugins: [
@@ -28,7 +28,7 @@ module.exports = {
       {
         test: /.jsx?$/,
         exclude: /(node_modules)/,
-        loader: 'babel',
+        loader: 'babel-loader',
       },
       {
         test: /\.json$/,
