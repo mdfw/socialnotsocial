@@ -1,5 +1,16 @@
 language: node_js
-node_js: node
+sudo: false
+node_js:
+  - "4.1"
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
 services:
   - postgresql
   - redis-server
+env:
+  - TRAVIS=travis CXX=g++-4.8
