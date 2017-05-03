@@ -98,3 +98,5 @@ server.on('listening', function reportOnListen(error) {
     console.log(`Main Server listening on http://localhost:${port}.`);
   }
 });
+
+module.exports = server;
