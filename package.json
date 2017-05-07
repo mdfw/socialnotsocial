@@ -5,8 +5,8 @@
   "main": "build/server.js",
   "scripts": {
     "start": "run-p _start:mainserver _start:apiserver",
-    "_start:mainserver": "node build/server.js",
-    "_start:apiserver": "node build/apiserver/server.js",
+    "_start:mainserver": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 build/server.js",
+    "_start:apiserver": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 build/apiserver/server.js",
     "dev": "run-p watch lint serve:dev",
     "test": "mocha --recursive --timeout 10000 --compilers js:babel-core/register",
     "build": "run-s build:*",
