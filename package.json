@@ -61,8 +61,9 @@
     "deploy:_build:js": "run-s deploy:_build:js:server deploy:_build:js:apiserver deploy:_build:js:client",
     "deploy:_build:js:server": "webpack --config webpack/webpack.server.prod.config.js",
     "deploy:_build:js:client": "webpack --config webpack/webpack.client.prod.config.js",
-    "deploy:_build:js:apiserver": "webpack --config webpack/webpack.apiserver.prod.config.js"
-  },
+    "deploy:_build:js:apiserver": "webpack --config webpack/webpack.apiserver.prod.config.js",
+    "postinstall": "if [ $BUILD_DEPLOY ]; then npm run deploy; fi"
+ },
   "author": "Mark Williams <mark@mdfw.me>",
   "license": "UNLICENSED",
   "devDependencies": {
