@@ -63,7 +63,7 @@
     "deploy:_build:js:client": "webpack --config webpack/webpack.client.prod.config.js",
     "deploy:_build:js:apiserver": "webpack --config webpack/webpack.apiserver.prod.config.js",
     "postinstall": "if [ $BUILD_DEPLOY ]; then npm run deploy; fi"
- },
+  },
   "author": "Mark Williams <mark@mdfw.me>",
   "license": "UNLICENSED",
   "devDependencies": {
@@ -120,6 +120,7 @@
     "isomorphic-fetch": "^2.2.1",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.2.1",
+    "less": "2.7.2",
     "material-ui": "^0.17.4",
     "mkdirp": "^0.5.1",
     "moment": "^2.17.1",
