@@ -9,8 +9,8 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
-    modulesDirectories: ['node_modules', 'shared'],
-    extensions:         ['.js', '.jsx']
+    modules: ['node_modules', 'shared'],
+    extensions: ['.js', '.jsx']
   },    
   devtool: 'cheap-module-source-map',
   plugins: [
@@ -20,7 +20,6 @@ module.exports = {
       },
       PRODUCTION: JSON.stringify(true),
     }),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       minimize: true,
       compress: {
