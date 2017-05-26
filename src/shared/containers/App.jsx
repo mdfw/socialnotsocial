@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import Header from '../components/Header';
+import HeaderContainer from '../components/Header';
 
 function App(props) {
   return (
     <div id="mainapp">
       <div className="content">
-        <Header router={props.router} />
+        <HeaderContainer router={props.router} />
         {props.children}
       </div>
     </div>

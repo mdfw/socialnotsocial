@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import React from 'react';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -14,7 +14,7 @@ const headerRightStyle = {
 };
 
 
-class HeaderLoggedButton extends React.Component {
+class HeaderLoggedInButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,11 +44,11 @@ class HeaderLoggedButton extends React.Component {
     });
   }
   handleShowRecipients() {
-    this.props.router.push('/recipients');
+    this.props.routerpush('/recipients');
   }
   handleGoHome() {
     console.log('going home');
-    this.props.router.push('/');
+    this.props.routerpush('/');
   }
 //   handleMenuItemTap(event, menuItem) {  <--storing in case we need it.
 
@@ -86,15 +86,18 @@ class HeaderLoggedButton extends React.Component {
   }
 }
 
-HeaderLoggedButton.propTypes = {
-  displayName: React.PropTypes.string,
-  dispatch: React.PropTypes.func,
-  router: React.PropTypes.shape({
-    push: React.PropTypes.func.isRequired,
-  }).isRequired,
+HeaderLoggedInButton.defaultProps = {
+  displayName: 'Guest',
 };
 
-const Container = connect()(HeaderLoggedButton);
+HeaderLoggedInButton.propTypes = {
+  displayName: React.PropTypes.string,
+  dispatch: React.PropTypes.func.isRequired,
+  routerpush: React.PropTypes.func.isRequired,
+};
+/*
+const Container = connect()(HeaderLoggedInButton);
 
 export default Container;
-
+*/
+export default HeaderLoggedInButton;

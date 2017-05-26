@@ -3,8 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import HeaderLoggedInButton from './HeaderLoggedInButton';
 
-
-const Header = props => (
+export const Header = props => (
   <div>
     <nav className="top-navigation">
       <div className="content">
@@ -21,7 +20,7 @@ const Header = props => (
             <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Social, Not Social</Link> <span className="title-beta">(Beta)</span>
           </span>
           <span className="welcome">
-            <HeaderLoggedInButton displayName={props.displayName} router={props.router} />
+            <HeaderLoggedInButton displayName={props.displayName} routerpush={props.routerpush} dispatch={props.dispatch} />
           </span>
         </div>
       </div>
@@ -30,18 +29,22 @@ const Header = props => (
   </div>
 );
 
+Header.defaultProps = {
+  displayName: 'Guest',
+};
+
 Header.propTypes = {
   displayName: React.PropTypes.string,
-  router: React.PropTypes.shape({
-    push: React.PropTypes.func.isRequired,
-  }).isRequired,
+  routerpush: React.PropTypes.func.isRequired,
+  dispatch: React.PropTypes.func.isRequired,
 };
 
 /** redux store map **/
 const mapStateToProps = function mapStateToProps(state, ownProps) {
+  console.log(`ownprops: ${ownProps}`);
   return {
     displayName: state.account.displayName,
-    router: ownProps.router,
+    routerpush: ownProps.router.push,
   };
 };
 
